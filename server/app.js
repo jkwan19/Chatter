@@ -11,8 +11,6 @@ const users = require("./routes/users");
 // DB Config
 const db = require("./config/keys").mongoURI;
 
-require('dotenv').config()
-
 const { json, urlencoded } = express;
 
 const app = express();
