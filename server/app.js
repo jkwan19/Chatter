@@ -1,11 +1,19 @@
 const createError = require("http-errors");
 const express = require("express");
+const mongoose = require("mongoose");
 const { join } = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const passport = require("passport");
 
 const indexRouter = require("./routes/index");
 const pingRouter = require("./routes/ping");
+const users = require("./routes/users");
+
+// DB Config
+const db = require("./config/keys").mongoURI;
+
+require('dotenv').config()
 
 const { json, urlencoded } = express;
 
@@ -19,6 +27,12 @@ app.use(express.static(join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/ping", pingRouter);
+// Routes
+app.use("/api/users", users);
+// Passport middleware
+app.use(passport.initialize());
+// Passport config
+require("./config/passport")(passport);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -35,5 +49,15 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.json({ error: err });
 });
+
+// Connect to MongoDB
+mongoose
+  .connect(
+    db,
+    { useNewUrlParser: true }
+  )
+  .then(() => console.log("MongoDB successfully connected"))
+  .catch(err => console.log(err));
+
 
 module.exports = app;
