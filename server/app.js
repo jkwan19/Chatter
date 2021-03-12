@@ -6,8 +6,6 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const passport = require("passport");
 
-const indexRouter = require("./routes/index");
-const pingRouter = require("./routes/ping");
 const users = require("./routes/users");
 
 // DB Config
@@ -25,8 +23,6 @@ app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(join(__dirname, "public")));
 
-app.use("/", indexRouter);
-app.use("/ping", pingRouter);
 // Routes
 app.use("/api/users", users);
 // Passport middleware
