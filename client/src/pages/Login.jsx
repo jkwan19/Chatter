@@ -1,25 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, {
+  useState,
+  useEffect
+} from "react";
 
 /* MATERIAL UI STYLING */
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Paper from "@material-ui/core/Paper";
-import Box from "@material-ui/core/Box";
-import Hidden from "@material-ui/core/Hidden";
-import { Link, useHistory } from "react-router-dom";
-import Grid from "@material-ui/core/Grid";
+import {
+  Box,
+  CssBaseline,
+  Grid,
+  Paper,
+  TextField,
+  Typography
+} from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import auth from "../services/auth.service";
 
 /* COMPONENTS */
-import LandingImage from './components/LandingImage';
-import SubmitButton from './components/SubmitButton';
-import AccountNavButtons from './components/AccountNavButtons';
-import FormHeader from './components/FormHeader';
-import ErrorMessage from './components/ErrorMessage';
+import LandingImage from "../image/LandingImage";
+import SubmitButton from "../submit/SubmitButton";
+import AccountNavButtons from "../nav-buttons/AccountNavButtons";
+import FormHeader from "../form/FormHeader";
+import ErrorMessage from "../snackbar/ErrorMessage";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -51,47 +55,46 @@ const useStyles = makeStyles(theme => ({
     margin: "auto"
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: "calc(100%)",
     marginTop: theme.spacing(1)
   },
-  label: { fontSize: 19, color: "rgb(0,0,0,0.4)", paddingLeft: "5px" },
+  label: {
+    fontSize: 14,
+    color: "rgb(0,0,0,0.4)",
+    paddingLeft: "5px"
+  },
   inputs: {
     marginTop: ".8rem",
     height: "2rem",
-    padding: "5px"
+    padding: "5px",
   },
   forgot: {
     paddingRight: 10,
-    color: "#3a8dff"
+    color: "#3a8dff",
+    fontWeight: 400,
+    fontSize: 12
   },
 }));
 
 // Login middleware placeholder
 function useLogin() {
-  const history = useHistory();
-
   const login = async (email, password) => {
-    console.log(email, password);
-    const res = await fetch(
-      `/auth/login?email=${email}&password=${password}`
-    ).then(res => res.json());
-    localStorage.setItem("user", res.user);
+    const res = await auth.login(email, password);
     localStorage.setItem("token", res.token);
-    history.push("/dashboard");
   };
   return login;
 }
 
 export default function Login() {
   const classes = useStyles();
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   const history = useHistory();
 
   useEffect(() => {
     const user = localStorage.getItem("user");
     if (user) history.push("/dashboard");
-  }, []);
+  }, [history]);
 
   const login = useLogin();
 
@@ -111,7 +114,7 @@ export default function Login() {
             link={'/signup'}
             main={'Create account'}
             alt={`Don't have an account?`}/>
-          <Box width="100%" maxWidth={450} p={3} alignSelf="center">
+          <Box width="100%" maxWidth='66%' p={3} alignSelf="center">
             <FormHeader value={'Welcome back!'}/>
             <Formik
               initialValues={{
@@ -131,16 +134,15 @@ export default function Login() {
                 setStatus();
                 login(email, password).then(
                   () => {
-                    // useHistory push to chat
-                    history.push(email, password)
-                    console.log(email, password);
+                    history.push("/dashboard");
                     return;
                   },
                   error => {
+                    setOpen(true);
                     setSubmitting(false);
                     setStatus(error);
                   }
-                );
+                )
               }}
             >
               {({ handleSubmit, handleChange, values, touched, errors }) => (
@@ -183,23 +185,27 @@ export default function Login() {
                       shrink: true
                     }}
                     InputProps={{
-                      classes: { input: classes.inputs },
+                      classes: {
+                        input: classes.inputs
+                      },
                       endAdornment: (
-                        <Typography className={classes.forgot}>
+                        <Typography
+                          className={classes.forgot}
+                          >
                           Forgot?
                         </Typography>
                       )
                     }}
+                    size="medium"
                     type="password"
                     autoComplete="current-password"
                     helperText={touched.password ? errors.password : ""}
                     error={touched.password && Boolean(errors.password)}
                     value={values.password}
                     onChange={handleChange}
-                    type="password"
                   />
                   <SubmitButton name={'Login'}/>
-                  <div style={{ height: 95 }} />
+                  <Box style={{ height: 95 }} />
                 </form>
               )}
             </Formik>
@@ -208,7 +214,7 @@ export default function Login() {
         </Box>
         <ErrorMessage
           open={open}
-          message={"Login failed"}
+          message="Login Failed"
           handleClose={handleClose}/>
       </Grid>
     </Grid>

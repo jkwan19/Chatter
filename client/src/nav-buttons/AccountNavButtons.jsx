@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 /* MATERIAL UI STYLING */
-import Box from "@material-ui/core/Box";
+import { Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 /* COMPONENTS */
@@ -10,7 +10,11 @@ import AccountButton from './AccountButton';
 import NoAccountButton from './NoAccountButton';
 
 const useStyles = makeStyles(theme => ({
-  link: { textDecoration: "none", display: "flex", flexWrap: "nowrap" },
+  link: {
+    textDecoration: "none",
+    display: "flex",
+    flexWrap: "nowrap",
+  },
 }));
 
 

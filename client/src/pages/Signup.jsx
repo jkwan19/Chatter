@@ -1,25 +1,27 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 /* MATERIAL UI STYLING */
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Paper from "@material-ui/core/Paper";
-import Box from "@material-ui/core/Box";
-import Hidden from "@material-ui/core/Hidden";
-import { Link, useHistory } from "react-router-dom";
-import Grid from "@material-ui/core/Grid";
+import {
+  Box,
+  CssBaseline,
+  Grid,
+  Paper,
+  TextField,
+  Typography
+} from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import auth from "../services/auth.service";
+
 
 /* COMPONENTS */
-import LandingImage from './components/LandingImage';
-import SubmitButton from './components/SubmitButton';
-import AccountNavButtons from './components/AccountNavButtons';
-import FormHeader from './components/FormHeader';
-import ErrorMessage from './components/ErrorMessage';
+import LandingImage from "../image/LandingImage";
+import SubmitButton from "../submit/SubmitButton";
+import AccountNavButtons from "../nav-buttons/AccountNavButtons";
+import FormHeader from "../form/FormHeader";
+import ErrorMessage from "../snackbar/ErrorMessage";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -62,40 +64,32 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+// Register middleware placeholder
 function useRegister() {
-  const history = useHistory();
-
-  const login = async (username, email, password) => {
-    console.log(email, password);
-    const res = await fetch(
-      `/auth/signup?username=${username}&email=${email}&password=${password}`
-    ).then(res => res.json());
-    console.log(res);
-    localStorage.setItem("user", res.user);
+  const register = async (username, email, password) => {
+    const res = await auth.register(username, email, password);
     localStorage.setItem("token", res.token);
-    history.push("/dashboard");
   };
-  return login;
+  return register;
 }
 
 export default function Register() {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(false);
 
   const register = useRegister();
+
+  const history = useHistory();
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) history.push("/dashboard");
+  }, [history]);
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") return;
     setOpen(false);
   };
-
-  const history = useHistory();
-
-  useEffect(() => {
-    console.log(history, 'history')
-    const user = localStorage.getItem("user");
-    if (user) history.push("/dashboard");
-  }, []);
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -111,6 +105,7 @@ export default function Register() {
             <FormHeader value={'Create an account'} />
             <Formik
               initialValues={{
+                username:"",
                 email: "",
                 password: ""
               }}
@@ -133,13 +128,12 @@ export default function Register() {
                 setStatus();
                 register(username, email, password).then(
                   () => {
-                    // useHistory push to chat
-                    history.push(username, email, password)
-                    console.log(username, email, password);
+                    history.push("/login")
                     return;
                   },
                   error => {
                     setSubmitting(false);
+                    setOpen(true);
                     setStatus(error);
                   }
                 );
@@ -159,7 +153,6 @@ export default function Register() {
                       </Typography>
                     }
                     fullWidth
-                    id="username"
                     margin="normal"
                     InputLabelProps={{
                       shrink: true
@@ -214,7 +207,6 @@ export default function Register() {
                     error={touched.password && Boolean(errors.password)}
                     value={values.password}
                     onChange={handleChange}
-                    type="password"
                   />
                   <SubmitButton name={'Create'} />
                 </form>
@@ -225,7 +217,7 @@ export default function Register() {
         </Box>
         <ErrorMessage
           open={open}
-          message={"Email already exists"}
+          message={"Registration failed"}
           handleClose={handleClose} />
       </Grid>
     </Grid>

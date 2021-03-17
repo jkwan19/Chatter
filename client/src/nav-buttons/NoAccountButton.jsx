@@ -1,7 +1,7 @@
 import React from "react";
 
 /* MATERIAL UI STYLING */
-import Button from "@material-ui/core/Button";
+import { Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
@@ -11,7 +11,11 @@ const useStyles = makeStyles(theme => ({
     fontWeight: 400,
     textAlign: "center",
     marginRight: 21,
-    whiteSpace: "nowrap"
+    whiteSpace: "nowrap",
+    flexDirection: "column",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
   },
 }));
 
@@ -19,8 +23,11 @@ export default function NoAccountButton(props) {
   const classes = useStyles();
 
   return (
-    <Button className={classes.noAccBtn}>
+    <Grid
+      className={classes.noAccBtn}
+      variant="inherit"
+      >
       {props.value}
-    </Button>
+    </Grid>
   )
 }

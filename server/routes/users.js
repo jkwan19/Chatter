@@ -20,7 +20,7 @@ const signJwt = (id) => {
     });
 };
 
-const sendToken = (user, statusCode, req, res) => {
+const sendToken = (user, statusCode, res) => {
   const token = signJwt(user._id);
 
   res.cookie("token", token, { httpOnly: true });
@@ -31,21 +31,22 @@ const sendToken = (user, statusCode, req, res) => {
     user,
   });
 };
-const hash = (newUser, salt, err, res) => {
+
+const hash = (newUser, salt, res, err) => {
   bcrypt.hash(newUser.password, salt, (err, hash) => {
     if (err) throw err;
     newUser.password = hash;
     newUser
       .save()
-      .then(user => sendToken(user, 201, req, res))
+      .then(user => sendToken(user, 201, res))
       .catch(err => console.log(err));
   });
 };
 
-const compare = (user, password, userPassword, req, res, errors) => {
+const compare = (user, password, userPassword, res, errors) => {
   bcrypt.compare(password, userPassword).then(isMatch => {
     if (isMatch) {
-      sendToken(user, 200, req, res);
+      sendToken(user, 200, res);
     } else {
       errors.password = 3;
       return res
@@ -62,6 +63,7 @@ router.post("/register", (req, res) => {
   if (!isValid) {
     return res.status(400).json(errors);
   }
+
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
       return res.status(400).json({ error: errors });
@@ -73,7 +75,7 @@ router.post("/register", (req, res) => {
       });
 
       bcrypt.genSalt(10, (err, salt) => {
-        hash(newUser, salt, err, res)
+        hash(newUser, salt, res, err)
       });
     }
   });
@@ -93,7 +95,7 @@ router.post("/login", (req, res) => {
       errors.email = invalidMessage;
       return res.status(404).json(errors);
     }
-    compare(user, password, user.password, req, res, errors);
+    compare(user, password, user.password, res, errors);
   });
 });
 

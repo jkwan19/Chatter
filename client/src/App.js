@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { MuiThemeProvider } from "@material-ui/core";
 import { theme } from "./themes/theme.js";
 // import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
-import { BrowserRouter, Route, Router, Redirect } from "react-router-dom";
+import { BrowserRouter, Route, Redirect } from "react-router-dom";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
@@ -10,7 +10,6 @@ import Dashboard from "./pages/Dashboard";
 import "./App.css";
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(localStorage.getItem("user"));
 
   return (
     <MuiThemeProvider theme={theme}>
@@ -27,3 +26,4 @@ function App() {
 }
 
 export default App;
+
