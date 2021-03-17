@@ -10,13 +10,10 @@ const loginPath = "/api/users/login";
 
 chai.use(chaiHttp);
 
+
 describe('Register', () => {
-  beforeEach((done) => {
-    User.remove({}, (err) => {
-        done();
-    });
-  });
   /* Test the /POST route  */
+  let userID;
   describe('/POST signup', () => {
     it('should not POST a registration without username field', (done) => {
     const user = {
@@ -45,6 +42,7 @@ describe('Register', () => {
         .set('content-type', 'application/x-www-form-urlencoded')
         .send(user)
         .end((err, res) => {
+          userID = res.body._id;
           res.should.have.status(201);
           res.body.should.be.a('object');
           done();
@@ -52,13 +50,16 @@ describe('Register', () => {
     })
   });
   after((done) => {
-    User.remove({}, (err) => {
+    User.remove({
+      _id: userID
+    }, (err) => {
         done();
     });
   });
 });
 
 describe('Login', () => {
+  let userID;
   before((done) => {
     const newUser = {
       username: "user",
@@ -69,7 +70,10 @@ describe('Login', () => {
       .post(registerPath)
       .set('content-type', 'application/x-www-form-urlencoded')
       .send(newUser)
-      .end(done())
+      .end((err, res) => {
+        userID = res.body._id;
+        done()
+      })
     })
   /* Test the /POST route  */
   describe('/POST login', () => {
@@ -99,7 +103,7 @@ describe('Login', () => {
         .send(user)
         .end((err, res) => {
           res.should.have.status(404);
-          res.body.emailnotfound.should.equal("Email not found")
+          res.body.error.should.equal("Email not found")
           done();
         })
     })
@@ -115,7 +119,7 @@ describe('Login', () => {
         .send(user)
         .end((err, res) => {
           res.should.have.status(400);
-          res.body.passwordincorrect.should.equal("Password incorrect");
+          res.body.error.should.equal("Password incorrect");
           done();
         })
     })
@@ -137,7 +141,9 @@ describe('Login', () => {
   });
 
   after((done) => {
-    User.remove({}, (err) => {
+    User.remove({
+      _id: userID
+    }, (err) => {
         done();
     });
   });
