@@ -9,7 +9,6 @@ const validateLoginInput = require("../validation/login");
 
 const User = require("../models/User");
 
-const invalidMessage = "Invalid credentials";
 
 const signJwt = (id) => {
   return jwt.sign(
@@ -27,12 +26,11 @@ const sendToken = (user, statusCode, res) => {
 
   res.status(statusCode).json({
     status: "success",
-    token,
     user,
   });
 };
 
-const hash = (newUser, salt, res, err) => {
+const createUser = (newUser, salt, res, err) => {
   bcrypt.hash(newUser.password, salt, (err, hash) => {
     if (err) throw err;
     newUser.password = hash;
@@ -43,12 +41,12 @@ const hash = (newUser, salt, res, err) => {
   });
 };
 
-const compare = (user, password, userPassword, res, errors) => {
+const findUser = (user, password, userPassword, res, errors) => {
   bcrypt.compare(password, userPassword).then(isMatch => {
     if (isMatch) {
       sendToken(user, 200, res);
     } else {
-      errors.password = 3;
+      errors.message = "Invalid credentials";
       return res
         .status(400)
         .json(errors);
@@ -75,7 +73,7 @@ router.post("/register", (req, res) => {
       });
 
       bcrypt.genSalt(10, (err, salt) => {
-        hash(newUser, salt, res, err)
+        createUser(newUser, salt, res, err)
       });
     }
   });
@@ -92,10 +90,10 @@ router.post("/login", (req, res) => {
 
   User.findOne({ email }).then(user => {
     if (!user) {
-      errors.email = invalidMessage;
-      return res.status(404).json(errors);
+      errors.message = "Invalid credentials";
+      return res.status(400).json(errors);
     }
-    compare(user, password, user.password, res, errors);
+    findUser(user, password, user.password, res, errors);
   });
 });
 

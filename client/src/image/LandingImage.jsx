@@ -4,6 +4,7 @@ import React from 'react';
 import {
   Grid,
   Hidden,
+  Box,
   Typography
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -22,7 +23,7 @@ const useStyles = makeStyles(theme => ({
       "linear-gradient(180deg, rgb(58,141,255, 0.75) 0%, rgb(134,185,255, 0.75) 85%)",
     backgroundSize: "cover",
     backgroundPosition: "center",
-    minHeight: "calc(100%)",
+    minHeight: "100%",
   },
   heroText: {
     fontSize: 26,

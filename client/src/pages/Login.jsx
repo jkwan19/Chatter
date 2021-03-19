@@ -55,8 +55,12 @@ const useStyles = makeStyles(theme => ({
     margin: "auto"
   },
   form: {
-    width: "calc(100%)",
+    display: "block",
     marginTop: theme.spacing(1)
+  },
+  formBox: {
+    marginRight: theme.spacing(1),
+    marginBottom: theme.spacing(4)
   },
   label: {
     fontSize: 14,
@@ -77,13 +81,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 // Login middleware placeholder
-function useLogin() {
-  const login = async (email, password) => {
-    const res = await auth.login(email, password);
-    localStorage.setItem("token", res.token);
-  };
-  return login;
-}
+const login = async (email, password) => {
+  await auth.login(email, password);
+};
+
 
 export default function Login() {
   const classes = useStyles();
@@ -95,8 +96,6 @@ export default function Login() {
     const user = localStorage.getItem("user");
     if (user) history.push("/dashboard");
   }, [history]);
-
-  const login = useLogin();
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") return;
@@ -114,8 +113,15 @@ export default function Login() {
             link={'/signup'}
             main={'Create account'}
             alt={`Don't have an account?`}/>
-          <Box width="100%" maxWidth='66%' p={3} alignSelf="center">
+          <Grid
+            container
+            direction="column"
+            justify="center"
+            alignItems="center"
+            className={classes.formBox}
+            >
             <FormHeader value={'Welcome back!'}/>
+
             <Formik
               initialValues={{
                 email: "",
@@ -205,11 +211,10 @@ export default function Login() {
                     onChange={handleChange}
                   />
                   <SubmitButton name={'Login'}/>
-                  <Box style={{ height: 95 }} />
                 </form>
               )}
             </Formik>
-          </Box>
+          </Grid>
           <Box p={1} alignSelf="center" />
         </Box>
         <ErrorMessage

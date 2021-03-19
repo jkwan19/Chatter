@@ -27,14 +27,13 @@ const login = (email, password) => {
 const logout = () => {
   return axios.post(API_URL + "logout")
     .then((res) => {
-      localStorage.removeItem("token")
       localStorage.removeItem("user");
     })
     .catch((err) => console.log("Error logging out: ", err));
 };
 
 const getCurrentUser = () => {
-  return JSON.parse(localStorage.user);
+  return JSON.parse(localStorage.getItem("user"));
 };
 
 const auth = {

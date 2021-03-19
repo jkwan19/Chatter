@@ -53,10 +53,18 @@ const useStyles = makeStyles(theme => ({
     margin: "auto"
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    display: "block",
     marginTop: theme.spacing(1)
   },
-  label: { fontSize: 19, color: "rgb(0,0,0,0.4)", paddingLeft: "5px" },
+  formBox: {
+    marginRight: theme.spacing(1),
+    marginBottom: theme.spacing(4)
+  },
+  label: {
+    fontSize: 19,
+    color: "rgb(0,0,0,0.4)",
+    paddingLeft: "5px"
+  },
   inputs: {
     marginTop: ".8rem",
     height: "2rem",
@@ -65,19 +73,14 @@ const useStyles = makeStyles(theme => ({
 }));
 
 // Register middleware placeholder
-function useRegister() {
-  const register = async (username, email, password) => {
-    const res = await auth.register(username, email, password);
-    localStorage.setItem("token", res.token);
-  };
-  return register;
-}
+const register = async (username, email, password) => {
+  await auth.register(username, email, password);
+};
+
 
 export default function Register() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-
-  const register = useRegister();
 
   const history = useHistory();
 
@@ -101,7 +104,12 @@ export default function Register() {
             link={'/login'}
             main={'Login'}
             alt={'Already have an account?'}/>
-          <Box width="100%" maxWidth={450} p={3} alignSelf="center">
+          <Grid
+            container
+            direction="column"
+            justify="center"
+            alignItems="center"
+            className={classes.formBox}>
             <FormHeader value={'Create an account'} />
             <Formik
               initialValues={{
@@ -212,12 +220,12 @@ export default function Register() {
                 </form>
               )}
             </Formik>
-          </Box>
+          </Grid>
           <Box p={1} alignSelf="center" />
         </Box>
         <ErrorMessage
           open={open}
-          message={"Registration failed"}
+          message="Registration failed"
           handleClose={handleClose} />
       </Grid>
     </Grid>
