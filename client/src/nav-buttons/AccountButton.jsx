@@ -1,7 +1,10 @@
 import React from "react";
 
 /* MATERIAL UI STYLING */
-import Button from "@material-ui/core/Button";
+import {
+  Button,
+  Typography
+ } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
@@ -13,7 +16,11 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "#ffffff",
     color: "#3a8dff",
     boxShadow: "none",
-    marginRight: 35
+    marginRight: 35,
+    flexDirection: "column",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
   },
 }));
 
@@ -25,8 +32,8 @@ export default function AccountButton(props) {
       color="inherit"
       className={classes.accBtn}
       variant="contained"
-    >
-      {props.value}
+      >
+      <Typography variant="body2">{props.value}</Typography>
     </Button>
   )
 }

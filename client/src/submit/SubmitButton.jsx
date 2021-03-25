@@ -1,8 +1,11 @@
 import React from 'react';
 
 /* MATERIAL UI STYLING */
-import Button from "@material-ui/core/Button";
-import Box from "@material-ui/core/Box";
+import {
+  Box,
+  Button,
+  Typography
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
@@ -31,7 +34,7 @@ export default function SubmitButton(props) {
         color="primary"
         className={classes.submit}
       >
-        {props.name}
+        <Typography variant="body2">{props.name}</Typography>
       </Button>
     </Box>
   )

@@ -1,17 +1,23 @@
 import React from "react";
 
 /* MATERIAL UI STYLING */
-import Button from "@material-ui/core/Button";
+import {
+  Button,
+  Typography
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
   noAccBtn: {
-    fontSize: 14,
     color: "#b0b0b0",
     fontWeight: 400,
     textAlign: "center",
     marginRight: 21,
-    whiteSpace: "nowrap"
+    whiteSpace: "nowrap",
+    flexDirection: "column",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
   },
 }));
 
@@ -19,8 +25,10 @@ export default function NoAccountButton(props) {
   const classes = useStyles();
 
   return (
-    <Button className={classes.noAccBtn}>
-      {props.value}
+    <Button
+      className={classes.noAccBtn}
+      >
+      <Typography variant="body2">{props.value}</Typography>
     </Button>
   )
 }

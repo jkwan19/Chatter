@@ -1,25 +1,34 @@
-import React, { useEffect } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useState
+} from "react";
 
 /* MATERIAL UI STYLING */
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Paper from "@material-ui/core/Paper";
-import Box from "@material-ui/core/Box";
-import Hidden from "@material-ui/core/Hidden";
-import { Link, useHistory } from "react-router-dom";
-import Grid from "@material-ui/core/Grid";
+import {
+  Box,
+  CssBaseline,
+  Grid,
+  Paper,
+  Typography
+} from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import auth from "../services/auth.service";
+import { AuthContext } from "../context/AuthContext";
 
 /* COMPONENTS */
-import LandingImage from './components/LandingImage';
-import SubmitButton from './components/SubmitButton';
-import AccountNavButtons from './components/AccountNavButtons';
-import FormHeader from './components/FormHeader';
-import ErrorMessage from './components/ErrorMessage';
+import LandingImage from "../image/LandingImage";
+import SubmitButton from "../submit/SubmitButton";
+import AccountNavButtons from "../nav-buttons/AccountNavButtons";
+import FormHeader from "../form/FormHeader";
+import FormContainer from "../form/FormContainer";
+import UsernameField from "../form/UsernameField";
+import EmailField from "../form/EmailField";
+import PasswordField from "../form/PasswordField";
+import ErrorMessage from "../snackbar/ErrorMessage";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -51,51 +60,37 @@ const useStyles = makeStyles(theme => ({
     margin: "auto"
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    display: "block",
     marginTop: theme.spacing(1)
   },
-  label: { fontSize: 19, color: "rgb(0,0,0,0.4)", paddingLeft: "5px" },
-  inputs: {
-    marginTop: ".8rem",
-    height: "2rem",
-    padding: "5px"
+  formBox: {
+    marginLeft: theme.spacing(12),
+    marginRight: theme.spacing(1),
+    marginBottom: theme.spacing(4),
+    width: '100%',
+    maxWidth: 450
   },
 }));
 
-function useRegister() {
-  const history = useHistory();
+// Register middleware placeholder
+const register = (username, email, password) => auth.register(username, email, password);
 
-  const login = async (username, email, password) => {
-    console.log(email, password);
-    const res = await fetch(
-      `/auth/signup?username=${username}&email=${email}&password=${password}`
-    ).then(res => res.json());
-    console.log(res);
-    localStorage.setItem("user", res.user);
-    localStorage.setItem("token", res.token);
-    history.push("/dashboard");
-  };
-  return login;
-}
 
 export default function Register() {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(false);
 
-  const register = useRegister();
+  const { loggedIn, setLoggedIn } = useContext(AuthContext);
+  const history = useHistory();
+
+  useEffect(() => {
+    if (loggedIn) history.push('/dashboard')
+  }, [history]);
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") return;
     setOpen(false);
   };
-
-  const history = useHistory();
-
-  useEffect(() => {
-    console.log(history, 'history')
-    const user = localStorage.getItem("user");
-    if (user) history.push("/dashboard");
-  }, []);
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -107,10 +102,16 @@ export default function Register() {
             link={'/login'}
             main={'Login'}
             alt={'Already have an account?'}/>
-          <Box width="100%" maxWidth={450} p={3} alignSelf="center">
+          <Grid
+            container
+            direction="column"
+            justify="center"
+            alignItems="center"
+            className={classes.formBox}>
             <FormHeader value={'Create an account'} />
             <Formik
               initialValues={{
+                username:"",
                 email: "",
                 password: ""
               }}
@@ -132,17 +133,17 @@ export default function Register() {
               ) => {
                 setStatus();
                 register(username, email, password).then(
-                  () => {
-                    // useHistory push to chat
-                    history.push(username, email, password)
-                    console.log(username, email, password);
-                    return;
+                  (res) => {
+                    setLoggedIn(true)
                   },
                   error => {
                     setSubmitting(false);
+                    setOpen(true);
                     setStatus(error);
                   }
-                );
+                ).then(
+                  history.push('/dashboard')
+                )
               }}
             >
               {({ handleSubmit, handleChange, values, touched, errors }) => (
@@ -151,81 +152,35 @@ export default function Register() {
                   className={classes.form}
                   noValidate
                 >
-                  <TextField
-                    id="username"
-                    label={
-                      <Typography className={classes.label}>
-                        Username
-                      </Typography>
-                    }
-                    fullWidth
-                    id="username"
-                    margin="normal"
-                    InputLabelProps={{
-                      shrink: true
-                    }}
-                    InputProps={{ classes: { input: classes.inputs } }}
-                    name="username"
-                    autoComplete="username"
-                    autoFocus
-                    helperText={touched.username ? errors.username : ""}
-                    error={touched.username && Boolean(errors.username)}
-                    value={values.username}
-                    onChange={handleChange}
+                  <UsernameField
+                    handleChange={handleChange}
+                    errors={errors}
+                    touched={touched}
+                    values={values}
                   />
-                  <TextField
-                    id="email"
-                    label={
-                      <Typography className={classes.label}>
-                        E-mail address
-                      </Typography>
-                    }
-                    fullWidth
-                    margin="normal"
-                    InputLabelProps={{
-                      shrink: true
-                    }}
-                    InputProps={{ classes: { input: classes.inputs } }}
-                    name="email"
-                    autoComplete="email"
-                    helperText={touched.email ? errors.email : ""}
-                    error={touched.email && Boolean(errors.email)}
-                    value={values.email}
-                    onChange={handleChange}
+                  <EmailField
+                    handleChange={handleChange}
+                    errors={errors}
+                    touched={touched}
+                    values={values}
+                    page="Signup"
                   />
-                  <TextField
-                    id="password"
-                    label={
-                      <Typography className={classes.label}>
-                        Password
-                      </Typography>
-                    }
-                    fullWidth
-                    margin="normal"
-                    InputLabelProps={{
-                      shrink: true
-                    }}
-                    InputProps={{
-                      classes: { input: classes.inputs }
-                    }}
-                    type="password"
-                    autoComplete="current-password"
-                    helperText={touched.password ? errors.password : ""}
-                    error={touched.password && Boolean(errors.password)}
-                    value={values.password}
-                    onChange={handleChange}
-                    type="password"
+                  <PasswordField
+                    handleChange={handleChange}
+                    errors={errors}
+                    touched={touched}
+                    values={values}
                   />
                   <SubmitButton name={'Create'} />
                 </form>
               )}
             </Formik>
-          </Box>
-          <Box p={1} alignSelf="center" />
+          </Grid>
+          <FormContainer />
         </Box>
         <ErrorMessage
           open={open}
-          message={"Email already exists"}
+          message="Registration failed"
           handleClose={handleClose} />
       </Grid>
     </Grid>

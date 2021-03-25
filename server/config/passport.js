@@ -1,18 +1,23 @@
+const passport = require('passport');
 const JwtStrategy = require("passport-jwt").Strategy;
-const ExtractJwt = require("passport-jwt").ExtractJwt;
 const mongoose = require("mongoose");
-const User = mongoose.model("users");
+const User = require("../models/User")
 const keys = require("../config/keys");
 
-const opts = {};
-
-opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = keys.secretOrKey;
+const cookieExtractor = req => {
+  let token = null;
+  if (req && req.cookies) {
+    token = req.cookies["token"];
+  }
+}
 
 module.exports = passport => {
   passport.use(
-    new JwtStrategy(opts, (jwt_payload, done) => {
-      User.findById(jwt_payload.id)
+    new JwtStrategy({
+      jwtFromRequest: cookieExtractor,
+      secretOrKey: keys.secretOrKey
+    }, (jwt_payload, done) => {
+      User.findById(jwt_payload._id)
         .then(user => {
           if (user) {
             return done(null, user);
@@ -21,5 +26,5 @@ module.exports = passport => {
         })
         .catch(err => console.log(err));
     })
-  );
+  )
 };

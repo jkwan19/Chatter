@@ -1,25 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, {
+  useContext,
+  useState,
+  useEffect
+} from "react";
 
 /* MATERIAL UI STYLING */
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Paper from "@material-ui/core/Paper";
-import Box from "@material-ui/core/Box";
-import Hidden from "@material-ui/core/Hidden";
-import { Link, useHistory } from "react-router-dom";
-import Grid from "@material-ui/core/Grid";
+import {
+  Box,
+  CssBaseline,
+  Grid,
+  Paper
+} from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import auth from "../services/auth.service";
+import { AuthContext } from "../context/AuthContext";
 
 /* COMPONENTS */
-import LandingImage from './components/LandingImage';
-import SubmitButton from './components/SubmitButton';
-import AccountNavButtons from './components/AccountNavButtons';
-import FormHeader from './components/FormHeader';
-import ErrorMessage from './components/ErrorMessage';
+import LandingImage from "../image/LandingImage";
+import SubmitButton from "../submit/SubmitButton";
+import AccountNavButtons from "../nav-buttons/AccountNavButtons";
+import FormHeader from "../form/FormHeader";
+import FormContainer from "../form/FormContainer";
+import EmailField from "../form/EmailField";
+import PasswordField from "../form/PasswordField";
+import ErrorMessage from "../snackbar/ErrorMessage";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -51,49 +58,32 @@ const useStyles = makeStyles(theme => ({
     margin: "auto"
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
+    display: "block",
+    marginTop: theme.spacing(1),
+    width: '100%'
   },
-  label: { fontSize: 19, color: "rgb(0,0,0,0.4)", paddingLeft: "5px" },
-  inputs: {
-    marginTop: ".8rem",
-    height: "2rem",
-    padding: "5px"
-  },
-  forgot: {
-    paddingRight: 10,
-    color: "#3a8dff"
+  formBox: {
+    marginLeft: theme.spacing(12),
+    marginRight: theme.spacing(1),
+    marginBottom: theme.spacing(4),
+    width: '100%',
+    maxWidth: 450
   },
 }));
 
 // Login middleware placeholder
-function useLogin() {
-  const history = useHistory();
-
-  const login = async (email, password) => {
-    console.log(email, password);
-    const res = await fetch(
-      `/auth/login?email=${email}&password=${password}`
-    ).then(res => res.json());
-    localStorage.setItem("user", res.user);
-    localStorage.setItem("token", res.token);
-    history.push("/dashboard");
-  };
-  return login;
-}
+const login = (email, password) => auth.login(email, password);
 
 export default function Login() {
   const classes = useStyles();
-  const [open, setOpen] = useState(true);
-
+  const [open, setOpen] = useState(false);
   const history = useHistory();
 
-  useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user) history.push("/dashboard");
-  }, []);
+  const { loggedIn, setLoggedIn, setUser } = useContext(AuthContext);
 
-  const login = useLogin();
+  useEffect(() => {
+    if (loggedIn) history.push('/dashboard')
+  }, [history]);
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") return;
@@ -111,7 +101,13 @@ export default function Login() {
             link={'/signup'}
             main={'Create account'}
             alt={`Don't have an account?`}/>
-          <Box width="100%" maxWidth={450} p={3} alignSelf="center">
+          <Grid
+            container
+            direction="column"
+            justify="center"
+            alignItems="center"
+            className={classes.formBox}
+            >
             <FormHeader value={'Welcome back!'}/>
             <Formik
               initialValues={{
@@ -130,17 +126,18 @@ export default function Login() {
               onSubmit={({ email, password }, { setStatus, setSubmitting }) => {
                 setStatus();
                 login(email, password).then(
-                  () => {
-                    // useHistory push to chat
-                    history.push(email, password)
-                    console.log(email, password);
-                    return;
+                  (res) => {
+                    setLoggedIn(true)
+                    setUser(res.user.username)
                   },
                   error => {
+                    setOpen(true);
                     setSubmitting(false);
                     setStatus(error);
                   }
-                );
+                ).then(
+                  history.push('/dashboard')
+                )
               }}
             >
               {({ handleSubmit, handleChange, values, touched, errors }) => (
@@ -149,66 +146,29 @@ export default function Login() {
                   className={classes.form}
                   noValidate
                 >
-                  <TextField
-                    id="email"
-                    label={
-                      <Typography className={classes.label}>
-                        E-mail address
-                      </Typography>
-                    }
-                    fullWidth
-                    margin="normal"
-                    InputLabelProps={{
-                      shrink: true
-                    }}
-                    InputProps={{ classes: { input: classes.inputs } }}
-                    name="email"
-                    autoComplete="email"
-                    autoFocus
-                    helperText={touched.email ? errors.email : ""}
-                    error={touched.email && Boolean(errors.email)}
-                    value={values.email}
-                    onChange={handleChange}
+                  <EmailField
+                    handleChange={handleChange}
+                    errors={errors}
+                    touched={touched}
+                    values={values}
                   />
-                  <TextField
-                    id="password"
-                    label={
-                      <Typography className={classes.label}>
-                        Password
-                      </Typography>
-                    }
-                    fullWidth
-                    margin="normal"
-                    InputLabelProps={{
-                      shrink: true
-                    }}
-                    InputProps={{
-                      classes: { input: classes.inputs },
-                      endAdornment: (
-                        <Typography className={classes.forgot}>
-                          Forgot?
-                        </Typography>
-                      )
-                    }}
-                    type="password"
-                    autoComplete="current-password"
-                    helperText={touched.password ? errors.password : ""}
-                    error={touched.password && Boolean(errors.password)}
-                    value={values.password}
-                    onChange={handleChange}
-                    type="password"
+                  <PasswordField
+                    handleChange={handleChange}
+                    errors={errors}
+                    touched={touched}
+                    values={values}
+                    page="Login"
                   />
                   <SubmitButton name={'Login'}/>
-                  <div style={{ height: 95 }} />
                 </form>
               )}
             </Formik>
-          </Box>
-          <Box p={1} alignSelf="center" />
+          </Grid>
+          <FormContainer />
         </Box>
         <ErrorMessage
           open={open}
-          message={"Login failed"}
+          message="Login Failed"
           handleClose={handleClose}/>
       </Grid>
     </Grid>
