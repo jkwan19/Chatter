@@ -10,6 +10,8 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
   welcome: {
+    flexGrow: 1,
+    width: "100%",
     paddingBottom: 20,
     color: "#000000",
   },

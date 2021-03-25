@@ -1,4 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useState
+} from "react";
 
 /* MATERIAL UI STYLING */
 import {
@@ -6,7 +10,6 @@ import {
   CssBaseline,
   Grid,
   Paper,
-  TextField,
   Typography
 } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
@@ -14,13 +17,17 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { makeStyles } from "@material-ui/core/styles";
 import auth from "../services/auth.service";
-
+import { AuthContext } from "../context/AuthContext";
 
 /* COMPONENTS */
 import LandingImage from "../image/LandingImage";
 import SubmitButton from "../submit/SubmitButton";
 import AccountNavButtons from "../nav-buttons/AccountNavButtons";
 import FormHeader from "../form/FormHeader";
+import FormContainer from "../form/FormContainer";
+import UsernameField from "../form/UsernameField";
+import EmailField from "../form/EmailField";
+import PasswordField from "../form/PasswordField";
 import ErrorMessage from "../snackbar/ErrorMessage";
 
 const useStyles = makeStyles(theme => ({
@@ -57,36 +64,27 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(1)
   },
   formBox: {
+    marginLeft: theme.spacing(12),
     marginRight: theme.spacing(1),
-    marginBottom: theme.spacing(4)
-  },
-  label: {
-    fontSize: 19,
-    color: "rgb(0,0,0,0.4)",
-    paddingLeft: "5px"
-  },
-  inputs: {
-    marginTop: ".8rem",
-    height: "2rem",
-    padding: "5px"
+    marginBottom: theme.spacing(4),
+    width: '100%',
+    maxWidth: 450
   },
 }));
 
 // Register middleware placeholder
-const register = async (username, email, password) => {
-  await auth.register(username, email, password);
-};
+const register = (username, email, password) => auth.register(username, email, password);
 
 
 export default function Register() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
 
+  const { loggedIn, setLoggedIn } = useContext(AuthContext);
   const history = useHistory();
 
   useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user) history.push("/dashboard");
+    if (loggedIn) history.push('/dashboard')
   }, [history]);
 
   const handleClose = (event, reason) => {
@@ -135,16 +133,17 @@ export default function Register() {
               ) => {
                 setStatus();
                 register(username, email, password).then(
-                  () => {
-                    history.push("/login")
-                    return;
+                  (res) => {
+                    setLoggedIn(true)
                   },
                   error => {
                     setSubmitting(false);
                     setOpen(true);
                     setStatus(error);
                   }
-                );
+                ).then(
+                  history.push('/dashboard')
+                )
               }}
             >
               {({ handleSubmit, handleChange, values, touched, errors }) => (
@@ -153,75 +152,31 @@ export default function Register() {
                   className={classes.form}
                   noValidate
                 >
-                  <TextField
-                    id="username"
-                    label={
-                      <Typography className={classes.label}>
-                        Username
-                      </Typography>
-                    }
-                    fullWidth
-                    margin="normal"
-                    InputLabelProps={{
-                      shrink: true
-                    }}
-                    InputProps={{ classes: { input: classes.inputs } }}
-                    name="username"
-                    autoComplete="username"
-                    autoFocus
-                    helperText={touched.username ? errors.username : ""}
-                    error={touched.username && Boolean(errors.username)}
-                    value={values.username}
-                    onChange={handleChange}
+                  <UsernameField
+                    handleChange={handleChange}
+                    errors={errors}
+                    touched={touched}
+                    values={values}
                   />
-                  <TextField
-                    id="email"
-                    label={
-                      <Typography className={classes.label}>
-                        E-mail address
-                      </Typography>
-                    }
-                    fullWidth
-                    margin="normal"
-                    InputLabelProps={{
-                      shrink: true
-                    }}
-                    InputProps={{ classes: { input: classes.inputs } }}
-                    name="email"
-                    autoComplete="email"
-                    helperText={touched.email ? errors.email : ""}
-                    error={touched.email && Boolean(errors.email)}
-                    value={values.email}
-                    onChange={handleChange}
+                  <EmailField
+                    handleChange={handleChange}
+                    errors={errors}
+                    touched={touched}
+                    values={values}
+                    page="Signup"
                   />
-                  <TextField
-                    id="password"
-                    label={
-                      <Typography className={classes.label}>
-                        Password
-                      </Typography>
-                    }
-                    fullWidth
-                    margin="normal"
-                    InputLabelProps={{
-                      shrink: true
-                    }}
-                    InputProps={{
-                      classes: { input: classes.inputs }
-                    }}
-                    type="password"
-                    autoComplete="current-password"
-                    helperText={touched.password ? errors.password : ""}
-                    error={touched.password && Boolean(errors.password)}
-                    value={values.password}
-                    onChange={handleChange}
+                  <PasswordField
+                    handleChange={handleChange}
+                    errors={errors}
+                    touched={touched}
+                    values={values}
                   />
                   <SubmitButton name={'Create'} />
                 </form>
               )}
             </Formik>
           </Grid>
-          <Box p={1} alignSelf="center" />
+          <FormContainer />
         </Box>
         <ErrorMessage
           open={open}

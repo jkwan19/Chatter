@@ -2,7 +2,7 @@ import React from "react";
 
 /* MATERIAL UI STYLING */
 import {
-  Box,
+  Button,
   Typography
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -25,10 +25,10 @@ export default function NoAccountButton(props) {
   const classes = useStyles();
 
   return (
-    <Box
+    <Button
       className={classes.noAccBtn}
       >
       <Typography variant="body2">{props.value}</Typography>
-    </Box>
+    </Button>
   )
 }

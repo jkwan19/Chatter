@@ -8,7 +8,6 @@ import {
 import CloseIcon from "@material-ui/icons/Close";
 
 export default function ErrorMessage(props) {
-
   return (
     <Snackbar
       anchorOrigin={{

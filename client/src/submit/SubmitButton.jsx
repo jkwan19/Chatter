@@ -3,7 +3,8 @@ import React from 'react';
 /* MATERIAL UI STYLING */
 import {
   Box,
-  Button
+  Button,
+  Typography
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -33,7 +34,7 @@ export default function SubmitButton(props) {
         color="primary"
         className={classes.submit}
       >
-        {props.name}
+        <Typography variant="body2">{props.name}</Typography>
       </Button>
     </Box>
   )

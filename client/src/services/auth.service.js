@@ -8,6 +8,8 @@ const register = (username, email, password) => {
     email,
     password,
   })
+    .then((res) => res.data)
+    .catch((err) => console.log("Register error: " + err));
 };
 
 const login = (email, password) => {
@@ -15,32 +17,27 @@ const login = (email, password) => {
       email,
       password,
     })
-    .then((res) => {
-      if (res.data.token) {
-        localStorage.setItem("user", JSON.stringify(res.data))
-      }
-      return res.data;
-    })
+    .then((res) => res.data)
     .catch(err => console.log("Login error: " + err));
 };
 
 const logout = () => {
   return axios.post(API_URL + "logout")
-    .then((res) => {
-      localStorage.removeItem("user");
-    })
+    .then((res) => res.data)
     .catch((err) => console.log("Error logging out: ", err));
 };
 
-const getCurrentUser = () => {
-  return JSON.parse(localStorage.getItem("user"));
-};
+const isAuth = () => {
+  return axios.get(API_URL + 'is_authenticated')
+    .then((res) => res.data)
+    .catch((err) => console.log("Error authenticating: ", err))
+}
 
 const auth = {
   register,
   login,
   logout,
-  getCurrentUser,
+  isAuth
 };
 
 export default auth;

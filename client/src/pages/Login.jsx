@@ -1,4 +1,5 @@
 import React, {
+  useContext,
   useState,
   useEffect
 } from "react";
@@ -8,21 +9,23 @@ import {
   Box,
   CssBaseline,
   Grid,
-  Paper,
-  TextField,
-  Typography
+  Paper
 } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { makeStyles } from "@material-ui/core/styles";
 import auth from "../services/auth.service";
+import { AuthContext } from "../context/AuthContext";
 
 /* COMPONENTS */
 import LandingImage from "../image/LandingImage";
 import SubmitButton from "../submit/SubmitButton";
 import AccountNavButtons from "../nav-buttons/AccountNavButtons";
 import FormHeader from "../form/FormHeader";
+import FormContainer from "../form/FormContainer";
+import EmailField from "../form/EmailField";
+import PasswordField from "../form/PasswordField";
 import ErrorMessage from "../snackbar/ErrorMessage";
 
 const useStyles = makeStyles(theme => ({
@@ -56,45 +59,30 @@ const useStyles = makeStyles(theme => ({
   },
   form: {
     display: "block",
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
+    width: '100%'
   },
   formBox: {
+    marginLeft: theme.spacing(12),
     marginRight: theme.spacing(1),
-    marginBottom: theme.spacing(4)
-  },
-  label: {
-    fontSize: 14,
-    color: "rgb(0,0,0,0.4)",
-    paddingLeft: "5px"
-  },
-  inputs: {
-    marginTop: ".8rem",
-    height: "2rem",
-    padding: "5px",
-  },
-  forgot: {
-    paddingRight: 10,
-    color: "#3a8dff",
-    fontWeight: 400,
-    fontSize: 12
+    marginBottom: theme.spacing(4),
+    width: '100%',
+    maxWidth: 450
   },
 }));
 
 // Login middleware placeholder
-const login = async (email, password) => {
-  await auth.login(email, password);
-};
-
+const login = (email, password) => auth.login(email, password);
 
 export default function Login() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-
   const history = useHistory();
 
+  const { loggedIn, setLoggedIn, setUser } = useContext(AuthContext);
+
   useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user) history.push("/dashboard");
+    if (loggedIn) history.push('/dashboard')
   }, [history]);
 
   const handleClose = (event, reason) => {
@@ -121,7 +109,6 @@ export default function Login() {
             className={classes.formBox}
             >
             <FormHeader value={'Welcome back!'}/>
-
             <Formik
               initialValues={{
                 email: "",
@@ -139,15 +126,17 @@ export default function Login() {
               onSubmit={({ email, password }, { setStatus, setSubmitting }) => {
                 setStatus();
                 login(email, password).then(
-                  () => {
-                    history.push("/dashboard");
-                    return;
+                  (res) => {
+                    setLoggedIn(true)
+                    setUser(res.user.username)
                   },
                   error => {
                     setOpen(true);
                     setSubmitting(false);
                     setStatus(error);
                   }
+                ).then(
+                  history.push('/dashboard')
                 )
               }}
             >
@@ -157,65 +146,25 @@ export default function Login() {
                   className={classes.form}
                   noValidate
                 >
-                  <TextField
-                    id="email"
-                    label={
-                      <Typography className={classes.label}>
-                        E-mail address
-                      </Typography>
-                    }
-                    fullWidth
-                    margin="normal"
-                    InputLabelProps={{
-                      shrink: true
-                    }}
-                    InputProps={{ classes: { input: classes.inputs } }}
-                    name="email"
-                    autoComplete="email"
-                    autoFocus
-                    helperText={touched.email ? errors.email : ""}
-                    error={touched.email && Boolean(errors.email)}
-                    value={values.email}
-                    onChange={handleChange}
+                  <EmailField
+                    handleChange={handleChange}
+                    errors={errors}
+                    touched={touched}
+                    values={values}
                   />
-                  <TextField
-                    id="password"
-                    label={
-                      <Typography className={classes.label}>
-                        Password
-                      </Typography>
-                    }
-                    fullWidth
-                    margin="normal"
-                    InputLabelProps={{
-                      shrink: true
-                    }}
-                    InputProps={{
-                      classes: {
-                        input: classes.inputs
-                      },
-                      endAdornment: (
-                        <Typography
-                          className={classes.forgot}
-                          >
-                          Forgot?
-                        </Typography>
-                      )
-                    }}
-                    size="medium"
-                    type="password"
-                    autoComplete="current-password"
-                    helperText={touched.password ? errors.password : ""}
-                    error={touched.password && Boolean(errors.password)}
-                    value={values.password}
-                    onChange={handleChange}
+                  <PasswordField
+                    handleChange={handleChange}
+                    errors={errors}
+                    touched={touched}
+                    values={values}
+                    page="Login"
                   />
                   <SubmitButton name={'Login'}/>
                 </form>
               )}
             </Formik>
           </Grid>
-          <Box p={1} alignSelf="center" />
+          <FormContainer />
         </Box>
         <ErrorMessage
           open={open}

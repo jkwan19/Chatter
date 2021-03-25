@@ -21,11 +21,10 @@ const signJwt = (id) => {
 
 const sendToken = (user, statusCode, res) => {
   const token = signJwt(user._id);
-
   res.cookie("token", token, { httpOnly: true });
 
   res.status(statusCode).json({
-    status: "success",
+    status : "success",
     user,
   });
 };
@@ -64,7 +63,8 @@ router.post("/register", (req, res) => {
 
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
-      return res.status(400).json({ error: errors });
+      errors.message = "Invalid credentials";
+      return res.status(400).json(errors);
     } else {
       const newUser = new User({
         username: req.body.username,
@@ -97,9 +97,22 @@ router.post("/login", (req, res) => {
   });
 });
 
+
 router.post("/logout", (req, res) => {
   res.clearCookie('token');
   res.send( {success: true} );
+})
+
+router.get("/is_authenticated", (req, res) => {
+  const token = req.cookies.token;
+  if (token) {
+    jwt.verify(token, keys.secretOrKey, (err, decoded) => {
+      decoded.status = true;
+      res.status(200).send(decoded)
+    });
+  } else {
+    res.status(400).send(null)
+  }
 })
 
 module.exports = router;

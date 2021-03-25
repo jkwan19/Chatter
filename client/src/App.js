@@ -21,6 +21,7 @@ function App() {
           <Redirect to="/signup" />
         </Route>
       </BrowserRouter>
+
     </MuiThemeProvider>
   );
 }

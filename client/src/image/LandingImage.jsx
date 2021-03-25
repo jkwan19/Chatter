@@ -3,8 +3,6 @@ import React from 'react';
 /* MATERIAL UI STYLING */
 import {
   Grid,
-  Hidden,
-  Box,
   Typography
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -15,7 +13,6 @@ const useStyles = makeStyles(theme => ({
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
     backgroundPosition: "center top",
-    maxWidth: "50%",
     width: "100%"
   },
   overlay: {
@@ -47,16 +44,10 @@ export default function LandingImage() {
         justify="center"
         alignItems="center"
       >
-        <Hidden
-          xsDown
-          >
-          <img width={67} alt="chat bubble" src="/images/chatBubble.png" />
-          <Hidden xsDown>
-            <Typography className={classes.heroText}>
-              Converse with anyone with any language
-            </Typography>
-          </Hidden>
-        </Hidden>
+        <img width={67} alt="chat bubble" src={process.env.PUBLIC_URL + '/images/chatBubble.png'} />
+          <Typography className={classes.heroText}>
+            Converse with anyone with any language
+          </Typography>
       </Grid>
     </Grid>
   )

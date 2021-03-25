@@ -2,7 +2,7 @@ import React from "react";
 
 /* MATERIAL UI STYLING */
 import {
-  Box,
+  Button,
   Typography
  } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -28,10 +28,12 @@ export default function AccountButton(props) {
   const classes = useStyles();
 
   return (
-    <Box
+    <Button
+      color="inherit"
       className={classes.accBtn}
+      variant="contained"
       >
       <Typography variant="body2">{props.value}</Typography>
-    </Box>
+    </Button>
   )
 }

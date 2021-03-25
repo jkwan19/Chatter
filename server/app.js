@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const { join } = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const passport = require("passport");
 const cors = require("cors");
 
 const users = require("./routes/users");
@@ -24,6 +25,11 @@ app.use(express.static(join(__dirname, "public")));
 
 // Routes
 app.use("/api/users", users);
+
+// Passport middleware
+app.use(passport.initialize());
+// Passport config
+require("./config/passport")(passport);
 
 app.use(function (req, res, next) {
   next(createError(404));
