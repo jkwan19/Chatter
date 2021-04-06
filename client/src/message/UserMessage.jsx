@@ -21,11 +21,7 @@ const useStyles = makeStyles(theme => ({
   },
   messageSection: {
     width: "auto"
-  },
-  mediaBubble: {
-    borderRadius: "10px 10px 0",
-    minWidth: '10vh'
-  }
+
 }));
 
 export default function Message(props) {
@@ -48,12 +44,7 @@ export default function Message(props) {
     return (
       media
         ?
-        <Grid
-          item container xs={12}
-          className={classes.mediaBubble}
-          >
-          <Media media={media} />
-        </Grid>
+        <Media media={media} />
         :
         <Grid
           item container xs={12}
