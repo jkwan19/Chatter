@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
   },
   messageSection: {
     width: "auto"
-
+  }
 }));
 
 export default function Message(props) {
