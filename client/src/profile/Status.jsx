@@ -2,36 +2,42 @@ import React from 'react';
 
 /* MATERIAL UI STYLING */
 import {
-  Badge,
-  Avatar
+  Grid,
+  Badge
 } from "@material-ui/core";
+
+import Picture from "./Picture";
+
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
-  large: {
-    width: theme.spacing(7),
-    height: theme.spacing(7),
-  },
 }));
 
 export default function Status(props) {
   const classes = useStyles();
-  const name = props.name;
+  const { name, status } = props;
+  const badgeColor = status ? "secondary" : "primary";
 
   return (
-    <Badge
-      color="primary"
-      overlap="circle"
-      badgeContent=" "
-      variant="dot"
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'right',
-      }}
-      className={classes.badge}
-      >
-        <Avatar
-          src={`/images/${name}.png`}className={classes.large}/>
-    </Badge>
+    <Grid
+      item
+    >
+      <Badge
+        color={badgeColor}
+        overlap="circle"
+        badgeContent=" "
+        variant="dot"
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        className={classes.badge}
+        >
+          <Picture
+            name={name}
+            type="default"
+            />
+      </Badge>
+    </Grid>
   )
 }

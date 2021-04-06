@@ -20,6 +20,9 @@ const useStyles = makeStyles(theme => ({
     fontWeight: 600,
     backgroundColor: "#3a8dff"
   },
+  text: {
+    color: '#FFFFFF'
+  }
 }));
 
 export default function SubmitButton(props) {
@@ -34,7 +37,11 @@ export default function SubmitButton(props) {
         color="primary"
         className={classes.submit}
       >
-        <Typography variant="body2">{props.name}</Typography>
+        <Typography
+          variant="body2"
+          className={classes.text}
+          >{props.name}
+        </Typography>
       </Button>
     </Box>
   )

@@ -9,8 +9,7 @@ import {
   Box,
   CssBaseline,
   Grid,
-  Paper,
-  Typography
+  Paper
 } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import { Formik } from "formik";
@@ -65,8 +64,6 @@ const useStyles = makeStyles(theme => ({
   },
   formBox: {
     marginLeft: theme.spacing(12),
-    marginRight: theme.spacing(1),
-    marginBottom: theme.spacing(4),
     width: '100%',
     maxWidth: 450
   },
@@ -104,8 +101,7 @@ export default function Register() {
             alt={'Already have an account?'}/>
           <Grid
             container
-            direction="column"
-            justify="center"
+            spacing={3}
             alignItems="center"
             className={classes.formBox}>
             <FormHeader value={'Create an account'} />

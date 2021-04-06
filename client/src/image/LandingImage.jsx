@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
     color: "white",
     marginTop: 30,
     maxWidth: 300,
-    paddingBottom: 145,
+    paddingBottom: theme.spacing(10)
   },
 }));
 

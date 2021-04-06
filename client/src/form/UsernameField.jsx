@@ -1,8 +1,7 @@
 import React from "react";
 
 import {
-  TextField,
-  Typography
+  TextField
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Label from "./Label";
