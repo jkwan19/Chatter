@@ -7,8 +7,6 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 
 export default function FilesIcon() {
 
-  const classes = useStyles();
-
   return (
     <Grid
       item container xs={2}

@@ -9,7 +9,7 @@ import {
 import Picture from "./Picture";
 
 export default function Status(props) {
-  const classes = useStyles();
+
   const { name, status } = props;
   const badgeColor = status ? "secondary" : "primary";
 
