@@ -64,8 +64,6 @@ const useStyles = makeStyles(theme => ({
   },
   formBox: {
     marginLeft: theme.spacing(12),
-    marginRight: theme.spacing(1),
-    marginBottom: theme.spacing(4),
     width: '100%',
     maxWidth: 450
   },
@@ -103,8 +101,7 @@ export default function Login() {
             alt={`Don't have an account?`}/>
           <Grid
             container
-            direction="column"
-            justify="center"
+            spacing={3}
             alignItems="center"
             className={classes.formBox}
             >

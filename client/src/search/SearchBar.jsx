@@ -1,0 +1,55 @@
+import {
+  Grid,
+  InputBase
+} from "@material-ui/core";
+
+import SearchIcon from './SearchIcon';
+
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles(theme => ({
+  bar: {
+    margin: theme.spacing(1),
+    padding: theme.spacing(1),
+    borderRadius: 5,
+    backgroundColor: '#E9EEF9'
+  },
+  searchIcon: {
+    height: '100%',
+  },
+  inputRoot: {
+    color: '#ADC0DE',
+  },
+  inputInput: {
+    transition: theme.transitions.create('width'),
+    width: '100%',
+  },
+}))
+
+export default function SearchBar () {
+  const classes = useStyles();
+
+  return (
+    <Grid container
+      className={classes.bar}
+      justify="center"
+      alignItems="center"
+      spacing={1}
+      >
+      <Grid item xs={1}
+        className={classes.searchIcon}>
+        <SearchIcon />
+      </Grid>
+      <Grid item xs={10}>
+        <InputBase
+          placeholder="Search"
+          classes={{
+            root: classes.inputRoot,
+            input: classes.inputInput,
+          }}
+          inputProps={{ 'aria-label': 'search' }}
+          />
+      </Grid>
+    </Grid>
+  )
+}

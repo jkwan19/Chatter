@@ -3,9 +3,6 @@ import auth from "../services/auth.service";
 
 export const AuthContext = createContext();
 
-const API_URL = "/api/users/";
-
-
 export function AuthContextProvider (props) {
   const [loggedIn, setLoggedIn] = useState(undefined);
   const [user, setUser] =  useState('');

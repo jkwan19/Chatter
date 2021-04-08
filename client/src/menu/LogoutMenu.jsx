@@ -1,0 +1,95 @@
+import {
+  useContext,
+  useState
+} from "react";
+
+import { useHistory } from "react-router-dom";
+
+import {
+  Grid,
+  Menu,
+  MenuItem,
+  Typography
+} from "@material-ui/core";
+
+import { makeStyles } from "@material-ui/core/styles";
+import HorizontalIcon from "./HorizontalIcon";
+
+import auth from "../services/auth.service";
+import { AuthContext } from "../context/AuthContext";
+
+const useStyles = makeStyles(theme => ({
+  logout: {
+    display: 'flex',
+    marginLeft: 'auto'
+  },
+  blackText: {
+    color: "#000"
+  }
+}));
+
+const ITEM_HEIGHT = 48;
+
+const logout = () => auth.logout();
+
+
+export default function LogoutMenu( { handleLogoutError }) {
+
+  const classes = useStyles();
+  const { setLoggedIn } = useContext(AuthContext)
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const history = useHistory();
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    logout()
+      .then((res) => setLoggedIn(false))
+      .then(() => history.push("/login"))
+      .catch((err) => handleLogoutError())
+  }
+
+  return (
+    <Grid
+      item
+      className={classes.logout}
+      >
+      <HorizontalIcon handleClick={handleClick}/>
+      <Menu
+        id="long-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={open}
+        onClose={handleClose}
+        PaperProps={{
+          style: {
+            maxHeight: ITEM_HEIGHT * 4.5,
+            width: '20ch',
+          },
+        }}
+      >
+        <MenuItem
+          className={classes.blackText}
+          key={'Logout'}
+          selected={true}
+          onClick={() => {
+            handleClose();
+            handleLogout();
+          }}>
+          <Typography
+            variant="body2"
+            >
+            Logout
+          </Typography>
+        </MenuItem>
+      </Menu>
+    </Grid>
+  );
+}

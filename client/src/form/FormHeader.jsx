@@ -22,12 +22,12 @@ export default function FormHeader(props) {
   const classes = useStyles();
 
   return (
-    <Grid container>
+    <Grid container >
       <Grid item xs>
         <Typography
           className={classes.welcome}
           component="h1"
-          variant="h5"
+          variant="h4"
         >
           {props.value}
         </Typography>
