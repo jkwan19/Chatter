@@ -5,9 +5,7 @@ import {
 
 import Icon from '@material-ui/core/Icon';
 
-export default function SendIcon(props) {
-
-  const { handleSend } = props;
+export default function SendIcon({ handleSend }) {
 
   return (
     <Grid

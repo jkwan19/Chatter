@@ -12,7 +12,7 @@ import {
   Typography
 } from "@material-ui/core";
 
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import HorizontalIcon from "./HorizontalIcon";
 
 import auth from "../services/auth.service";
@@ -28,15 +28,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-
-const option = 'Logout';
-
 const ITEM_HEIGHT = 48;
 
 const logout = () => auth.logout();
 
 
-export default function LogoutMenu() {
+export default function LogoutMenu( { handleLogoutError }) {
 
   const classes = useStyles();
   const { setLoggedIn } = useContext(AuthContext)
@@ -56,7 +53,7 @@ export default function LogoutMenu() {
     logout()
       .then((res) => setLoggedIn(false))
       .then(() => history.push("/login"))
-      .catch((err) => console.log("Error logging out: ", err))
+      .catch((err) => handleLogoutError())
   }
 
   return (
@@ -80,13 +77,16 @@ export default function LogoutMenu() {
       >
         <MenuItem
           className={classes.blackText}
-          key={option}
-          selected={option === 'Logout'}
-          onClick={handleClose}>
+          key={'Logout'}
+          selected={true}
+          onClick={() => {
+            handleClose();
+            handleLogout();
+          }}>
           <Typography
             variant="body2"
-            onClick={handleLogout}>
-              Logout
+            >
+            Logout
           </Typography>
         </MenuItem>
       </Menu>

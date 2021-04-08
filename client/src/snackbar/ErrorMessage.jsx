@@ -7,24 +7,25 @@ import {
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 
-export default function ErrorMessage(props) {
+export default function ErrorMessage({ open, message, handleClose}) {
+
   return (
     <Snackbar
       anchorOrigin={{
         vertical: "bottom",
         horizontal: "center"
       }}
-      open={props.open}
+      open={open}
       autoHideDuration={6000}
-      onClose={props.handleClose}
-      message={props.message}
+      onClose={handleClose}
+      message={message}
       action={
         <React.Fragment>
           <IconButton
             size="small"
             aria-label="close"
             color="inherit"
-            onClick={props.handleClose}
+            onClick={handleClose}
           >
             <CloseIcon fontSize="small" />
           </IconButton>

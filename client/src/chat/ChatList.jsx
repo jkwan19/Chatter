@@ -8,67 +8,46 @@ import User from "../profile/User";
 
 const useStyles = makeStyles(theme => ({
   list: {
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(2),
+    height: '100%',
   }
 }));
 
-export default function ChatList (props) {
+export default function ChatList ({ friends, handleChat }) {
 
   const classes = useStyles();
 
-  const { handleChat } = props;
+  const listFriends = friends.map((friend) => {
+    const {
+      id,
+      name,
+      message,
+      numUnread,
+      isOnline,
+      isRead,
+      isTyping
+    } = friend;
+
+    return (
+      <User
+        key={id}
+        index={id}
+        name={name}
+        message={message}
+        numUnread={numUnread}
+        isOnline={isOnline}
+        isRead={isRead}
+        isTyping={isTyping}
+        handleChat={handleChat}
+      />
+    )
+  })
 
   return (
     <List
-      container
       className={classes.list}
       >
-      <User
-        name='santiago'
-        message=""
-        numUnread={0}
-        isOnline={true}
-        isRead={true}
-        isTyping={true}
-        handleChat={handleChat}
-        />
-      <User
-        name='chiumbo'
-        message="Sure! What time?"
-        numUnread={1}
-        isOnline={true}
-        isRead={false}
-        handleChat={handleChat}
-        />
-      <User
-        name='hualing'
-        message="😅 😅 😅"
-        numUnread={12}
-        isOnline={false}
-        isRead={false}
-        handleChat={handleChat}
-        />
-      <User
-        name='ashanti'
-        message="Sent photo"
-        isOnline={false}
-        isRead={true}
-        handleChat={handleChat}
-        />
-      <User
-        name='julia'
-        message="Do you have any plans?"
-        isOnline={false}
-        isRead={true}
-        handleChat={handleChat}
-       />
-      <User
-        name='cheng'
-        message="Message"
-        isOnline={false}
-        isRead={true}
-        handleChat={handleChat}
-        />
+      {listFriends}
     </List>
   )
 }

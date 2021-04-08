@@ -12,6 +12,7 @@ const useStyles = makeStyles(theme => ({
   headerBox: {
     height: '11vh',
     width: '100%',
+    zIndex: 2,
   },
   horizIcon: {
     display: 'flex',
@@ -29,17 +30,14 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function MessageHeader (props) {
+export default function MessageHeader ({ name, status }) {
 
   const classes = useStyles();
-
-  const { name } = props;
 
   return (
     <Grid
       container
       component={Paper}
-      square
       className={classes.headerBox}
       direction="row"
       >
@@ -51,9 +49,8 @@ export default function MessageHeader (props) {
         <Typography variant="h5">{name}</Typography>
         <Grid item className={classes.chatStatus}>
           <Badge
-            color="secondary"
+            color={status ? "secondary" : "primary"}
             overlap="circle"
-            badgeContent=" "
             variant="dot"
             anchorOrigin={{
               vertical: 'bottom',
@@ -66,9 +63,8 @@ export default function MessageHeader (props) {
               >
               <Typography
                 variant="subtitle1"
-
                 >
-                Online
+                {status ? "Online" : "Offline"}
               </Typography>
             </Grid>
           </Badge>
