@@ -18,18 +18,26 @@ import SearchBar from "../search/SearchBar";
 import ChatList from "../chat/ChatList";
 import LogoutMenu from "../menu/LogoutMenu";
 import Messenger from "../chat/Messenger";
+import friendsList from "./friends.json";
 
 const useStyles = makeStyles(theme => ({
+  '@global': {
+    '*::-webkit-scrollbar': {
+      display: 'none'
+    }
+  },
   chat: {
-    maxHeight: '50vh'
+    maxHeight: '50vh',
+    position: 'relative'
   },
   chatSection: {
+    height: '100%',
   },
   chatBorder: {
     borderRight: '1px none #e0e0e0'
   },
   conversationList: {
-    padding: '1px 10px'
+    padding: '1px 10px',
   },
   label: {
     padding: theme.spacing(1)
@@ -47,18 +55,24 @@ const useStyles = makeStyles(theme => ({
 export default function Dashboard() {
   const classes = useStyles();
 
-  const [ name, setName ] = useState('santiago')
-  const { loggedIn } = useContext(AuthContext)
+  const [ friends, setFriends ] = useState([]);
+  const [ name, setName ] = useState('santiago');
+  const [ status, setStatus ] = useState(false);
+  const { loggedIn } = useContext(AuthContext);
   const history = useHistory();
 
   useEffect(() => {
-    // if (!loggedIn) history.push('/login')
+    setFriends(friendsList);
   }, [history]);
 
   const handleChat = (e) => {
-    const name = e.target.offsetParent.id || e.target.id;
+    const id = e.target.offsetParent.id || e.target.id;
+    const user = friends[id - 1];
+    const { name, isOnline } = user;
     setName(name)
+    setStatus(isOnline);
   }
+
 
   return (
     <Grid container
@@ -93,7 +107,10 @@ export default function Dashboard() {
               <ChatHeader />
             </Grid>
             <SearchBar />
-            <ChatList handleChat={handleChat}/>
+            <ChatList
+              friends={friends}
+              handleChat={handleChat}
+              />
           </Grid>
         </Grid>
         {/* Column two for messages with user*/}
@@ -104,8 +121,11 @@ export default function Dashboard() {
           >
           <MessageHeader
             name={name}
+            status={status}
             />
-          <Messenger />
+          <Messenger
+            name={name}
+            />
         </Grid>
       </Grid>
     </Grid>

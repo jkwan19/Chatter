@@ -8,11 +8,6 @@ import {
 
 import Picture from "./Picture";
 
-import { makeStyles } from "@material-ui/core/styles";
-
-const useStyles = makeStyles(theme => ({
-}));
-
 export default function Status(props) {
   const classes = useStyles();
   const { name, status } = props;
@@ -25,13 +20,11 @@ export default function Status(props) {
       <Badge
         color={badgeColor}
         overlap="circle"
-        badgeContent=" "
         variant="dot"
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'right',
         }}
-        className={classes.badge}
         >
           <Picture
             name={name}

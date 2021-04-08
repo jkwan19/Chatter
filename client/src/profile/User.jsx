@@ -18,43 +18,38 @@ const useStyles = makeStyles(theme => ({
 }));
 export default function User (props) {
   const classes = useStyles();
-  const { message, name, isOnline, isRead, isTyping, handleChat} = props;
+  const { index, message, name, isOnline, isRead, isTyping, handleChat} = props;
   let { numUnread } = props;
-
   if (isRead) {
     numUnread = 0
   }
 
-  let preview = () => {
-    return (
-      isTyping
-      ?
-      <Typography
-        variant="subtitle2"
-        style={{
-          fontStyle: 'italic',
-          color: '#94A6C4'
-          }}>
-          Typing...
-      </Typography>
-      :
-      <Typography
-        variant="subtitle2"
-        style={{
-          fontWeight: 500,
-          color: isRead ? "#94A6C4" : "#000"
-          }}>
-        {message}
-      </Typography>
-    )
-  }
+  let preview = isTyping
+                  ?
+                  <Typography
+                    variant="subtitle2"
+                    style={{
+                      fontStyle: 'italic',
+                      color: '#94A6C4'
+                      }}>
+                      Typing...
+                  </Typography>
+                  :
+                  <Typography
+                    variant="subtitle2"
+                    style={{
+                      fontWeight: 500,
+                      color: isRead ? "#94A6C4" : "#000"
+                      }}>
+                    {message}
+                  </Typography>;
 
   return (
     <ListItem
       button
       direction="row"
       className={classes.chatUser}
-      id={name}
+      id={index}
       onClick={handleChat}
       >
       <Status name={name} status={isOnline}/>
@@ -67,7 +62,7 @@ export default function User (props) {
           style={{padding: '10px 20px'}}
           >
           <Name name={name} />
-          {preview()}
+          {preview}
         </Grid>
       </Grid>
       <UnreadNotification numUnread={numUnread} />

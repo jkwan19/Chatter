@@ -22,14 +22,12 @@ const useStyles = makeStyles(theme => ({
   logout: {
     display: 'flex',
     marginLeft: 'auto'
+  },
+  blackText: {
+    color: "#000"
   }
 }));
 
-const BlackTextTypography = withStyles({
-  root: {
-    color: "#000"
-  }
-})(Typography);
 
 const option = 'Logout';
 
@@ -80,12 +78,16 @@ export default function LogoutMenu() {
           },
         }}
       >
-        <MenuItem key={option} selected={option === 'Logout'} onClick={handleClose}>
-          <BlackTextTypography
+        <MenuItem
+          className={classes.blackText}
+          key={option}
+          selected={option === 'Logout'}
+          onClick={handleClose}>
+          <Typography
             variant="body2"
             onClick={handleLogout}>
               Logout
-          </BlackTextTypography>
+          </Typography>
         </MenuItem>
       </Menu>
     </Grid>

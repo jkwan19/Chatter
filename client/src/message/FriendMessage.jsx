@@ -28,22 +28,25 @@ const useStyles = makeStyles(theme => ({
 export default function Message(props) {
   const classes = useStyles();
 
-  const { timeStamp, media, message, isReceived, isTyping } = props;
+  const {
+    timeStamp,
+    media,
+    message, name,
+    isReceived,
+    isTyping
+  } = props;
 
-  const body = () => {
-    return (
-      media
-        ?
-        <Media media={media} />
-        :
-        <Content
-          message={message}
-          color="textPrimary"
-          isTyping={isTyping}
-          type="friend"
-          />
-    )
-  }
+  const body = media
+                  ?
+                  <Media media={media} />
+                  :
+                  <Content
+                    message={message}
+                    color="textPrimary"
+                    isTyping={isTyping}
+                    type="friend"
+                    />;
+
 
   return(
     <Grid
@@ -57,7 +60,7 @@ export default function Message(props) {
           item
           >
           <Picture
-            name="santiago"
+            name={name}
             type="small"
             />
         </Grid>
@@ -67,7 +70,7 @@ export default function Message(props) {
           className={classes.messageSection}
           >
           <Receipt
-            name="santiago"
+            name={name}
             timeStamp={timeStamp}
             align="left"
             />
@@ -76,7 +79,7 @@ export default function Message(props) {
             justify="center"
             className={classes.friendBubble}
             >
-            {body()}
+            {body}
           </Grid>
         </Grid>
     </Grid>
