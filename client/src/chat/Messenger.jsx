@@ -13,6 +13,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import Compose from "../chat/Compose";
 import Message from "../message/Message";
+import conversation from "./conversation.json";
 
 const useStyles = makeStyles(theme => ({
   messenger: {
@@ -39,9 +40,13 @@ export default function Messenger ({ recipient }) {
   const classes = useStyles();
 
   const [ newMessage, setNewMessage ] = useState('');
-  const [ messages, setMessages ] = useState(recipient.conversation);
+  const [ messages, setMessages ] = useState([]);
 
   let chatBottom = useRef(null);
+
+  useEffect(() => {
+    setMessages(conversation)
+  }, [])
 
   const handleSend = () => {
     const messageBody = {
@@ -65,7 +70,6 @@ export default function Messenger ({ recipient }) {
   };
 
   useEffect(scrollToBottom, [messages]);
-
 
   const listConversation = messages.map((content, key) => {
     const {
