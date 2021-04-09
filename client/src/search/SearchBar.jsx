@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export default function SearchBar () {
+export default function SearchBar ({ findConversation }) {
   const classes = useStyles();
 
   return (
@@ -36,7 +36,9 @@ export default function SearchBar () {
       alignItems="center"
       spacing={1}
       >
-      <Grid item xs={1}
+      <Grid item container xs={1}
+        justify="center"
+        alignItems="center"
         className={classes.searchIcon}>
         <SearchIcon />
       </Grid>
@@ -48,6 +50,7 @@ export default function SearchBar () {
             input: classes.inputInput,
           }}
           inputProps={{ 'aria-label': 'search' }}
+          onChange={findConversation}
           />
       </Grid>
     </Grid>

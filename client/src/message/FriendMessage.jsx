@@ -13,7 +13,6 @@ const useStyles = makeStyles(theme => ({
   friendBubble: {
     background: 'linear-gradient(-45deg, #6cc1ff 0%, #3a8dff 100%)',
     borderRadius: "0 10px 10px",
-    width: "auto",
     minHeight: "5.5vh"
   },
   friendSection: {
@@ -25,16 +24,15 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Message(props) {
+export default function Message({
+  timeStamp,
+  media,
+  message,
+  recipient,
+  isReceived,
+  isTyping
+  }) {
   const classes = useStyles();
-
-  const {
-    timeStamp,
-    media,
-    message, name,
-    isReceived,
-    isTyping
-  } = props;
 
   const body = media
                   ?
@@ -51,7 +49,6 @@ export default function Message(props) {
   return(
     <Grid
       container
-      direction="row"
       alignItems="center"
       spacing={2}
       className={classes.friendSection}
@@ -60,7 +57,7 @@ export default function Message(props) {
           item
           >
           <Picture
-            name={name}
+            name={recipient.name}
             type="small"
             />
         </Grid>
@@ -70,7 +67,7 @@ export default function Message(props) {
           className={classes.messageSection}
           >
           <Receipt
-            name={name}
+            name={recipient.name}
             timeStamp={timeStamp}
             align="left"
             />

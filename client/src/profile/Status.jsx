@@ -8,14 +8,13 @@ import {
 
 import Picture from "./Picture";
 
-export default function Status(props) {
+export default function Status({ name, status }) {
 
-  const { name, status } = props;
   const badgeColor = status ? "secondary" : "primary";
 
   return (
     <Grid
-      item
+      item xs={2}
     >
       <Badge
         color={badgeColor}

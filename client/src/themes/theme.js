@@ -31,10 +31,10 @@ export const theme = createMuiTheme({
       color: '#BFC9DB'
     },
     subtitle2:{
-      fontSize: 12
+      fontSize: '75%'
     },
     body1: {
-      fontSize: 14
+      fontSize: '87.5%'
     },
     body2: {
       fontSize: 14
@@ -42,14 +42,13 @@ export const theme = createMuiTheme({
     caption: {
       fontSize: 11,
       color: '#BECCE2'
-    }
+    },
   },
   span: {
     allVariants: {
       color: '#000'
     }
   },
-
   palette: {
     primary: {
       main: "#D0DAE9"
@@ -64,3 +63,5 @@ export const theme = createMuiTheme({
     }
   }
 });
+
+

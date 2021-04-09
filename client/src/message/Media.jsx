@@ -13,11 +13,9 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Media(props) {
+export default function Media({ media }) {
 
   const classes = useStyles();
-
-  const { media } = props;
 
   return(
     <Grid

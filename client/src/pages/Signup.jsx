@@ -89,6 +89,10 @@ export default function Register() {
     setOpen(false);
   };
 
+  const handleError = () => {
+    setOpen(true);
+  }
+
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
@@ -167,7 +171,10 @@ export default function Register() {
                     touched={touched}
                     values={values}
                   />
-                  <SubmitButton name={'Create'} />
+                  <SubmitButton
+                    name={'Create'}
+                    handleError={handleError}
+                    />
                 </form>
               )}
             </Formik>

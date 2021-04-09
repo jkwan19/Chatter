@@ -17,10 +17,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Picture(props) {
+export default function Picture({ name, type }) {
 
   const classes = useStyles();
-  const { name, type } = props;
 
   return (
     <Grid

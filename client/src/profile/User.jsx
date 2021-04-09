@@ -16,10 +16,10 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(1),
   }
 }));
-export default function User (props) {
+export default function User ({ index, message, name, numUnread, isOnline, isRead, isTyping, handleChat}) {
+
   const classes = useStyles();
-  const { index, message, name, isOnline, isRead, isTyping, handleChat} = props;
-  let { numUnread } = props;
+
   if (isRead) {
     numUnread = 0
   }
@@ -47,7 +47,6 @@ export default function User (props) {
   return (
     <ListItem
       button
-      direction="row"
       className={classes.chatUser}
       id={index}
       onClick={handleChat}

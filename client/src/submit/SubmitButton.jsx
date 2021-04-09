@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function SubmitButton(props) {
+export default function SubmitButton({ name, handleError}) {
   const classes = useStyles();
 
   return (
@@ -36,11 +36,12 @@ export default function SubmitButton(props) {
         variant="contained"
         color="primary"
         className={classes.submit}
+        onClick={handleError}
       >
         <Typography
           variant="body2"
           className={classes.text}
-          >{props.name}
+          >{name}
         </Typography>
       </Button>
     </Box>

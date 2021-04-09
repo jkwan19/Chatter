@@ -24,41 +24,44 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Message(props) {
-  const classes = useStyles();
+export default function Message({
+  media,
+  message,
+  name,
+  recipient,
+  timeStamp,
+  isReceived,
+  isSeen
+  }) {
 
-  const { media, message, name, timeStamp, isReceived, isSeen } = props;
+  const classes = useStyles();
 
   const messageSeen = () => {
     if (isSeen) {
       return (
         <Picture
-          name='santiago'
+          name={recipient.name}
           type="seen"
           />
       )
     }
   }
 
-  const body = () => {
-    return (
-      media
-        ?
-        <Media media={media} />
-        :
-        <Grid
-          item container xs={12}
-          className={classes.userBubble}
-          direction="column"
-          >
-          <Content
-            message={message}
-            color="textSecondary"
-            type="user"
-            />
-        </Grid>
-    )
-  }
+  const body = media
+                  ?
+                  <Media media={media} />
+                  :
+                  <Grid
+                    item container xs={12}
+                    className={classes.userBubble}
+                    direction="column"
+                    >
+                    <Content
+                      message={message}
+                      color="textSecondary"
+                      type="user"
+                      />
+                  </Grid>
 
   return (
     <Grid
@@ -76,7 +79,7 @@ export default function Message(props) {
           timeStamp={timeStamp}
           align="right"
           />
-        {body()}
+        {body}
         {messageSeen()}
       </Grid>
     </Grid>

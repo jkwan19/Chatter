@@ -18,11 +18,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function UnreadNotification (props) {
+export default function UnreadNotification ({ numUnread }) {
 
   const classes = useStyles();
-
-  const { numUnread } = props;
 
   return (
     <Grid

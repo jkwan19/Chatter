@@ -14,10 +14,8 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Content(props) {
+export default function Content({ color, message, type, isReceived, isTyping }) {
   const classes = useStyles();
-
-  const { color, message, type, isReceived, isTyping } = props
 
   if (isTyping) {
     return (

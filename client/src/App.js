@@ -10,7 +10,6 @@ import Dashboard from "./pages/Dashboard";
 import "./App.css";
 
 function App() {
-
   return (
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>

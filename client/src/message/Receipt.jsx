@@ -3,9 +3,7 @@ import {
   Typography
 } from "@material-ui/core";
 
-export default function Receipt(props) {
-
-  const { align, name, timeStamp } = props;
+export default function Receipt({ align, name, timeStamp }) {
 
   return(
     <Grid

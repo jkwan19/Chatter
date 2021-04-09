@@ -3,12 +3,10 @@ import {
   Typography
 } from "@material-ui/core";
 
-export default function Name (props) {
+export default function Name ({ name }) {
 
-  const { name } = props;
   return (
-
-    <Grid item>
+    <Grid item xs={4}>
       <Typography>{name}</Typography>
     </Grid>
     )

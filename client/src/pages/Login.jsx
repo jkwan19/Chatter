@@ -88,6 +88,9 @@ export default function Login() {
     setOpen(false);
   };
 
+  const handleError = () => {
+    setOpen(true);
+  }
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -127,8 +130,7 @@ export default function Login() {
                     setLoggedIn(true)
                     setUser(res.user.username)
                   },
-                  error => {
-                    setOpen(true);
+                  (error) => {
                     setSubmitting(false);
                     setStatus(error);
                   }
@@ -156,7 +158,10 @@ export default function Login() {
                     values={values}
                     page="Login"
                   />
-                  <SubmitButton name={'Login'}/>
+                  <SubmitButton
+                    name={'Login'}
+                    handleError={handleError}
+                    />
                 </form>
               )}
             </Formik>

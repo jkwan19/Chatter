@@ -11,10 +11,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function HorizontalIcon (props) {
+export default function HorizontalIcon ({ handleClick }) {
 
   const classes = useStyles();
-  const { handleClick } = props;
 
   return (
     <IconButton

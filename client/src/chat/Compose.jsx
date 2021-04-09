@@ -27,12 +27,17 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     marginLeft: 'auto',
     alignItems: 'center',
-    paddingRight: theme.spacing(3)
+    paddingRight: theme.spacing(3),
+    "& .MuiButton-label": {
+      color: "#D1D9E6"
+    }
   }
 }));
 
-export default function Compose () {
+export default function Compose ({ handleSend, handleMessage, newMessage }) {
+
   const classes = useStyles();
+
   return (
     <Grid
       container
@@ -40,24 +45,28 @@ export default function Compose () {
       direction="row"
       >
       <Grid
-        item container xs={8}
-        alignItems="center"
-        className={classes.messageInput}>
+        item container xs={7}
+        className={classes.messageInput}
+        >
           <InputBase
             placeholder="Type Something..."
+            value={newMessage}
             classes={{
               root: classes.inputRoot,
             }}
             inputProps={{ 'aria-label': 'text' }}
+            onChange={handleMessage}
           />
       </Grid>
       <Grid
-        item container xs={4}
+        item container xs={5}
+        spacing={2}
         justify="flex-end"
-        alignItem="center"
         className={classes.messageButtons}
         >
-          <SendIcon />
+          <SendIcon
+            handleSend={handleSend}
+            />
           <FilesIcon />
       </Grid>
     </Grid>

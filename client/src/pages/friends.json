@@ -1,0 +1,308 @@
+[
+  {
+    "id": 1,
+    "name": "santiago",
+    "message": "",
+    "numUnread": 0,
+    "isOnline": true,
+    "isRead": true,
+    "isTyping": true,
+    "conversation": [
+      {
+        "timeStamp": "10:45",
+        "message": "Where are you from?",
+        "isReceived": true,
+        "isSeen": false,
+        "isTyping": false,
+        "media": ""
+      },
+      {
+        "timeStamp": "10:51",
+        "message": "I'm from New York",
+        "isReceived": false,
+        "isSeen": false,
+        "isTyping": false,
+        "media": ""
+      },
+      {
+        "timeStamp": "10:55",
+        "message": "Share photo of your city, please",
+        "isReceived": true,
+        "isSeen": false,
+        "isTyping": false,
+        "media": ""
+      },
+      {
+        "timeStamp": "10:58",
+        "message": "Where are you from?",
+        "isReceived": false,
+        "isSeen": true,
+        "isTyping": false,
+        "media": "/images/sentImg.png"
+      },
+      {
+        "timeStamp": "",
+        "message": "",
+        "isReceived": true,
+        "isSeen": false,
+        "isTyping": true,
+        "media": ""
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "chiumbo",
+    "message": "Sure! What time?",
+    "numUnread": 1,
+    "isOnline": true,
+    "isRead": false,
+    "isTyping": false,
+    "conversation": [
+      {
+        "timeStamp": "10:45",
+        "message": "Where are you from?",
+        "isReceived": true,
+        "isSeen": false,
+        "isTyping": false,
+        "media": ""
+      },
+      {
+        "timeStamp": "10:51",
+        "message": "I'm from New York",
+        "isReceived": false,
+        "isSeen": false,
+        "isTyping": false,
+        "media": ""
+      },
+      {
+        "timeStamp": "10:55",
+        "message": "Share photo of your city, please",
+        "isReceived": true,
+        "isSeen": false,
+        "isTyping": false,
+        "media": ""
+      },
+      {
+        "timeStamp": "10:58",
+        "message": "Where are you from?",
+        "isReceived": false,
+        "isSeen": true,
+        "isTyping": false,
+        "media": "/images/sentImg.png"
+      },
+      {
+        "timeStamp": "",
+        "message": "",
+        "isReceived": true,
+        "isSeen": false,
+        "isTyping": true,
+        "media": ""
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "hualing",
+    "message": "😅 😅 😅",
+    "numUnread": 12,
+    "isOnline": false,
+    "isRead": false,
+    "isTyping": false,
+    "conversation": [
+      {
+        "timeStamp": "10:45",
+        "message": "Where are you from?",
+        "isReceived": true,
+        "isSeen": false,
+        "isTyping": false,
+        "media": ""
+      },
+      {
+        "timeStamp": "10:51",
+        "message": "I'm from New York",
+        "isReceived": false,
+        "isSeen": false,
+        "isTyping": false,
+        "media": ""
+      },
+      {
+        "timeStamp": "10:55",
+        "message": "Share photo of your city, please",
+        "isReceived": true,
+        "isSeen": false,
+        "isTyping": false,
+        "media": ""
+      },
+      {
+        "timeStamp": "10:58",
+        "message": "Where are you from?",
+        "isReceived": false,
+        "isSeen": true,
+        "isTyping": false,
+        "media": "/images/sentImg.png"
+      },
+      {
+        "timeStamp": "",
+        "message": "",
+        "isReceived": true,
+        "isSeen": false,
+        "isTyping": true,
+        "media": ""
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "ashanti",
+    "message": "Sent photo",
+    "numUnread": 0,
+    "isOnline": false,
+    "isRead": true,
+    "isTyping": false,
+    "conversation": [
+      {
+        "timeStamp": "10:45",
+        "message": "Where are you from?",
+        "isReceived": true,
+        "isSeen": false,
+        "isTyping": false,
+        "media": ""
+      },
+      {
+        "timeStamp": "10:51",
+        "message": "I'm from New York",
+        "isReceived": false,
+        "isSeen": false,
+        "isTyping": false,
+        "media": ""
+      },
+      {
+        "timeStamp": "10:55",
+        "message": "Share photo of your city, please",
+        "isReceived": true,
+        "isSeen": false,
+        "isTyping": false,
+        "media": ""
+      },
+      {
+        "timeStamp": "10:58",
+        "message": "Where are you from?",
+        "isReceived": false,
+        "isSeen": true,
+        "isTyping": false,
+        "media": "/images/sentImg.png"
+      },
+      {
+        "timeStamp": "",
+        "message": "",
+        "isReceived": true,
+        "isSeen": false,
+        "isTyping": true,
+        "media": ""
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "julia",
+    "message": "Do you have any plans?",
+    "numUnread": 0,
+    "isOnline": false,
+    "isRead": true,
+    "isTyping": false,
+    "conversation": [
+      {
+        "timeStamp": "10:45",
+        "message": "Where are you from?",
+        "isReceived": true,
+        "isSeen": false,
+        "isTyping": false,
+        "media": ""
+      },
+      {
+        "timeStamp": "10:51",
+        "message": "I'm from New York",
+        "isReceived": false,
+        "isSeen": false,
+        "isTyping": false,
+        "media": ""
+      },
+      {
+        "timeStamp": "10:55",
+        "message": "Share photo of your city, please",
+        "isReceived": true,
+        "isSeen": false,
+        "isTyping": false,
+        "media": ""
+      },
+      {
+        "timeStamp": "10:58",
+        "message": "Where are you from?",
+        "isReceived": false,
+        "isSeen": true,
+        "isTyping": false,
+        "media": "/images/sentImg.png"
+      },
+      {
+        "timeStamp": "",
+        "message": "",
+        "isReceived": true,
+        "isSeen": false,
+        "isTyping": true,
+        "media": ""
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "cheng",
+    "message": "Message",
+    "numUnread": 0,
+    "isOnline": false,
+    "isRead": true,
+    "isTyping": false,
+    "conversation": [
+      {
+        "timeStamp": "10:45",
+        "message": "Where are you from?",
+        "isReceived": true,
+        "isSeen": false,
+        "isTyping": false,
+        "media": ""
+      },
+      {
+        "timeStamp": "10:51",
+        "message": "I'm from New York",
+        "isReceived": false,
+        "isSeen": false,
+        "isTyping": false,
+        "media": ""
+      },
+      {
+        "timeStamp": "10:55",
+        "message": "Share photo of your city, please",
+        "isReceived": true,
+        "isSeen": false,
+        "isTyping": false,
+        "media": ""
+      },
+      {
+        "timeStamp": "10:58",
+        "message": "Where are you from?",
+        "isReceived": false,
+        "isSeen": true,
+        "isTyping": false,
+        "media": "/images/sentImg.png"
+      },
+      {
+        "timeStamp": "",
+        "message": "",
+        "isReceived": true,
+        "isSeen": false,
+        "isTyping": true,
+        "media": ""
+      }
+    ]
+  }
+]
