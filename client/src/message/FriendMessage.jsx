@@ -14,7 +14,8 @@ const useStyles = makeStyles(theme => ({
   friendBubble: {
     background: 'linear-gradient(-45deg, #6cc1ff 0%, #3a8dff 100%)',
     borderRadius: "0 10px 10px",
-    minHeight: "4.5vh",
+    marginLeft: '5px',
+    minHeight: "7vh",
     [theme.breakpoints.down("sm")]: {
       minHeight: "2.5vh",
     }
@@ -78,8 +79,8 @@ export default function Message({
             align="left"
             />
           <Grid
-            item container xs={12} sm={12}
-            justify="center"
+            item container xs={12} sm={10}
+            justify="space-evenly"
             className={classes.friendBubble}
             >
             {body}
