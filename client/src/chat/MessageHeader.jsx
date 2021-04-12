@@ -10,10 +10,12 @@ import HorizontalIcon from "../menu/HorizontalIcon";
 
 const useStyles = makeStyles(theme => ({
   headerBox: {
-    maxHeight: '11vh',
     padding: theme.spacing(3),
     borderRadius: '0 5px',
-    width: '100%'
+    width: '100%',
+    [theme.breakpoints.down("sm")]: {
+      height: '7vh',
+    }
   },
   horizIcon: {
     marginLeft: 'auto'
@@ -36,6 +38,7 @@ export default function MessageHeader ({ name, status }) {
       container
       component={Grid}
       className={classes.headerBox}
+      alignContent='center'
       boxShadow={1}
       >
       <Typography variant="h5">{name}</Typography>

@@ -1,5 +1,6 @@
 import {
-  Grid
+  Grid,
+  Hidden
 } from "@material-ui/core";
 
 import Receipt from "./Receipt";
@@ -13,7 +14,10 @@ const useStyles = makeStyles(theme => ({
   friendBubble: {
     background: 'linear-gradient(-45deg, #6cc1ff 0%, #3a8dff 100%)',
     borderRadius: "0 10px 10px",
-    minHeight: "5.5vh"
+    minHeight: "4.5vh",
+    [theme.breakpoints.down("sm")]: {
+      minHeight: "2.5vh",
+    }
   },
   friendSection: {
     marginRight: "auto",
@@ -56,10 +60,12 @@ export default function Message({
         <Grid
           item
           >
-          <Picture
-            name={recipient.name}
-            type="small"
-            />
+          <Hidden smDown>
+            <Picture
+              name={recipient.name}
+              type="small"
+              />
+          </Hidden>
         </Grid>
         <Grid
           item container
@@ -72,7 +78,7 @@ export default function Message({
             align="left"
             />
           <Grid
-            item container xs={10}
+            item container xs={12} sm={12}
             justify="center"
             className={classes.friendBubble}
             >

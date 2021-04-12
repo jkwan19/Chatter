@@ -14,7 +14,7 @@ export default function Status({ name, status }) {
 
   return (
     <Grid
-      item xs={2}
+      item xs={8} sm={8} md={2} lg={2} xl={2}
     >
       <Badge
         color={badgeColor}

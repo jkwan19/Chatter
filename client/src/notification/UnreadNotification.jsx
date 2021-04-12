@@ -6,15 +6,15 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
-  bubble:{
-    marginLeft: "auto"
-  },
   notification:{
     backgroundColor: '#3F92FF',
     padding: "0px 8px 4px",
     color: "#FFF",
-    fontSize: "10px",
-    fontWeight: 600
+    fontSize: ".625rem",
+    fontWeight: 600,
+    [theme.breakpoints.down("sm")]: {
+      fontSize: '.1rem'
+    }
   }
 }));
 
@@ -24,9 +24,7 @@ export default function UnreadNotification ({ numUnread }) {
 
   return (
     <Grid
-      item container xs={1}
-      alignContent="center"
-      className={classes.bubble}
+      item xs={12} sm={12} md={1} lg={1}
       >
       <Badge
         badgeContent={numUnread}

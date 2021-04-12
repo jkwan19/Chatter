@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
   list: {
     marginRight: theme.spacing(2),
     height: '100%',
-    overflow: 'auto',
+    overflowY: 'scroll',
     position: 'relative'
   }
 }));

@@ -14,7 +14,10 @@ const useStyles = makeStyles(theme => ({
     borderRadius: '10px',
     width: '100%',
     minHeight:'10vh',
-    margin: theme.spacing(2, 1)
+    margin: theme.spacing(2, 1),
+    [theme.breakpoints.down("sm")]: {
+      minHeight: '7vh'
+    }
   },
   inputRoot: {
     color: 'inherit',

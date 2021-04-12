@@ -13,7 +13,10 @@ const useStyles = makeStyles(theme => ({
   userBubble:{
     backgroundColor: '#F4F6FA',
     borderRadius: "10px 10px 0",
-    minHeight: "5.5vh"
+    minHeight: "5.5vh",
+    [theme.breakpoints.down("sm")]: {
+      minHeight: "2.5vh"
+    }
   },
   userSection: {
     marginLeft: "auto",
@@ -52,7 +55,7 @@ export default function Message({
                   <Media media={media} />
                   :
                   <Grid
-                    item container xs={12}
+                    item container xs={12} sm={12}
                     className={classes.userBubble}
                     direction="column"
                     >

@@ -1,47 +1,11 @@
-import { createMuiTheme } from "@material-ui/core";
+import { createMuiTheme } from '@material-ui/core/styles';
 
-export const theme = createMuiTheme({
+const defaultTheme = createMuiTheme({
   typography: {
     fontFamily: `'Open Sans', sans-serif`,
-    fontSize: 14,
-    h1: {
-      fontWeight: '600',
-      fontSize: 26,
-    },
-    h4: {
-      fontWeight: '500',
-      fontSize: 26,
-      color: "#000"
-    },
-    h5: {
-      fontWeight: '500',
-      fontSize: 20,
-      color: "#000"
-    },
-    h6: {
-      fontWeight: '500',
-      fontSize: 16
-    },
+    fontSize: 12,
     button: {
       textTransform: 'none'
-    },
-    subtitle1: {
-      fontWeight: '600',
-      fontSize: 12,
-      color: '#BFC9DB'
-    },
-    subtitle2:{
-      fontSize: '75%'
-    },
-    body1: {
-      fontSize: '87.5%'
-    },
-    body2: {
-      fontSize: 14
-    },
-    caption: {
-      fontSize: 11,
-      color: '#BECCE2'
     },
   },
   span: {
@@ -64,4 +28,120 @@ export const theme = createMuiTheme({
   }
 });
 
+const { breakpoints } = defaultTheme;
+
+export const theme = {
+  ...defaultTheme,
+  overrides: {
+    MuiTypography: {
+      h1: {
+        fontWeight: '600',
+        fontSize: '1.625rem',
+        [breakpoints.down("sm")]: {
+          fontSize: ".75rem"
+        },
+      },
+      h4: {
+        fontWeight: '500',
+        fontSize: '1.625rem',
+        color: "#000",
+        [breakpoints.down("sm")]: {
+          fontSize: ".75rem"
+        }
+      },
+      h5: {
+        fontSize: '1.25rem',
+        fontWeight: '500',
+        [breakpoints.down("sm")]: {
+          fontSize: ".5rem"
+        },
+      },
+      h6: {
+        fontWeight: '500',
+        fontSize: ".875rem",
+        [breakpoints.down("sm")]: {
+          fontSize: ".365rem"
+        }
+      },
+      body1: {
+        fontSize: ".875rem",
+        [breakpoints.down("sm")]: {
+          fontSize: ".25rem"
+        },
+      },
+      body2: {
+        fontSize: '.875rem',
+        [breakpoints.down("sm")]: {
+          fontSize: ".25rem"
+        },
+      },
+      subtitle1: {
+        fontWeight: '600',
+        fontSize: ".75rem",
+        color: '#BFC9DB',
+        [breakpoints.down("sm")]: {
+          fontSize: ".25rem"
+        },
+      },
+      subtitle2: {
+        fontSize: '.75rem',
+        [breakpoints.down("sm")]: {
+          fontSize: ".15rem"
+        },
+      },
+      caption: {
+        fontSize: '.688rem',
+        color: '#BECCE2',
+        [breakpoints.down("sm")]: {
+          fontSize: ".25rem"
+        },
+      },
+    },
+    MuiAvatar: {
+      root: {
+        [breakpoints.down("sm")]: {
+          height: '3vh',
+          width: '3vh'
+        }
+      }
+    },
+    MuiInputBase: {
+      input: {
+        fontSize: '.75rem',
+        [breakpoints.down("sm")]: {
+          fontSize: '.25rem'
+        }
+      }
+    },
+    MuiBadge: {
+      badge: {
+        [breakpoints.down("sm")]: {
+          height: '.25rem',
+          width: '.25rem',
+          minWidth: '.25rem'
+        }
+      },
+      dot: {
+        [breakpoints.down("sm")]: {
+          height: '.25rem',
+          minWidth: '.25rem'
+        }
+      }
+    },
+    MuiIcon: {
+      root: {
+        [breakpoints.down("sm")]: {
+          fontSize: '.75rem'
+        }
+      }
+    },
+    MuiSvgIcon: {
+      root: {
+        [breakpoints.down("sm")]: {
+          fontSize: '.75rem'
+        }
+      }
+    }
+  }
+}
 

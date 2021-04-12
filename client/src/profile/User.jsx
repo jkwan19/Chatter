@@ -1,5 +1,6 @@
 import {
   Grid,
+  Hidden,
   ListItem,
   Typography
 } from "@material-ui/core";
@@ -14,7 +15,11 @@ const useStyles = makeStyles(theme => ({
   chatUser: {
     padding: theme.spacing(2),
     margin: theme.spacing(1),
-  }
+    [theme.breakpoints.down("sm")]: {
+      padding: theme.spacing(1),
+      margin: theme.spacing(0)
+    }
+  },
 }));
 export default function User ({ index, message, name, numUnread, isOnline, isRead, isTyping, handleChat}) {
 
@@ -54,17 +59,21 @@ export default function User ({ index, message, name, numUnread, isOnline, isRea
       <Status name={name} status={isOnline}/>
       <Grid
         container
+        spacing={1}
         >
         <Grid
-          item container
-          direction="column"
+          item xs={12} sm={12} md={11} lg={11} xl={11}
           style={{padding: '10px 20px'}}
           >
           <Name name={name} />
-          {preview}
+          <Hidden smDown>
+            {preview}
+          </Hidden>
         </Grid>
       </Grid>
-      <UnreadNotification numUnread={numUnread} />
+      <Hidden smDown>
+        <UnreadNotification numUnread={numUnread} />
+      </Hidden>
     </ListItem>
   )
 }

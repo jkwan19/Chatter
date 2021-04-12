@@ -19,8 +19,6 @@ import auth from "../services/auth.service";
 import { AuthContext } from "../context/AuthContext";
 
 const useStyles = makeStyles(theme => ({
-  logout: {
-  },
   blackText: {
     color: "#000"
   }
@@ -56,8 +54,7 @@ export default function LogoutMenu( { handleLogoutError }) {
 
   return (
     <Grid
-      item container xs={6}
-      className={classes.logout}
+      item container xs={4} sm={4} md={8}
       justify="flex-end"
       >
       <HorizontalIcon handleClick={handleClick}/>

@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
   '@global': {
     '*::-webkit-scrollbar': {
       display: 'none'
-    }
+    },
   },
   chatSection: {
     marginTop: '6px',
@@ -78,7 +78,7 @@ export default function Dashboard() {
       className={classes.root}
       >
       {/* Column one for users and profile*/}
-      <Grid item container xs={3} sm={3}
+      <Grid item container xs={4} sm={3} md={3}
         className={classes.chatSection}
          >
           <Grid
@@ -104,7 +104,7 @@ export default function Dashboard() {
       </Grid>
       {/* Column two for messages with user*/}
       <Grid
-        item xs={9} sm={9}
+        item xs={8} sm={9} md={9}
         className={classes.messageContainer}
         >
         <MessageHeader

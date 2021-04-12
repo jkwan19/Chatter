@@ -7,9 +7,13 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
   media: {
-    minHeight: '18vh',
-    minWidth: '18vh',
+    height: '18vh',
+    width: '18vh',
     borderRadius: "10px 10px 0",
+    [theme.breakpoints.down("sm")]: {
+      width: '9vh',
+      height: '9vh'
+    }
   },
 }));
 

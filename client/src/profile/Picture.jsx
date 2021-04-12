@@ -9,6 +9,10 @@ const useStyles = makeStyles(theme => ({
   small: {
     width: theme.spacing(4),
     height: theme.spacing(4),
+    [theme.breakpoints.down("sm")]:{
+      width: '3vh',
+      height: '3vh'
+    }
   },
   seen: {
     width: theme.spacing(2),
@@ -23,7 +27,7 @@ export default function Picture({ name, type }) {
 
   return (
     <Grid
-      item
+      item xs={12} sm={12} md={2}
       >
       <Avatar
         src={process.env.PUBLIC_URL + `/images/${name}.png`}
