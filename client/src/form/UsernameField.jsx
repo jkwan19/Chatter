@@ -15,13 +15,12 @@ const useStyles = makeStyles(theme => ({
     marginTop: ".8rem",
     height: "2rem",
     padding: "5px",
+    color: "#000"
   },
 }))
 
-export default function UsernameField (props) {
+export default function UsernameField ({ handleChange, errors, touched, values}) {
   const classes = useStyles();
-
-  const { handleChange, errors, touched, values} = props;
 
   return (
     <TextField

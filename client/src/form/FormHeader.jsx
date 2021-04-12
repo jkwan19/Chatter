@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-export default function FormHeader(props) {
+export default function FormHeader({ value }) {
   const classes = useStyles();
 
   return (
@@ -29,7 +29,7 @@ export default function FormHeader(props) {
           component="h1"
           variant="h4"
         >
-          {props.value}
+          {value}
         </Typography>
       </Grid>
     </Grid>

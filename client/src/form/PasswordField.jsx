@@ -16,6 +16,7 @@ const useStyles = makeStyles(theme => ({
     marginTop: ".8rem",
     height: "2rem",
     padding: "5px",
+    color: "#000"
   },
   forgot: {
     paddingRight: 10,
@@ -25,10 +26,9 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export default function PasswordField (props) {
-  const classes = useStyles();
+export default function PasswordField ({ handleChange, errors, touched, values, page }) {
 
-  const { handleChange, errors, touched, values, page } = props;
+  const classes = useStyles();
 
   const inputProps = page === "Login" ? (
     <Typography className={classes.forgot}>

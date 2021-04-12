@@ -15,13 +15,13 @@ const useStyles = makeStyles(theme => ({
     marginTop: ".8rem",
     height: "2rem",
     padding: "5px",
+    color: "#000"
   },
 }))
 
-export default function EmailField (props) {
-  const classes = useStyles();
+export default function EmailField ({ handleChange, errors, touched, values, page }) {
 
-  const { handleChange, errors, touched, values, page } = props;
+  const classes = useStyles();
 
   return (
     <TextField

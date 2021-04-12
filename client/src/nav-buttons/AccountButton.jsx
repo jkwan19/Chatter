@@ -17,14 +17,14 @@ const useStyles = makeStyles(theme => ({
     color: "#3a8dff",
     boxShadow: "none",
     marginRight: 35,
-    flexDirection: "column",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center"
+    [theme.breakpoints.down("sm")]: {
+      height: 50,
+      width: 140
+    }
   },
 }));
 
-export default function AccountButton(props) {
+export default function AccountButton({ value }) {
   const classes = useStyles();
 
   return (
@@ -33,7 +33,7 @@ export default function AccountButton(props) {
       className={classes.accBtn}
       variant="contained"
       >
-      <Typography variant="body2">{props.value}</Typography>
+      <Typography variant="body2">{value}</Typography>
     </Button>
   )
 }

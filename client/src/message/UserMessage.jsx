@@ -14,6 +14,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: '#F4F6FA',
     borderRadius: "10px 10px 0",
     minHeight: "7vh",
+    overflow: 'auto',
     [theme.breakpoints.down("sm")]: {
       minHeight: "2.5vh"
     }
@@ -23,7 +24,7 @@ const useStyles = makeStyles(theme => ({
     width: "auto",
   },
   messageSection: {
-    width: "auto"
+    width: "auto",
   }
 }));
 

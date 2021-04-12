@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
     borderRadius: "0 10px 10px",
     marginLeft: '5px',
     minHeight: "7vh",
-    [theme.breakpoints.down("sm")]: {
+    [theme.breakpoints.down("lg")]: {
       minHeight: "2.5vh",
     }
   },
@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
     width: "auto",
   },
   messageSection: {
-    width: "auto"
+    width: "auto",
   }
 }));
 

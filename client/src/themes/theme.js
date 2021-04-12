@@ -38,7 +38,7 @@ export const theme = {
         fontWeight: '600',
         fontSize: '1.625rem',
         [breakpoints.down("sm")]: {
-          fontSize: ".75rem"
+          fontSize: "1.25rem"
         },
       },
       h4: {
@@ -46,7 +46,7 @@ export const theme = {
         fontSize: '1.625rem',
         color: "#000",
         [breakpoints.down("sm")]: {
-          fontSize: ".75rem"
+          fontSize: "1.25rem"
         }
       },
       h5: {
@@ -66,13 +66,13 @@ export const theme = {
       body1: {
         fontSize: ".875rem",
         [breakpoints.down("sm")]: {
-          fontSize: ".25rem"
+          fontSize: ".75rem"
         },
       },
       body2: {
         fontSize: '.875rem',
         [breakpoints.down("sm")]: {
-          fontSize: ".25rem"
+          fontSize: ".75rem"
         },
       },
       subtitle1: {
@@ -86,7 +86,7 @@ export const theme = {
       subtitle2: {
         fontSize: '.75rem',
         [breakpoints.down("sm")]: {
-          fontSize: ".15rem"
+          fontSize: ".25rem"
         },
       },
       caption: {
@@ -108,6 +108,7 @@ export const theme = {
     MuiInputBase: {
       input: {
         fontSize: '.75rem',
+        minWidth: '100%',
         [breakpoints.down("sm")]: {
           fontSize: '.25rem'
         }

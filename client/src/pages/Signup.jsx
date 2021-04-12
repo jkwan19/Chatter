@@ -65,7 +65,11 @@ const useStyles = makeStyles(theme => ({
   formBox: {
     marginLeft: theme.spacing(12),
     width: '100%',
-    maxWidth: 450
+    maxWidth: 450,
+    [theme.breakpoints.down("sm")]: {
+      maxWidth: 300,
+      margin: 'auto'
+    }
   },
 }));
 
@@ -97,7 +101,7 @@ export default function Register() {
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
       <LandingImage />
-      <Grid item xs={12} sm={8} md={7} elevation={6} component={Paper} square>
+      <Grid item xs={12} sm={8} md={7} component={Paper} square>
         <Box className={classes.buttonHeader}>
           <AccountNavButtons
             link={'/login'}
@@ -107,6 +111,7 @@ export default function Register() {
             container
             spacing={3}
             alignItems="center"
+            justify="center"
             className={classes.formBox}>
             <FormHeader value={'Create an account'} />
             <Formik

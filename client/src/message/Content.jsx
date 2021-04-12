@@ -14,8 +14,10 @@ const useStyles = makeStyles(theme => ({
   },
   user:{
     paddingLeft: theme.spacing(2),
+    overflow: 'wrap',
     [theme.breakpoints.down("sm")]: {
-      margin: 'auto'
+      margin: 'auto',
+      maxWidth: '2vh'
     }
   }
 }));

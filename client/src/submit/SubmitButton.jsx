@@ -18,7 +18,11 @@ const useStyles = makeStyles(theme => ({
     marginTop: 49,
     fontSize: 16,
     fontWeight: 600,
-    backgroundColor: "#3a8dff"
+    backgroundColor: "#3a8dff",
+    [theme.breakpoints.down("sm")]: {
+      width: 100,
+      height: 25
+    }
   },
   text: {
     color: '#FFFFFF'

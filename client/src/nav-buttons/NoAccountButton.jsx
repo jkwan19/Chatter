@@ -13,22 +13,17 @@ const useStyles = makeStyles(theme => ({
     fontWeight: 400,
     textAlign: "center",
     marginRight: 21,
-    whiteSpace: "nowrap",
-    flexDirection: "column",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center"
   },
 }));
 
-export default function NoAccountButton(props) {
+export default function NoAccountButton({ value }) {
   const classes = useStyles();
 
   return (
     <Button
       className={classes.noAccBtn}
       >
-      <Typography variant="body2">{props.value}</Typography>
+      <Typography variant="body2">{value}</Typography>
     </Button>
   )
 }

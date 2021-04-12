@@ -13,22 +13,30 @@ const useStyles = makeStyles(theme => ({
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
     backgroundPosition: "center top",
-    width: "100%"
+    width: "100%",
+  },
+  icon: {
+    [theme.breakpoints.down("sm")]: {
+      width: '40px',
+      marginTop: theme.spacing(3)
+    }
   },
   overlay: {
     backgroundImage:
       "linear-gradient(180deg, rgb(58,141,255, 0.75) 0%, rgb(134,185,255, 0.75) 85%)",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
     minHeight: "100%",
   },
   heroText: {
-    fontSize: 26,
+    fontSize: '1.625rem',
     textAlign: "center",
     color: "white",
     marginTop: 30,
     maxWidth: 300,
-    paddingBottom: theme.spacing(10)
+    paddingBottom: theme.spacing(10),
+    [theme.breakpoints.down("sm")]: {
+      fontSize: '1rem',
+      paddingBottom: theme.spacing(5)
+    }
   },
 }));
 
@@ -36,7 +44,7 @@ export default function LandingImage() {
   const classes = useStyles();
 
   return (
-    <Grid item xs={false} sm={4} md={5} className={classes.image}>
+    <Grid item xs={12} sm={4} md={5} className={classes.image}>
       <Grid
         className={classes.overlay}
         container
@@ -44,7 +52,11 @@ export default function LandingImage() {
         justify="center"
         alignItems="center"
       >
-        <img width={67} alt="chat bubble" src={process.env.PUBLIC_URL + '/images/chatBubble.png'} />
+        <img
+          width={67} alt="chat bubble"
+          className={classes.icon}
+          src={process.env.PUBLIC_URL + '/images/chatBubble.png'}
+          />
           <Typography className={classes.heroText}>
             Converse with anyone with any language
           </Typography>
