@@ -21,7 +21,7 @@ import { AuthContext } from "../context/AuthContext";
 const useStyles = makeStyles(theme => ({
   blackText: {
     color: "#000"
-  }
+  },
 }));
 
 const ITEM_HEIGHT = 48;
@@ -54,7 +54,7 @@ export default function LogoutMenu( { handleLogoutError }) {
 
   return (
     <Grid
-      item container xs={4} sm={4} md={8}
+      item container xs={4} sm={4} md={4}
       justify="flex-end"
       >
       <HorizontalIcon handleClick={handleClick}/>

@@ -146,7 +146,21 @@ export const theme = {
       root: {
         minWidth: '0px'
       }
-    }
+    },
+    MuiMenuItem: {
+      root :{
+        [breakpoints.down("sm")]: {
+          minHeight: '1vh'
+        }
+      }
+    },
+    MuiPopover: {
+      paper :{
+        [breakpoints.down("sm")]: {
+          maxWidth: '10vh'
+        }
+      }
+    },
   }
 }
 
