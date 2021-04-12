@@ -141,6 +141,11 @@ export const theme = {
           fontSize: '.75rem'
         }
       }
+    },
+    MuiButton: {
+      root: {
+        minWidth: '0px'
+      }
     }
   }
 }

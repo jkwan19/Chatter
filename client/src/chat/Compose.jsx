@@ -27,7 +27,6 @@ const useStyles = makeStyles(theme => ({
     justify: 'center'
   },
   messageButtons: {
-    display: 'flex',
     marginLeft: 'auto',
     alignItems: 'center',
     paddingRight: theme.spacing(3),
@@ -48,7 +47,7 @@ export default function Compose ({ handleSend, handleMessage, newMessage }) {
       direction="row"
       >
       <Grid
-        item container xs={7}
+        item container xs={10}
         className={classes.messageInput}
         >
           <InputBase
@@ -62,9 +61,9 @@ export default function Compose ({ handleSend, handleMessage, newMessage }) {
           />
       </Grid>
       <Grid
-        item container xs={5}
-        spacing={2}
-        justify="flex-end"
+        item container xs={2}
+        alignContent="space-around"
+        justify="space-evenly"
         className={classes.messageButtons}
         >
           <SendIcon

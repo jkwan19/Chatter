@@ -9,8 +9,7 @@ export default function FilesIcon() {
 
   return (
     <Grid
-      item container xs={2}
-      justify="space-evenly"
+      item container xs={6}
       >
       <Button onClick={() => console.log('upload media')}>
         <SvgIcon>
