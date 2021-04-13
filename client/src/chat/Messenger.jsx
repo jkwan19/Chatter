@@ -20,6 +20,10 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(0, 2),
     padding: theme.spacing(0, 2),
     overflow: 'hidden',
+    [theme.breakpoints.down("sm")]: {
+      padding: 0,
+      margin: 0
+    }
   },
   messageList:{
     maxHeight: '75vh',

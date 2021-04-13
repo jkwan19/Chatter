@@ -21,6 +21,7 @@ const useStyles = makeStyles(theme => ({
   },
   inputRoot: {
     color: 'inherit',
+    width: '100vh'
   },
   messageInput: {
     paddingLeft: theme.spacing(3),

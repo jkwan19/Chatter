@@ -10,8 +10,12 @@ const useStyles = makeStyles(theme => ({
   list: {
     marginRight: theme.spacing(2),
     height: '100%',
+    width: '100%',
     overflowY: 'scroll',
-    position: 'relative'
+    position: 'relative',
+    [theme.breakpoints.down("sm")]: {
+      marginRight: 0
+    }
   }
 }));
 
