@@ -1,5 +1,6 @@
 import {
-  Grid
+  Grid,
+  Hidden
 } from "@material-ui/core";
 
 import Receipt from "./Receipt";
@@ -13,28 +14,32 @@ const useStyles = makeStyles(theme => ({
   friendBubble: {
     background: 'linear-gradient(-45deg, #6cc1ff 0%, #3a8dff 100%)',
     borderRadius: "0 10px 10px",
-    width: "auto",
-    minHeight: "5.5vh"
+    marginLeft: '5px',
+    minHeight: "6vh",
+    justifyContent: "space-evenly",
+    [theme.breakpoints.down("sm")]: {
+      minHeight: "2.5vh",
+    }
   },
   friendSection: {
     marginRight: "auto",
     width: "auto",
+    alignContent: "center"
   },
   messageSection: {
-    width: "auto"
+    width: "auto",
   }
 }));
 
-export default function Message(props) {
+export default function Message({
+  timeStamp,
+  media,
+  message,
+  recipient,
+  isReceived,
+  isTyping
+  }) {
   const classes = useStyles();
-
-  const {
-    timeStamp,
-    media,
-    message, name,
-    isReceived,
-    isTyping
-  } = props;
 
   const body = media
                   ?
@@ -51,18 +56,18 @@ export default function Message(props) {
   return(
     <Grid
       container
-      direction="row"
-      alignItems="center"
       spacing={2}
       className={classes.friendSection}
       >
         <Grid
           item
           >
-          <Picture
-            name={name}
-            type="small"
-            />
+          <Hidden smDown>
+            <Picture
+              name={recipient.name}
+              type="small"
+              />
+          </Hidden>
         </Grid>
         <Grid
           item container
@@ -70,13 +75,12 @@ export default function Message(props) {
           className={classes.messageSection}
           >
           <Receipt
-            name={name}
+            name={recipient.name}
             timeStamp={timeStamp}
             align="left"
             />
           <Grid
-            item container xs={10}
-            justify="center"
+            item container xs={12} sm={10}
             className={classes.friendBubble}
             >
             {body}

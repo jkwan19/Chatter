@@ -7,17 +7,23 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
   friend: {
-    paddingRight: theme.spacing(2),
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.down("sm")]: {
+      margin: 'auto'
+    }
   },
   user:{
     paddingLeft: theme.spacing(2),
+    overflow: 'wrap',
+    [theme.breakpoints.down("sm")]: {
+      margin: 'auto',
+      maxWidth: '2vh'
+    }
   }
 }));
 
-export default function Content(props) {
+export default function Content({ color, message, type, isReceived, isTyping }) {
   const classes = useStyles();
-
-  const { color, message, type, isReceived, isTyping } = props
 
   if (isTyping) {
     return (

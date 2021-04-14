@@ -7,15 +7,14 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
   label: {
-    fontSize: 14,
     color: "rgb(0,0,0,0.4)",
-    paddingLeft: "5px"
+    paddingLeft: "5px",
   },
 }))
 
-export default function Label (props) {
+export default function Label ({ name }) {
+
   const classes = useStyles();
-  const name = props.name;
 
   return (
     <Typography className={classes.label}>

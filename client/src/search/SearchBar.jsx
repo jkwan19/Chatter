@@ -12,10 +12,18 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(1),
     padding: theme.spacing(1),
     borderRadius: 5,
-    backgroundColor: '#E9EEF9'
+    backgroundColor: '#E9EEF9',
+    justifyContent: "center",
+    alignItems: "center",
+    [theme.breakpoints.down("sm")]: {
+      margin: theme.spacing(0),
+      padding: theme.spacing(0)
+    }
   },
   searchIcon: {
     height: '100%',
+    justifyContent: "center",
+    alignItems: "center"
   },
   inputRoot: {
     color: '#ADC0DE',
@@ -26,21 +34,20 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export default function SearchBar () {
+export default function SearchBar ({ findConversation }) {
   const classes = useStyles();
 
   return (
     <Grid container
       className={classes.bar}
-      justify="center"
-      alignItems="center"
       spacing={1}
       >
-      <Grid item xs={1}
+      <Grid item container xs={2} sm={2}
+
         className={classes.searchIcon}>
         <SearchIcon />
       </Grid>
-      <Grid item xs={10}>
+      <Grid item xs={10} sm={10}>
         <InputBase
           placeholder="Search"
           classes={{
@@ -48,6 +55,7 @@ export default function SearchBar () {
             input: classes.inputInput,
           }}
           inputProps={{ 'aria-label': 'search' }}
+          onChange={findConversation}
           />
       </Grid>
     </Grid>

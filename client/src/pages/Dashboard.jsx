@@ -1,15 +1,13 @@
 import {
-  useContext,
   useEffect,
-  useState
+  useState,
 } from "react";
 import {
   Grid,
 } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import { AuthContext } from "../context/AuthContext";
 
+import ErrorMessage from "../snackbar/ErrorMessage";
 import Status from "../profile/Status";
 import ChatHeader from "../chat/ChatHeader";
 import MessageHeader from "../chat/MessageHeader";
@@ -24,30 +22,20 @@ const useStyles = makeStyles(theme => ({
   '@global': {
     '*::-webkit-scrollbar': {
       display: 'none'
-    }
-  },
-  chat: {
-    maxHeight: '50vh',
-    position: 'relative'
+    },
   },
   chatSection: {
-    height: '100%',
-  },
-  chatBorder: {
-    borderRight: '1px none #e0e0e0'
-  },
-  conversationList: {
-    padding: '1px 10px',
+    marginTop: '6px',
+    padding: theme.spacing(1)
   },
   label: {
     padding: theme.spacing(1)
   },
-  messengerSection:{
-    paddingLeft: theme.spacing(1)
+  messageContainer: {
   },
   profileHeader: {
     alignItems: 'center',
-    padding: '12px'
+    padding: theme.spacing(1, 0, 1, 1)
   }
 }));
 
@@ -55,79 +43,83 @@ const useStyles = makeStyles(theme => ({
 export default function Dashboard() {
   const classes = useStyles();
 
+  const [ open, setOpen ] = useState(false);
   const [ friends, setFriends ] = useState([]);
-  const [ name, setName ] = useState('santiago');
-  const [ status, setStatus ] = useState(false);
-  const { loggedIn } = useContext(AuthContext);
-  const history = useHistory();
+  const [ filter, setFilter ] = useState('');
+  const [ recipient, setRecipient ] = useState({})
 
   useEffect(() => {
     setFriends(friendsList);
-  }, [history]);
+    setRecipient(friendsList[0]);
+  }, []);
 
   const handleChat = (e) => {
     const id = e.target.offsetParent.id || e.target.id;
     const user = friends[id - 1];
-    const { name, isOnline } = user;
-    setName(name)
-    setStatus(isOnline);
+    setRecipient(user)
   }
 
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") return;
+    setOpen(false);
+  };
+
+  const handleErrorMessage = () => {
+    setOpen(true);
+  }
+
+  const findConversation = (e) => {
+    const name = e.target.value;
+    setFilter(name)
+  }
 
   return (
     <Grid container
-      className={classes.chat}
+      className={classes.root}
       >
       {/* Column one for users and profile*/}
-      <Grid container
-        className={classes.chatSection} >
-        <Grid
-          item xs={3}
-          variant="elevation"
-          className={classes.borderRight500}>
+      <Grid item container xs={4} sm={3} md={3}
+        className={classes.chatSection}
+         >
+          <Grid
+            container
+            className={classes.profileHeader}
+            >
+            <Status name='thomas' status='online'/>
+            <Name name="thomas" />
+            <LogoutMenu handleLogoutError={handleErrorMessage}/>
+          </Grid>
           <Grid
             item
-            className={classes.conversationList}
+            className={classes.label}
             >
-            <Grid
-              container
-              className={classes.profileHeader}
-              direction='row'
-              spacing={2}
-              >
-              <Status name='thomas' status='online'/>
-              <Name name="thomas" />
-              <LogoutMenu/>
-            </Grid>
-            <Grid
-              container
-              className={classes.label}
-              spacing={2}
-              >
-              <ChatHeader />
-            </Grid>
-            <SearchBar />
-            <ChatList
-              friends={friends}
-              handleChat={handleChat}
-              />
+            <ChatHeader />
           </Grid>
-        </Grid>
-        {/* Column two for messages with user*/}
-        <Grid
-          item xs={9}
-          className={classes.messengerSection}
-          variant="elevation"
-          >
-          <MessageHeader
-            name={name}
-            status={status}
+          <SearchBar findConversation={findConversation}/>
+          <ChatList
+            friends={friends}
+            filter={filter}
+            handleChat={handleChat}
             />
-          <Messenger
-            name={name}
-            />
-        </Grid>
       </Grid>
+      {/* Column two for messages with user*/}
+      <Grid
+        item xs={8} sm={9} md={9}
+        className={classes.messageContainer}
+        >
+        <MessageHeader
+          name={recipient.name}
+          status={recipient.isOnline}
+          />
+        <Messenger
+          recipient={recipient}
+          />
+      </Grid>
+      <ErrorMessage
+        open={open}
+        message='Logout failed'
+        handleClose={handleClose}
+      />
     </Grid>
   );
 }

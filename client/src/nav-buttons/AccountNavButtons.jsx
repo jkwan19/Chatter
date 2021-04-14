@@ -18,14 +18,14 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-export default function AccountNavButtons(props) {
+export default function AccountNavButtons({ alt, link, main }) {
   const classes = useStyles();
 
   return (
     <Grid container justify="flex-end">
-      <Link to={props.link} className={classes.link}>
-        <NoAccountButton value={props.alt} />
-        <AccountButton value={props.main} />
+      <Link to={link} className={classes.link}>
+        <NoAccountButton value={alt} />
+        <AccountButton value={main} />
       </Link>
     </Grid>
   )

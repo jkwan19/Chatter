@@ -36,6 +36,9 @@ const useStyles = makeStyles(theme => ({
     },
     "& .MuiInput-underline:after": {
       borderBottom: "2px solid #3A8DFF"
+    },
+    [theme.breakpoints.down("sm")]: {
+      width: 'auto'
     }
   },
   buttonHeader: {
@@ -65,7 +68,11 @@ const useStyles = makeStyles(theme => ({
   formBox: {
     marginLeft: theme.spacing(12),
     width: '100%',
-    maxWidth: 450
+    maxWidth: 450,
+    [theme.breakpoints.down("sm")]: {
+      maxWidth: 300,
+      margin: 'auto'
+    }
   },
 }));
 
@@ -88,20 +95,24 @@ export default function Login() {
     setOpen(false);
   };
 
+  const handleError = () => {
+    setOpen(true);
+  }
 
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
       <LandingImage />
-      <Grid item xs={12} sm={8} md={7} elevation={6} component={Paper} square>
+      <Grid item xs={12} sm={7} md={7} component={Paper} square>
         <Box className={classes.buttonHeader}>
           <AccountNavButtons
             link={'/signup'}
             main={'Create account'}
             alt={`Don't have an account?`}/>
           <Grid
-            container
+            item container xs={12} sm={12}
             spacing={3}
+            justify="center"
             alignItems="center"
             className={classes.formBox}
             >
@@ -127,8 +138,7 @@ export default function Login() {
                     setLoggedIn(true)
                     setUser(res.user.username)
                   },
-                  error => {
-                    setOpen(true);
+                  (error) => {
                     setSubmitting(false);
                     setStatus(error);
                   }
@@ -156,7 +166,10 @@ export default function Login() {
                     values={values}
                     page="Login"
                   />
-                  <SubmitButton name={'Login'}/>
+                  <SubmitButton
+                    name={'Login'}
+                    handleError={handleError}
+                    />
                 </form>
               )}
             </Formik>

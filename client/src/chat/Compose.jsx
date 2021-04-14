@@ -14,25 +14,34 @@ const useStyles = makeStyles(theme => ({
     borderRadius: '10px',
     width: '100%',
     minHeight:'10vh',
-    margin: theme.spacing(2, 1)
+    margin: theme.spacing(2, 1),
+    [theme.breakpoints.down("sm")]: {
+      minHeight: '7vh'
+    }
   },
   inputRoot: {
     color: 'inherit',
+    width: '100vh'
   },
   messageInput: {
     paddingLeft: theme.spacing(3),
     justify: 'center'
   },
   messageButtons: {
-    display: 'flex',
     marginLeft: 'auto',
     alignItems: 'center',
-    paddingRight: theme.spacing(3)
+    alignContent: 'space-around',
+    paddingRight: theme.spacing(3),
+    "& .MuiButton-label": {
+      color: "#D1D9E6"
+    }
   }
 }));
 
-export default function Compose () {
+export default function Compose ({ handleSend, handleMessage, newMessage }) {
+
   const classes = useStyles();
+
   return (
     <Grid
       container
@@ -40,24 +49,26 @@ export default function Compose () {
       direction="row"
       >
       <Grid
-        item container xs={8}
-        alignItems="center"
-        className={classes.messageInput}>
+        item container xs={10}
+        className={classes.messageInput}
+        >
           <InputBase
             placeholder="Type Something..."
+            value={newMessage}
             classes={{
               root: classes.inputRoot,
             }}
             inputProps={{ 'aria-label': 'text' }}
+            onChange={handleMessage}
           />
       </Grid>
       <Grid
-        item container xs={4}
-        justify="flex-end"
-        alignItem="center"
+        item container xs={2}
         className={classes.messageButtons}
         >
-          <SendIcon />
+          <SendIcon
+            handleSend={handleSend}
+            />
           <FilesIcon />
       </Grid>
     </Grid>

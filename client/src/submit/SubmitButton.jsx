@@ -18,14 +18,18 @@ const useStyles = makeStyles(theme => ({
     marginTop: 49,
     fontSize: 16,
     fontWeight: 600,
-    backgroundColor: "#3a8dff"
+    backgroundColor: "#3a8dff",
+    [theme.breakpoints.down("sm")]: {
+      width: 100,
+      height: 25
+    }
   },
   text: {
     color: '#FFFFFF'
   }
 }));
 
-export default function SubmitButton(props) {
+export default function SubmitButton({ name, handleError}) {
   const classes = useStyles();
 
   return (
@@ -36,11 +40,12 @@ export default function SubmitButton(props) {
         variant="contained"
         color="primary"
         className={classes.submit}
+        onClick={handleError}
       >
         <Typography
           variant="body2"
           className={classes.text}
-          >{props.name}
+          >{name}
         </Typography>
       </Button>
     </Box>

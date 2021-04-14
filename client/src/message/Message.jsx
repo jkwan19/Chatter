@@ -5,9 +5,19 @@ import {
 import UserMessage from "./UserMessage";
 import FriendMessage from "./FriendMessage";
 
-export default function Message(props) {
+export default function Message(
+  { content,
+    recipient })
+    {
 
-  const { timeStamp, message, isReceived, isSeen, isTyping, media } = props;
+  const {
+    timeStamp,
+    message,
+    media,
+    isReceived,
+    isSeen,
+    isTyping
+  } = content;
 
   return (
     <ListItem >
@@ -17,12 +27,14 @@ export default function Message(props) {
           message={message}
           timeStamp={timeStamp}
           isTyping={isTyping}
+          recipient={recipient}
           /> :
         <UserMessage
           media={media}
           message={message}
           timeStamp={timeStamp}
           isSeen={isSeen}
+          recipient={recipient}
         />
         }
     </ListItem>

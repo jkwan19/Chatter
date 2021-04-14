@@ -1,5 +1,5 @@
 import {
-  List
+  List,
 } from "@material-ui/core";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -10,14 +10,24 @@ const useStyles = makeStyles(theme => ({
   list: {
     marginRight: theme.spacing(2),
     height: '100%',
+    width: '100%',
+    overflowY: 'scroll',
+    position: 'relative',
+    [theme.breakpoints.down("sm")]: {
+      marginRight: 0
+    }
   }
 }));
 
-export default function ChatList ({ friends, handleChat }) {
+export default function ChatList ({ filter, friends, handleChat }) {
 
   const classes = useStyles();
 
-  const listFriends = friends.map((friend) => {
+  const filterFunc = ({ name }) => {
+    return name.toLowerCase().indexOf(filter) > -1;
+  }
+
+  const listFriends = friends.filter(filterFunc).map((friend) => {
     const {
       id,
       name,
