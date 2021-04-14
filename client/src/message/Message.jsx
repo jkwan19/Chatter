@@ -5,7 +5,19 @@ import {
 import UserMessage from "./UserMessage";
 import FriendMessage from "./FriendMessage";
 
-export default function Message({ media, message, recipient, timeStamp, isReceived, isSeen, isTyping }) {
+export default function Message(
+  { content,
+    recipient })
+    {
+
+  const {
+    timeStamp,
+    message,
+    media,
+    isReceived,
+    isSeen,
+    isTyping
+  } = content;
 
   return (
     <ListItem >

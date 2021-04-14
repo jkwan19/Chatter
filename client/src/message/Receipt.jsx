@@ -9,7 +9,7 @@ export default function Receipt({ align, name, timeStamp }) {
     <Grid
       item xs={12}
       align={align}
-      style={{paddingBottom: '10px'}}
+      style={{paddingBottom: '8px'}}
       >
         <Typography
           variant="caption"

@@ -15,14 +15,16 @@ const useStyles = makeStyles(theme => ({
     background: 'linear-gradient(-45deg, #6cc1ff 0%, #3a8dff 100%)',
     borderRadius: "0 10px 10px",
     marginLeft: '5px',
-    minHeight: "7vh",
-    [theme.breakpoints.down("lg")]: {
+    minHeight: "6vh",
+    justifyContent: "space-evenly",
+    [theme.breakpoints.down("sm")]: {
       minHeight: "2.5vh",
     }
   },
   friendSection: {
     marginRight: "auto",
     width: "auto",
+    alignContent: "center"
   },
   messageSection: {
     width: "auto",
@@ -54,7 +56,6 @@ export default function Message({
   return(
     <Grid
       container
-      alignItems="center"
       spacing={2}
       className={classes.friendSection}
       >
@@ -80,7 +81,6 @@ export default function Message({
             />
           <Grid
             item container xs={12} sm={10}
-            justify="space-evenly"
             className={classes.friendBubble}
             >
             {body}

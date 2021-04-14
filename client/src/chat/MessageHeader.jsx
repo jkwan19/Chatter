@@ -13,6 +13,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(3),
     borderRadius: '0 5px',
     width: '100%',
+    alignContent: 'center',
     [theme.breakpoints.down("sm")]: {
       height: '7vh',
     }
@@ -38,7 +39,6 @@ export default function MessageHeader ({ name, status }) {
       container
       component={Grid}
       className={classes.headerBox}
-      alignContent='center'
       boxShadow={1}
       >
       <Typography variant="h5">{name}</Typography>

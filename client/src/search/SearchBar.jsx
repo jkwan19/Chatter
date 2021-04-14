@@ -13,6 +13,8 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1),
     borderRadius: 5,
     backgroundColor: '#E9EEF9',
+    justifyContent: "center",
+    alignItems: "center",
     [theme.breakpoints.down("sm")]: {
       margin: theme.spacing(0),
       padding: theme.spacing(0)
@@ -20,6 +22,8 @@ const useStyles = makeStyles(theme => ({
   },
   searchIcon: {
     height: '100%',
+    justifyContent: "center",
+    alignItems: "center"
   },
   inputRoot: {
     color: '#ADC0DE',
@@ -36,13 +40,10 @@ export default function SearchBar ({ findConversation }) {
   return (
     <Grid container
       className={classes.bar}
-      justify="center"
-      alignItems="center"
       spacing={1}
       >
       <Grid item container xs={2} sm={2}
-        justify="center"
-        alignItems="center"
+
         className={classes.searchIcon}>
         <SearchIcon />
       </Grid>

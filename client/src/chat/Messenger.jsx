@@ -17,8 +17,8 @@ import conversation from "./conversation.json";
 
 const useStyles = makeStyles(theme => ({
   messenger: {
-    margin: theme.spacing(0, 2),
-    padding: theme.spacing(0, 2),
+    margin: theme.spacing(0, 1),
+    padding: theme.spacing(0, 1),
     overflow: 'hidden',
     [theme.breakpoints.down("sm")]: {
       padding: 0,
@@ -44,13 +44,22 @@ export default function Messenger ({ recipient }) {
   const classes = useStyles();
 
   const [ newMessage, setNewMessage ] = useState('');
-  const [ messages, setMessages ] = useState([]);
+  const [ messages, setMessages ] = useState(conversation);
+  const [ conversationList, setConversationList ] = useState([]);
 
   let chatBottom = useRef(null);
 
   useEffect(() => {
-    setMessages(conversation)
-  }, [])
+    setConversationList(messages.map((content, key) => {
+      return (
+        <Message
+          key={key}
+          content={content}
+          recipient={recipient}
+        />
+      )
+    }))
+  }, [conversationList])
 
   const handleSend = () => {
     const messageBody = {
@@ -75,28 +84,6 @@ export default function Messenger ({ recipient }) {
 
   useEffect(scrollToBottom, [messages]);
 
-  const listConversation = messages.map((content, key) => {
-    const {
-      timeStamp,
-      message,
-      media,
-      isReceived,
-      isSeen,
-      isTyping
-    } = content;
-    return (
-      <Message
-        key={key}
-        timeStamp={timeStamp}
-        message={message}
-        media={media}
-        isReceived={isReceived}
-        isSeen={isSeen}
-        isTyping={isTyping}
-        recipient={recipient}
-      />
-    )
-  })
   return (
     <Grid
       item xs={12}
@@ -106,7 +93,7 @@ export default function Messenger ({ recipient }) {
         <Grid
           container
           className={classes.messageList}>
-          {listConversation}
+          {conversationList}
           <div ref={chatBottom} />
         </Grid>
         <Compose

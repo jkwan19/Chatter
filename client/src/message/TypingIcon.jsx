@@ -10,7 +10,9 @@ const useStyles = makeStyles(theme => ({
   typingContainer: {
     maxHeight: '2.5vh',
     maxWidth: '2vh',
-    paddingTop: '6px'
+    paddingTop: '6px',
+    justifyContent: "center",
+    alignContent: "center"
   },
   typingIcon: {
     color: '#FFF',
@@ -28,8 +30,6 @@ export default function TypingIcon() {
   return (
     <Grid
       container
-      justify="center"
-      alignContent="center"
       className={classes.typingContainer}
       >
       <MoreHorizIcon

@@ -21,7 +21,16 @@ const useStyles = makeStyles(theme => ({
     }
   },
 }));
-export default function User ({ index, message, name, numUnread, isOnline, isRead, isTyping, handleChat}) {
+export default function User (
+  { index,
+    message,
+    name,
+    numUnread,
+    isOnline,
+    isRead,
+    isTyping,
+    handleChat})
+  {
 
   const classes = useStyles();
 

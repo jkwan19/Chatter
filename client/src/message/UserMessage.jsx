@@ -13,8 +13,7 @@ const useStyles = makeStyles(theme => ({
   userBubble:{
     backgroundColor: '#F4F6FA',
     borderRadius: "10px 10px 0",
-    minHeight: "7vh",
-    overflow: 'auto',
+    minHeight: "6vh",
     [theme.breakpoints.down("sm")]: {
       minHeight: "2.5vh"
     }
@@ -25,6 +24,7 @@ const useStyles = makeStyles(theme => ({
   },
   messageSection: {
     width: "auto",
+    justifyContent: 'flex-end'
   }
 }));
 
@@ -74,7 +74,6 @@ export default function Message({
       >
       <Grid
         item container
-        justify="flex-end"
         spacing={1}
         className={classes.messageSection}
         >

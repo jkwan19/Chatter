@@ -30,6 +30,7 @@ const useStyles = makeStyles(theme => ({
   messageButtons: {
     marginLeft: 'auto',
     alignItems: 'center',
+    alignContent: 'space-around',
     paddingRight: theme.spacing(3),
     "& .MuiButton-label": {
       color: "#D1D9E6"
@@ -63,8 +64,6 @@ export default function Compose ({ handleSend, handleMessage, newMessage }) {
       </Grid>
       <Grid
         item container xs={2}
-        alignContent="space-around"
-        justify="space-evenly"
         className={classes.messageButtons}
         >
           <SendIcon
