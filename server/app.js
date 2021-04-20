@@ -8,6 +8,7 @@ const passport = require("passport");
 const cors = require("cors");
 
 const users = require("./routes/users");
+const messages = require("./routes/messages");
 
 // DB Config
 const db = require("./config/keys").mongoURI;
@@ -25,6 +26,7 @@ app.use(express.static(join(__dirname, "public")));
 
 // Routes
 app.use("/api/users", users);
+app.use("/api/messages", messages);
 
 // Passport middleware
 app.use(passport.initialize());
