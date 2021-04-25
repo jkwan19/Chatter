@@ -11,7 +11,7 @@ const users = require("./routes/users");
 const messages = require("./routes/messages");
 
 // DB Config
-const db = require("./config/keys").mongoURI;
+const db = require("./config/keys").mongoURI;3
 
 const { json, urlencoded } = express;
 

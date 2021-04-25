@@ -3,21 +3,18 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const keys = require('../config/keys');
-const verify = require('../verification/verify-token');
 
 const Conversation = require('../models/Conversation');
 const Message = require('../models/Message');
 
-let jwtUser = null;
-
 //TOKEN VERIFICATION MIDDLEWARE
-router.use(function(req, res, next) {
-  jwtUser = jwt.verify(verify(req), keys.secretOrKey, function(err, decodedToken) {
-    if(err) {
+router.use((req, res, next) => {
+  jwt.verify(req.cookies.token, keys.secretOrKey, (err, decodedToken) => {
+    if (err) {
       res.status(400).send(err);
     }
     else {
-     jwtUser = decodedToken;
+     req.jwtUser = decodedToken;
      next();
     }
   });
@@ -25,7 +22,7 @@ router.use(function(req, res, next) {
 
 //GET CONVERSATION
 router.get('/conversations', (req, res) => {
-  let from = mongoose.Types.ObjectId(jwtUser.id);
+  let from = mongoose.Types.ObjectId(req.jwtUser.id);
   Conversation.aggregate([
     {
       $lookup: {
@@ -52,7 +49,7 @@ router.get('/conversations', (req, res) => {
 });
 
 router.get('/conversations/query', (req, res) => {
-  let user1 = mongoose.Types.ObjectId(jwtUser.id);
+  let user1 = mongoose.Types.ObjectId(req.jwtUser.id);
   let user2 = mongoose.Types.ObjectId(req.query.userId);
   Message.aggregate([
   {
@@ -88,7 +85,6 @@ router.get('/conversations/query', (req, res) => {
   })
   .exec((err, messages) => {
       if (err) {
-          console.log(err);
           res.status(400).send(err);
       } else {
           res.send(messages);
@@ -98,7 +94,7 @@ router.get('/conversations/query', (req, res) => {
 
 // ADD MESSAGE TO CONVERSATION
 router.post('/', (req, res) => {
-  let from = mongoose.Types.ObjectId(jwtUser.id);
+  let from = mongoose.Types.ObjectId(req.jwtUser.id);
   let to = mongoose.Types.ObjectId(req.body.to);
   Conversation.findOneAndUpdate(
     {
@@ -117,7 +113,6 @@ router.post('/', (req, res) => {
     { upsert: true, new: true, setDefaultsOnInsert: true },
     function(err, conversation) {
       if (err) {
-        console.log(err);
         res.status(400).send(err);
       } else {
         let message = new Message({
@@ -129,14 +124,13 @@ router.post('/', (req, res) => {
 
         message.save(err => {
           if (err) {
-            console.log(err);
             res.status(400).send(err)
           } else {
             res.end(
-                JSON.stringify({
-                    message: 'Success',
-                    conversationId: conversation._id,
-                })
+              JSON.stringify({
+                  message: 'Success',
+                  conversationId: conversation._id,
+              })
             );
           }
         });

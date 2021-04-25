@@ -13,11 +13,14 @@ const signJwt = (id) => {
 
 const sendToken = (user, statusCode, res) => {
   const token = signJwt(user._id);
+  const { _id, username, date } = user;
   res.cookie("token", token, { httpOnly: true });
 
   res.status(statusCode).json({
     status : "success",
-    user,
+    _id,
+    username,
+    date
   });
 };
 
