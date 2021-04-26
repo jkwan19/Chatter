@@ -96,6 +96,7 @@ router.get('/conversations/query', (req, res) => {
 router.post('/', (req, res) => {
   let from = mongoose.Types.ObjectId(req.jwtUser.id);
   let to = mongoose.Types.ObjectId(req.body.to);
+
   Conversation.findOneAndUpdate(
     {
       recipients: {
@@ -106,7 +107,7 @@ router.post('/', (req, res) => {
       },
     },
     {
-      recipients: [jwtUser.id, req.body.to],
+      recipients: [req.jwtUser.id, req.body.to],
       lastMessage: req.body.body,
       date: Date.now(),
     },
@@ -118,7 +119,7 @@ router.post('/', (req, res) => {
         let message = new Message({
           conversation: conversation._id,
           to: req.body.to,
-          from: jwtUser.id,
+          from: req.jwtUser.id,
           body: req.body.body,
         });
 
