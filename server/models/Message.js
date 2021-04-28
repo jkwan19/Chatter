@@ -6,17 +6,21 @@ const MessageSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'conversations',
   },
-  to: {
-      type: Schema.Types.ObjectId,
-      ref: 'users',
-  },
   from: {
-      type: Schema.Types.ObjectId,
-      ref: 'users',
+    type: Schema.Types.ObjectId,
+    ref: 'users',
   },
   body: {
-      type: String,
-      required: true,
+    type: String,
+    required: true,
+  },
+  media: {
+    type: String,
+    default: '',
+  },
+  isSeen: {
+    type: Boolean,
+    default: false
   },
   date: {
       type: String,

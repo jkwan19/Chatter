@@ -1,49 +1,58 @@
 const express = require("express");
 const router = express.Router();
-const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
-const keys = require('../config/keys');
 
 const Conversation = require('../models/Conversation');
 const Message = require('../models/Message');
+const User = require('../models/User');
 
-//TOKEN VERIFICATION MIDDLEWARE
-router.use((req, res, next) => {
-  jwt.verify(req.cookies.token, keys.secretOrKey, (err, decodedToken) => {
-    if (err) {
-      res.status(400).send(err);
-    }
-    else {
-     req.jwtUser = decodedToken;
-     next();
-    }
-  });
-});
 
 //GET CONVERSATION
+
+router.get('/', (req, res) => {
+  let from = mongoose.Types.ObjectId(req.jwtUser.id);
+
+  User.aggregate()
+    .match({ _id: { $not: { $eq: from } } })
+    .project({
+      password: 0,
+      __v: 0,
+      date: 0,
+    })
+    .exec((err, users) => {
+      if (err) {
+        res.status(400).send(err);
+      } else {
+        res.send(users);
+      }
+    });
+})
+
 router.get('/conversations', (req, res) => {
   let from = mongoose.Types.ObjectId(req.jwtUser.id);
+
   Conversation.aggregate([
     {
       $lookup: {
         from: 'users',
-        localField: 'recipients',
+        localField: 'members',
         foreignField: '_id',
-        as: 'recipientObj',
+        as: 'membersObj',
       },
     },
   ])
-  .match({ recipients: { $all: [{ $elemMatch: { $eq: from } }] } })
+  .match({ members: { $all: [{ $elemMatch: { $eq: from } }] } })
   .project({
-    'recipientObj.password': 0,
-    'recipientObj.__v': 0,
-    'recipientObj.date': 0,
+    "membersObj.password": 0,
+    "membersObj.__v": 0,
+    "membersObj.email": 0,
+    "membersObj.date": 0
   })
   .exec((err, conversations) => {
     if (err) {
       res.status(400).send(err);
     } else {
-      res.send(conversations);
+      res.send(conversations)
     }
   });
 });
@@ -51,15 +60,8 @@ router.get('/conversations', (req, res) => {
 router.get('/conversations/query', (req, res) => {
   let user1 = mongoose.Types.ObjectId(req.jwtUser.id);
   let user2 = mongoose.Types.ObjectId(req.query.userId);
+
   Message.aggregate([
-  {
-    $lookup: {
-        from: 'users',
-        localField: 'to',
-        foreignField: '_id',
-        as: 'toObj',
-    },
-  },
   {
     $lookup: {
         from: 'users',
@@ -71,17 +73,15 @@ router.get('/conversations/query', (req, res) => {
   ])
   .match({
     $or: [
-      { $and: [{ to: user1 }, { from: user2 }] },
-      { $and: [{ to: user2 }, { from: user1 }] },
+      { $and: [{ from: user2 }] },
+      { $and: [{ from: user1 }] },
     ],
   })
   .project({
-      'toObj.password': 0,
-      'toObj.__v': 0,
-      'toObj.date': 0,
-      'fromObj.password': 0,
-      'fromObj.__v': 0,
-      'fromObj.date': 0,
+    "fromObj.password": 0,
+    "fromObj.__v": 0,
+    "fromObj.email": 0,
+    "fromObj.date": 0
   })
   .exec((err, messages) => {
       if (err) {
@@ -99,7 +99,7 @@ router.post('/', (req, res) => {
 
   Conversation.findOneAndUpdate(
     {
-      recipients: {
+      members: {
         $all: [
           { $elemMatch: { $eq: from } },
           { $elemMatch: { $eq: to } },
@@ -107,7 +107,7 @@ router.post('/', (req, res) => {
       },
     },
     {
-      recipients: [req.jwtUser.id, req.body.to],
+      members: [from, to],
       lastMessage: req.body.body,
       date: Date.now(),
     },
@@ -118,11 +118,9 @@ router.post('/', (req, res) => {
       } else {
         let message = new Message({
           conversation: conversation._id,
-          to: req.body.to,
-          from: req.jwtUser.id,
+          from: from,
           body: req.body.body,
         });
-
         message.save(err => {
           if (err) {
             res.status(400).send(err)
