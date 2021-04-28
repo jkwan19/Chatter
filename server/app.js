@@ -2,15 +2,19 @@ const createError = require("http-errors");
 const express = require("express");
 const mongoose = require("mongoose");
 const { join } = require("path");
+const bodyParser = require('body-parser');
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const passport = require("passport");
 const cors = require("cors");
+const jwt = require('jsonwebtoken');
+const keys = require('./config/keys');
 
 const users = require("./routes/users");
+const messages = require("./routes/messages");
 
 // DB Config
-const db = require("./config/keys").mongoURI;
+const db = keys.mongoURI;
 
 const { json, urlencoded } = express;
 
@@ -18,18 +22,35 @@ const app = express();
 
 app.use(logger("dev"));
 app.use(json());
-app.use(urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(cors());
 app.use(cookieParser());
-app.use(express.static(join(__dirname, "public")));
+app.use("images", express.static(join(__dirname, "public")));
 
-// Routes
 app.use("/api/users", users);
+
+//TOKEN VERIFICATION MIDDLEWARE
+app.use((req, res, next) => {
+  jwt.verify(req.cookies.token, keys.secretOrKey, (err, decodedToken) => {
+    if (err) {
+      res.status(400).send(err);
+    }
+    else {
+     req.jwtUser = decodedToken;
+     next();
+    }
+  });
+});
+
+app.use("/api/messages", messages);
 
 // Passport middleware
 app.use(passport.initialize());
 // Passport config
 require("./config/passport")(passport);
+
+
 
 app.use(function (req, res, next) {
   next(createError(404));
@@ -42,6 +63,7 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.json({ error: err });
 });
+
 
 mongoose
   .connect(
