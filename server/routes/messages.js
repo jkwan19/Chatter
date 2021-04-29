@@ -10,7 +10,7 @@ const User = require('../models/User');
 //GET CONVERSATION
 
 router.get('/', (req, res) => {
-  let from = mongoose.Types.ObjectId(req.jwtUser.id);
+  const from = mongoose.Types.ObjectId(req.jwtUser.id);
 
   User.aggregate()
     .match({ _id: { $not: { $eq: from } } })
@@ -26,6 +26,19 @@ router.get('/', (req, res) => {
         res.send(users);
       }
     });
+})
+
+router.get('/users', (req, res) => {
+  const username = req.query.username;
+
+  User.find({username: username})
+    .exec((err, users) => {
+      if (err) {
+        res.status(400).send(err);
+      } else {
+        res.send(users)
+      }
+    })
 })
 
 router.get('/conversations', (req, res) => {
@@ -57,7 +70,7 @@ router.get('/conversations', (req, res) => {
   });
 });
 
-router.get('/conversations/query', (req, res) => {
+router.get('/conversations/conversationId', (req, res) => {
   let user1 = mongoose.Types.ObjectId(req.jwtUser.id);
   let user2 = mongoose.Types.ObjectId(req.query.userId);
 
