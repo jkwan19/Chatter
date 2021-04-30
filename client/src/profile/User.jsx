@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 export default function User (
-  { index,
+  { _id,
     message,
     name,
     numUnread,
@@ -61,8 +61,8 @@ export default function User (
   return (
     <ListItem
       button
+      id={_id}
       className={classes.chatUser}
-      id={index}
       onClick={handleChat}
       >
       <Status name={name} status={isOnline}/>

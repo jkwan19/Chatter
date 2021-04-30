@@ -77,8 +77,8 @@ router.get('/conversations/conversationId', (req, res) => {
   Message.aggregate([
   {
     $lookup: {
-        from: 'users',
-        localField: 'from',
+        from: 'conversations',
+        localField: 'conversation',
         foreignField: '_id',
         as: 'fromObj',
     },
@@ -89,7 +89,9 @@ router.get('/conversations/conversationId', (req, res) => {
       { $and: [{ from: user2 }] },
       { $and: [{ from: user1 }] },
     ],
+
   })
+
   .project({
     "fromObj.password": 0,
     "fromObj.__v": 0,

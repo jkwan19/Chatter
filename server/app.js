@@ -28,6 +28,11 @@ app.use(cors());
 app.use(cookieParser());
 app.use("images", express.static(join(__dirname, "public")));
 
+// Passport middleware
+app.use(passport.initialize());
+// Passport config
+require("./config/passport")(passport);
+
 app.use("/api/users", users);
 
 //TOKEN VERIFICATION MIDDLEWARE
@@ -37,20 +42,13 @@ app.use((req, res, next) => {
       res.status(400).send(err);
     }
     else {
-     req.jwtUser = decodedToken;
-     next();
+      req.jwtUser = decodedToken;
+      next();
     }
   });
 });
 
 app.use("/api/messages", messages);
-
-// Passport middleware
-app.use(passport.initialize());
-// Passport config
-require("./config/passport")(passport);
-
-
 
 app.use(function (req, res, next) {
   next(createError(404));

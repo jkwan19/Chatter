@@ -63,13 +63,11 @@ router.post("/logout", (req, res) => {
   res.send( {success: true} );
 })
 
-router.get("/is_authenticated", (req, res) => {
+router.get("/is_authenticated", (req, res, next) => {
   const token = req.cookies.token;
   if (token) {
-    jwt.verify(token, keys.secretOrKey, (err, decoded) => {
-      decoded.status = true;
-      res.status(200).send(decoded)
-    });
+    const decoded = jwt.verify(token, keys.secretOrKey);
+    res.status(200).send(decoded);
   } else {
     res.status(400).send(null)
   }

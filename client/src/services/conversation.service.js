@@ -8,8 +8,8 @@ const getConversations = () => {
     .catch(err => console.log("Error getting conversations: " + err))
 };
 
-const getConversationMessages = (id) => {
-  return axios.get(`${API_URL}conversations/conversationId?userId=${id}`)
+const getConversationMessages = (userId) => {
+  return axios.get(`${API_URL}conversations/conversationId?userId=${userId}`)
     .then(res => res.data)
     .catch(err => console.log("Error getting messages: " + err))
 }
@@ -27,7 +27,7 @@ const findConversation = (username) => {
 const sendMessage = (to, body) => {
   return axios.post(`${API_URL}`, {
     to: to,
-    body: body
+    body: body.message
   })
     .then(res => res.data)
     .catch(err => console.log("Error sending message: " + err))
