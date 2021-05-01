@@ -27,16 +27,13 @@ export default function User (
     name,
     numUnread,
     isOnline,
-    isRead,
     isTyping,
     handleChat})
   {
 
   const classes = useStyles();
 
-  if (isRead) {
-    numUnread = 0
-  }
+  let isRead = !numUnread ? true : false;
 
   let preview = isTyping
                   ?

@@ -136,7 +136,11 @@ router.post('/', (req, res) => {
       lastMessage: req.body.body,
       date: Date.now(),
     },
-    { upsert: true, new: true, setDefaultsOnInsert: true },
+    {
+      upsert: true,
+      new: true,
+      setDefaultsOnInsert: true
+    },
     function(err, conversation) {
       if (err) {
         res.status(400).send(err);
@@ -162,5 +166,23 @@ router.post('/', (req, res) => {
     }
   );
 });
+
+router.post('/conversations/read', (req, res) => {
+
+  const conversationId = req.body.conversationId;
+
+  Conversation.findByIdAndUpdate(
+    conversationId,
+    {
+      numUnread: 0,
+    })
+    .exec((err, conversation) => {
+      if (err) {
+        res.status(400).send(err);
+      } else {
+        res.send('Read conversation!')
+      }
+    })
+})
 
 module.exports = router;

@@ -9,7 +9,11 @@ const ConversationSchema = new Schema({
       }
     ],
     lastMessage: {
-        type: String,
+      type: String,
+    },
+    numUnread: {
+      type: Number,
+      default: 0
     }
 });
 

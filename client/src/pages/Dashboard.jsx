@@ -57,6 +57,9 @@ export default function Dashboard() {
 
   const { user } = useContext(AuthContext)
 
+
+  /* GET CONVERSATIONS && MESSAGES */
+
   const getMessages = (userId) => {
     authConversation.getConversationMessages(userId)
       .then(res => setMessages(res))
@@ -68,9 +71,13 @@ export default function Dashboard() {
       setConversations(res)
     });
   }
+
   useEffect(() => {
     getConversations();
   }, [messages])
+
+
+  /* LIST AND FILTER CONVERSATIONS */
 
   useEffect(() => {
     if(!filter) {
@@ -117,7 +124,8 @@ export default function Dashboard() {
     for (let i = 0; i < friendsData.length; i++) {
       let friend = friendsData[i];
       if (friend._id === userId) {
-        setRecipient(friend)
+        setRecipient(friend);
+        authConversation.readMessage(friend.conversationId)
       }
     }
     getMessages(userId);

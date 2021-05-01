@@ -39,6 +39,7 @@ export default function ChatList ({ friendsData, handleChat }) {
         _id,
         username,
         membersObj,
+        numUnread,
         lastMessage
       } = friend;
 
@@ -48,9 +49,8 @@ export default function ChatList ({ friendsData, handleChat }) {
           _id={_id || membersObj[0]._id}
           name={username}
           message={lastMessage || ''}
-          numUnread={0}
+          numUnread={numUnread || 0}
           isOnline={true}
-          isRead={false}
           isTyping={false}
           handleChat={handleChat}
         />
