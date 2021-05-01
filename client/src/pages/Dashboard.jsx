@@ -52,15 +52,25 @@ export default function Dashboard() {
   const [ filter, setFilter ] = useState('');
   const [ recipient, setRecipient ] = useState([]);
   const [ conversations,  setConversations] = useState([]);
+  const [ messages, setMessages ] = useState([]);
   const [ friendsData, setFriendsData ] = useState([]);
 
-  const { loggedIn, setLoggedIn, user, setUser } = useContext(AuthContext);
+  const { user } = useContext(AuthContext)
 
-  useEffect(() => {
+  const getMessages = (userId) => {
+    authConversation.getConversationMessages(userId)
+      .then(res => setMessages(res))
+      .catch(err => console.log(err))
+  }
+
+  const getConversations = () => {
     authConversation.getConversations().then(res => {
       setConversations(res)
-    })
-  }, [])
+    });
+  }
+  useEffect(() => {
+    getConversations();
+  }, [messages])
 
   useEffect(() => {
     if(!filter) {
@@ -81,7 +91,7 @@ export default function Dashboard() {
       let dataList = [];
       friends.map((friend) => {
         let conversationData = conversations.filter(conversation => {
-          return conversation.membersObj[0]._id === friend._id
+          return conversation.members.includes(friend._id)
         })
 
         if (conversationData[0]) {
@@ -98,7 +108,7 @@ export default function Dashboard() {
 
       setFriendsData(dataList)
     }
-  }, [friends])
+  }, [friends, messages, conversations])
 
 
   const handleChat = (e) => {
@@ -109,11 +119,8 @@ export default function Dashboard() {
       if (friend._id === userId) {
         setRecipient(friend)
       }
-
     }
-    authConversation.getConversationMessages(userId)
-      .then(res => setConversations(res))
-      .catch(err => console.log(err))
+    getMessages(userId);
   }
 
 
@@ -171,7 +178,9 @@ export default function Dashboard() {
         <Messenger
           recipient={recipient}
           friendsData={friendsData}
-          conversations={conversations}
+          conversations={messages}
+          getMessages={getMessages}
+          getConversations={getConversations}
           />
       </Grid>
       <ErrorMessage

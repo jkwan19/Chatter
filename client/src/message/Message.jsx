@@ -5,34 +5,46 @@ import {
 import UserMessage from "./UserMessage";
 import FriendMessage from "./FriendMessage";
 
+import moment from "moment";
+
 export default function Message(
   { content,
-    recipient })
+    recipient
+  })
     {
 
   const {
-    timeStamp,
-    message,
+    date,
+    body,
     media,
-    isReceived,
+    from,
     isSeen,
     isTyping
   } = content;
+
+
+  let isReceived = from === recipient._id;
+
+  const convertToMilitary = (timeStamp) => {
+    return moment(date).format("hh:mm")
+  }
+
+  let time = convertToMilitary(date);
 
   return (
     <ListItem >
       {isReceived
         ? <FriendMessage
           media={media}
-          message={message}
-          timeStamp={timeStamp}
+          message={body}
+          timeStamp={time}
           isTyping={isTyping}
           recipient={recipient}
           /> :
         <UserMessage
           media={media}
-          message={message}
-          timeStamp={timeStamp}
+          message={body}
+          timeStamp={time}
           isSeen={isSeen}
           recipient={recipient}
         />

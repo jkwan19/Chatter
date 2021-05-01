@@ -136,7 +136,7 @@ export default function Login() {
                 login(email, password).then(
                   (res) => {
                     setLoggedIn(true);
-                    localStorage.setItem("username", res.username);
+                    localStorage.setItem("username", res.username)
                     history.push('/dashboard')
                   },
                   (error) => {

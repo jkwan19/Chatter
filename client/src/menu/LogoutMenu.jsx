@@ -48,6 +48,7 @@ export default function LogoutMenu( { handleLogoutError }) {
   const handleLogout = () => {
     logout()
       .then((res) => setLoggedIn(false))
+      .then(() => localStorage.removeItem("username"))
       .then(() => history.push("/login"))
       .catch((err) => handleLogoutError())
   }

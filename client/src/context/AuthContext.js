@@ -5,12 +5,13 @@ export const AuthContext = createContext();
 
 export function AuthContextProvider (props) {
   const [loggedIn, setLoggedIn] = useState(undefined);
-  const [user, setUser] =  useState(localStorage.getItem("username"));
+  const [user, setUser] =  useState("");
 
   useEffect(() => {
     auth.isAuth().then((data) => {
       setLoggedIn(data)
     })
+    setUser(localStorage.getItem("username"))
   }, [])
 
   return (

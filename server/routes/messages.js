@@ -54,7 +54,15 @@ router.get('/conversations', (req, res) => {
       },
     },
   ])
-  .match({ members: { $all: [{ $elemMatch: { $eq: from } }] } })
+  .match({
+    members: {
+      $all: [{
+        $elemMatch: {
+          $eq: from
+        }
+      }]
+    }
+  })
   .project({
     "membersObj.password": 0,
     "membersObj.__v": 0,
@@ -91,12 +99,14 @@ router.get('/conversations/conversationId', (req, res) => {
     ],
 
   })
-
   .project({
     "fromObj.password": 0,
     "fromObj.__v": 0,
     "fromObj.email": 0,
     "fromObj.date": 0
+  })
+  .sort({
+    date: 1
   })
   .exec((err, messages) => {
       if (err) {
