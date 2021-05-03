@@ -64,7 +64,7 @@ export default function Message({
           >
           <Hidden smDown>
             <Picture
-              name={recipient.name}
+              name={recipient.username}
               type="small"
               />
           </Hidden>
@@ -75,7 +75,7 @@ export default function Message({
           className={classes.messageSection}
           >
           <Receipt
-            name={recipient.name}
+            name={recipient.username}
             timeStamp={timeStamp}
             align="left"
             />

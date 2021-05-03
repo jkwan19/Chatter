@@ -11,9 +11,10 @@ import {
 
 import { makeStyles } from "@material-ui/core/styles";
 
+import authConversation from "../services/conversation.service";
+
 import Compose from "../chat/Compose";
 import Message from "../message/Message";
-import conversation from "./conversation.json";
 
 const useStyles = makeStyles(theme => ({
   messenger: {
@@ -26,28 +27,48 @@ const useStyles = makeStyles(theme => ({
     }
   },
   messageList:{
+    minHeight: '70vh',
     maxHeight: '75vh',
     paddingBottom: theme.spacing(1),
     overflowY: 'scroll'
   },
 }));
 
-const getMilitaryTime = () => {
-  const date = new Date();
-  const hour = date.getHours();
-  const min = date.getMinutes();
-  return `${hour}:${min}`;
-}
-
-export default function Messenger ({ recipient }) {
+export default function Messenger ({
+  recipient,
+  friendsData,
+  conversations,
+  getMessages,
+  getConversations
+  }) {
 
   const classes = useStyles();
 
   const [ newMessage, setNewMessage ] = useState('');
-  const [ messages, setMessages ] = useState(conversation);
+  const [ messages, setMessages ] = useState([]);
+  const [ recipientData, setRecipientData ] = useState({});
   const [ conversationList, setConversationList ] = useState([]);
+  const [ recipientId, setRecipientId ] = useState();
 
   let chatBottom = useRef(null);
+
+
+  useEffect(() => {
+    setRecipientId(recipient._id)
+  }, [recipient])
+
+  useEffect(() => {
+    const data = friendsData.find(data => data._id === recipientId);
+    let userMessages = conversations.filter(({conversation}) => {
+      if (recipientData) {
+        return conversation === recipientData.conversationId;
+      } else {
+        return [];
+      }
+    });
+    setRecipientData(data);
+    setMessages(userMessages)
+  }, [recipientId, conversations, friendsData, recipientData])
 
   useEffect(() => {
     setConversationList(messages.map((content, key) => {
@@ -59,19 +80,24 @@ export default function Messenger ({ recipient }) {
         />
       )
     }))
-  }, [conversationList])
+
+  }, [messages, recipient])
+
 
   const handleSend = () => {
-    const messageBody = {
-      timeStamp: getMilitaryTime(),
-      message: newMessage,
-      isReceived: false,
-      isSeen: false,
-      isTyping: false,
-      media: ""
+    if (newMessage) {
+      const messageBody = {
+        message: newMessage
+      }
+      authConversation.sendMessage(recipientId, messageBody)
+        .then(() => {
+          getMessages(recipientId)
+        })
+        .then(() => {
+          getConversations()
+        })
+        setNewMessage('');
     }
-    setMessages([...messages, messageBody])
-    setNewMessage('');
   }
 
   const handleMessage = (e) => {
@@ -83,6 +109,15 @@ export default function Messenger ({ recipient }) {
   };
 
   useEffect(scrollToBottom, [messages]);
+
+  if (!recipient) {
+    return (
+      <Grid
+        item xs={12}
+        className={classes.messenger}
+        ></Grid>
+    )
+  };
 
   return (
     <Grid

@@ -10,7 +10,7 @@ const User = require('../models/User');
 //GET CONVERSATION
 
 router.get('/', (req, res) => {
-  let from = mongoose.Types.ObjectId(req.jwtUser.id);
+  const from = mongoose.Types.ObjectId(req.jwtUser.id);
 
   User.aggregate()
     .match({ _id: { $not: { $eq: from } } })
@@ -28,6 +28,19 @@ router.get('/', (req, res) => {
     });
 })
 
+router.get('/users', (req, res) => {
+  const username = req.query.username;
+
+  User.find({username: username})
+    .exec((err, users) => {
+      if (err) {
+        res.status(400).send(err);
+      } else {
+        res.send(users)
+      }
+    })
+})
+
 router.get('/conversations', (req, res) => {
   let from = mongoose.Types.ObjectId(req.jwtUser.id);
 
@@ -41,7 +54,15 @@ router.get('/conversations', (req, res) => {
       },
     },
   ])
-  .match({ members: { $all: [{ $elemMatch: { $eq: from } }] } })
+  .match({
+    members: {
+      $all: [{
+        $elemMatch: {
+          $eq: from
+        }
+      }]
+    }
+  })
   .project({
     "membersObj.password": 0,
     "membersObj.__v": 0,
@@ -57,15 +78,15 @@ router.get('/conversations', (req, res) => {
   });
 });
 
-router.get('/conversations/query', (req, res) => {
+router.get('/conversations/conversationId', (req, res) => {
   let user1 = mongoose.Types.ObjectId(req.jwtUser.id);
   let user2 = mongoose.Types.ObjectId(req.query.userId);
 
   Message.aggregate([
   {
     $lookup: {
-        from: 'users',
-        localField: 'from',
+        from: 'conversations',
+        localField: 'conversation',
         foreignField: '_id',
         as: 'fromObj',
     },
@@ -76,12 +97,16 @@ router.get('/conversations/query', (req, res) => {
       { $and: [{ from: user2 }] },
       { $and: [{ from: user1 }] },
     ],
+
   })
   .project({
     "fromObj.password": 0,
     "fromObj.__v": 0,
     "fromObj.email": 0,
     "fromObj.date": 0
+  })
+  .sort({
+    date: 1
   })
   .exec((err, messages) => {
       if (err) {
@@ -111,7 +136,11 @@ router.post('/', (req, res) => {
       lastMessage: req.body.body,
       date: Date.now(),
     },
-    { upsert: true, new: true, setDefaultsOnInsert: true },
+    {
+      upsert: true,
+      new: true,
+      setDefaultsOnInsert: true
+    },
     function(err, conversation) {
       if (err) {
         res.status(400).send(err);
@@ -137,5 +166,23 @@ router.post('/', (req, res) => {
     }
   );
 });
+
+router.post('/conversations/read', (req, res) => {
+
+  const conversationId = req.body.conversationId;
+
+  Conversation.findByIdAndUpdate(
+    conversationId,
+    {
+      numUnread: 0,
+    })
+    .exec((err, conversation) => {
+      if (err) {
+        res.status(400).send(err);
+      } else {
+        res.send('Read conversation!')
+      }
+    })
+})
 
 module.exports = router;

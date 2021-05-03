@@ -84,11 +84,11 @@ export default function Login() {
   const [open, setOpen] = useState(false);
   const history = useHistory();
 
-  const { loggedIn, setLoggedIn, setUser } = useContext(AuthContext);
+  const { loggedIn, setLoggedIn } = useContext(AuthContext);
 
   useEffect(() => {
     if (loggedIn) history.push('/dashboard')
-  }, [history]);
+  }, [history, loggedIn]);
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") return;
@@ -135,15 +135,14 @@ export default function Login() {
                 setStatus();
                 login(email, password).then(
                   (res) => {
-                    setLoggedIn(true)
-                    setUser(res.user.username)
+                    setLoggedIn(true);
+                    localStorage.setItem("username", res.username)
+                    history.push('/dashboard')
                   },
                   (error) => {
                     setSubmitting(false);
                     setStatus(error);
                   }
-                ).then(
-                  history.push('/dashboard')
                 )
               }}
             >

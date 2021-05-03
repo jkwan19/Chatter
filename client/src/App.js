@@ -13,12 +13,12 @@ function App() {
   return (
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>
-        <Route path="/login" component={Login} />
-        <Route path="/signup" component={Signup} />
-        <Route path="/dashboard" component={Dashboard} />
-        <Route exact path="/">
-          <Redirect to="/signup" />
-        </Route>
+          <Route path="/login" component={Login} />
+          <Route path="/signup" component={Signup} />
+          <Route path="/dashboard" component={Dashboard} />
+          <Route exact path="/">
+            <Redirect to="/signup" />
+          </Route>
       </BrowserRouter>
 
     </MuiThemeProvider>

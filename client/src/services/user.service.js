@@ -1,14 +1,16 @@
 import axios from "axios";
-import authHeader from "./auth-header";
 
-const API_URL = "http://localhost:3001/api/users/";
+const API_URL = "/api/messages/";
 
 
-const getUserBoard = () => {
-  return axios.get(API_URL + "user", { headers: authHeader() });
+const getUsers = () => {
+  return axios.get(API_URL)
+    .then(res => res.data)
+    .catch(err => console.log("Error fetching users: " + err))
 };
 
 const auth = {
-  getUserBoard
+  getUsers,
 }
+
 export default auth;

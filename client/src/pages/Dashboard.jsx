@@ -1,4 +1,5 @@
 import {
+  useContext,
   useEffect,
   useState,
 } from "react";
@@ -6,6 +7,10 @@ import {
   Grid,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+
+import authConversation from "../services/conversation.service";
+import authUser from "../services/user.service";
+import { AuthContext } from  "../context/AuthContext";
 
 import ErrorMessage from "../snackbar/ErrorMessage";
 import Status from "../profile/Status";
@@ -16,7 +21,6 @@ import SearchBar from "../search/SearchBar";
 import ChatList from "../chat/ChatList";
 import LogoutMenu from "../menu/LogoutMenu";
 import Messenger from "../chat/Messenger";
-import friendsList from "./friends.json";
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -46,18 +50,87 @@ export default function Dashboard() {
   const [ open, setOpen ] = useState(false);
   const [ friends, setFriends ] = useState([]);
   const [ filter, setFilter ] = useState('');
-  const [ recipient, setRecipient ] = useState({})
+  const [ recipient, setRecipient ] = useState([]);
+  const [ conversations,  setConversations] = useState([]);
+  const [ messages, setMessages ] = useState([]);
+  const [ friendsData, setFriendsData ] = useState([]);
+
+  const { user } = useContext(AuthContext)
+
+
+  /* GET CONVERSATIONS && MESSAGES */
+
+  const getMessages = (userId) => {
+    authConversation.getConversationMessages(userId)
+      .then(res => setMessages(res))
+      .catch(err => console.log(err))
+  }
+
+  const getConversations = () => {
+    authConversation.getConversations().then(res => {
+      setConversations(res)
+    });
+  }
 
   useEffect(() => {
-    setFriends(friendsList);
-    setRecipient(friendsList[0]);
-  }, []);
+    getConversations();
+  }, [messages])
+
+
+  /* LIST AND FILTER CONVERSATIONS */
+
+  useEffect(() => {
+    if(!filter) {
+      authUser.getUsers().then(res => {
+        setFriends(res)
+      })
+    } else {
+      authConversation.findConversation(filter)
+      .then(res => {
+        setFriends(res)
+      })
+    }
+  }, [filter])
+
+  useEffect(() => {
+    if (friends && conversations ) {
+
+      let dataList = [];
+      friends.map((friend) => {
+        let conversationData = conversations.filter(conversation => {
+          return conversation.members.includes(friend._id)
+        })
+
+        if (conversationData[0]) {
+          conversationData[0] = {
+              conversationId: conversationData[0]._id,
+              ...conversationData[0]
+            };
+        }
+        let data = {...conversationData[0], ...friend}
+
+        dataList = [...dataList, data];
+        return dataList;
+      })
+
+      setFriendsData(dataList)
+    }
+  }, [friends, messages, conversations])
+
 
   const handleChat = (e) => {
-    const id = e.target.offsetParent.id || e.target.id;
-    const user = friends[id - 1];
-    setRecipient(user)
+    const userId = e.target.offsetParent.id;
+
+    for (let i = 0; i < friendsData.length; i++) {
+      let friend = friendsData[i];
+      if (friend._id === userId) {
+        setRecipient(friend);
+        authConversation.readMessage(friend.conversationId)
+      }
+    }
+    getMessages(userId);
   }
+
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") return;
@@ -85,8 +158,8 @@ export default function Dashboard() {
             container
             className={classes.profileHeader}
             >
-            <Status name='thomas' status='online'/>
-            <Name name="thomas" />
+            <Status name={user} status='online'/>
+            <Name name={user} />
             <LogoutMenu handleLogoutError={handleErrorMessage}/>
           </Grid>
           <Grid
@@ -97,9 +170,8 @@ export default function Dashboard() {
           </Grid>
           <SearchBar findConversation={findConversation}/>
           <ChatList
-            friends={friends}
-            filter={filter}
             handleChat={handleChat}
+            friendsData={friendsData}
             />
       </Grid>
       {/* Column two for messages with user*/}
@@ -108,11 +180,15 @@ export default function Dashboard() {
         className={classes.messageContainer}
         >
         <MessageHeader
-          name={recipient.name}
-          status={recipient.isOnline}
-          />
+          name={recipient.username}
+          status={true}
+         />
         <Messenger
           recipient={recipient}
+          friendsData={friendsData}
+          conversations={messages}
+          getMessages={getMessages}
+          getConversations={getConversations}
           />
       </Grid>
       <ErrorMessage

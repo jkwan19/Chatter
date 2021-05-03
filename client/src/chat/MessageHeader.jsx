@@ -34,6 +34,19 @@ export default function MessageHeader ({ name, status }) {
 
   const classes = useStyles();
 
+  const header = name;
+
+
+  if (!name) {
+    return (
+      <Box
+      container
+      component={Grid}
+      className={classes.headerBox}
+      boxShadow={1}
+      ></Box>
+    )
+  }
   return (
     <Box
       container
@@ -41,7 +54,7 @@ export default function MessageHeader ({ name, status }) {
       className={classes.headerBox}
       boxShadow={1}
       >
-      <Typography variant="h5">{name}</Typography>
+      <Typography variant="h5">{header}</Typography>
       <Grid item className={classes.chatStatus}>
         <Badge
           color={status ? "secondary" : "primary"}

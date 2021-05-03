@@ -30,7 +30,7 @@ export default function Picture({ name, type }) {
       item xs={12} sm={12} md={2}
       >
       <Avatar
-        src={process.env.PUBLIC_URL + `/images/${name}.png`}
+        src={`/images/${name}.png`}
         className={classes[type]}
         id={name}
         />

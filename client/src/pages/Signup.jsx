@@ -86,7 +86,7 @@ export default function Register() {
 
   useEffect(() => {
     if (loggedIn) history.push('/dashboard')
-  }, [history]);
+  }, [history, loggedIn]);
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") return;
@@ -140,14 +140,13 @@ export default function Register() {
                 register(username, email, password).then(
                   (res) => {
                     setLoggedIn(true)
+                    history.push('/dashboard')
                   },
                   error => {
                     setSubmitting(false);
                     setOpen(true);
                     setStatus(error);
                   }
-                ).then(
-                  history.push('/dashboard')
                 )
               }}
             >

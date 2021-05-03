@@ -1,4 +1,9 @@
 import {
+  useState,
+  useEffect
+} from "react";
+
+import {
   List,
 } from "@material-ui/core";
 
@@ -19,45 +24,47 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function ChatList ({ filter, friends, handleChat }) {
+export default function ChatList ({ friendsData, handleChat }) {
 
   const classes = useStyles();
 
-  const filterFunc = ({ name }) => {
-    return name.toLowerCase().indexOf(filter) > -1;
-  }
+  const [friendsList, setFriendsList] = useState([])
 
-  const listFriends = friends.filter(filterFunc).map((friend) => {
-    const {
-      id,
-      name,
-      message,
-      numUnread,
-      isOnline,
-      isRead,
-      isTyping
-    } = friend;
 
-    return (
-      <User
-        key={id}
-        index={id}
-        name={name}
-        message={message}
-        numUnread={numUnread}
-        isOnline={isOnline}
-        isRead={isRead}
-        isTyping={isTyping}
-        handleChat={handleChat}
-      />
-    )
-  })
+  useEffect(() => {
+
+    setFriendsList(friendsData.map((friend) => {
+
+      const {
+        _id,
+        username,
+        membersObj,
+        numUnread,
+        lastMessage
+      } = friend;
+
+      return (
+        <User
+          key={_id}
+          _id={_id || membersObj[0]._id}
+          name={username}
+          message={lastMessage || ''}
+          numUnread={numUnread || 0}
+          isOnline={true}
+          isTyping={false}
+          handleChat={handleChat}
+        />
+      )
+    }));
+
+
+  }, [friendsData, handleChat])
 
   return (
     <List
       className={classes.list}
       >
-      {listFriends}
+      {friendsList}
     </List>
   )
 }
