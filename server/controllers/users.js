@@ -2,12 +2,9 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const keys = require("../config/keys");
 
-const signJwt = ({id, username}) => {
+const signJwt = (id) => {
   return jwt.sign(
-    {
-      id,
-      username
-    },
+    { id },
     keys.secretOrKey,
     {
       expiresIn: "604800" //expires in 7 day in seconds,
@@ -15,7 +12,7 @@ const signJwt = ({id, username}) => {
 };
 
 const sendToken = (user, statusCode, res) => {
-  const token = signJwt(user);
+  const token = signJwt(user._id);
   const { _id, username, date } = user;
   res.cookie("token", token, { httpOnly: true });
 

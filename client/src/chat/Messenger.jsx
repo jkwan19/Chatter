@@ -58,7 +58,7 @@ export default function Messenger ({
   }, [recipient])
 
   useEffect(() => {
-    const data = friendsData.find(friendData => friendData._id === recipientId);
+    const data = friendsData.find(data => data._id === recipientId);
     let userMessages = conversations.filter(({conversation}) => {
       if (recipientData) {
         return conversation === recipientData.conversationId;
@@ -92,6 +92,9 @@ export default function Messenger ({
       authConversation.sendMessage(recipientId, messageBody)
         .then(() => {
           getMessages(recipientId)
+        })
+        .then(() => {
+          getConversations()
         })
         setNewMessage('');
     }

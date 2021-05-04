@@ -11,7 +11,7 @@ const jwt = require('jsonwebtoken');
 const keys = require('./config/keys');
 
 const users = require("./routes/users");
-const messages = require("./routes/messages");3
+const messages = require("./routes/messages");
 
 // DB Config
 const db = keys.mongoURI;
