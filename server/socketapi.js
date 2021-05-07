@@ -17,7 +17,6 @@ const addOnlineUsers = (socketID, userID) => {
   })
   if (users[socketID] === undefined) {
     users[socketID] = [userID];
-    console.log(users, 'users')
     console.log(`${userID} is online!`)
     return;
   }
@@ -51,7 +50,8 @@ io.on('connection', function(socket) {
 
   socket.on('login', function(data){
     if (data.userId) {
-      addOnlineUsers(socket.id, data.userId)
+      addOnlineUsers(socket.id, data.userId);
+      io.emit('online', data)
     }
   });
 
@@ -59,7 +59,7 @@ io.on('connection', function(socket) {
     if(data.typing === true) {
       io.emit('display', data)
     } else {
-      io.emit('display', '')
+      io.emit('display', "")
     }
   })
 
@@ -70,8 +70,16 @@ io.on('connection', function(socket) {
       body
     });
   })
+
+  socket.on('update_logout', (data) => {
+    const userId = data.userId;
+    removeOnlineUser(socket.id, userId);
+    io.emit("logout", data)
+  });
+
   socket.on('disconnect', function(){
     const userId = users[socket.id];
+
     removeOnlineUser(socket.id, userId)
   });
 
@@ -85,10 +93,6 @@ io.use((socket, next) => {
   }
   next();
 });
-
-socketApi.updateStatus = function (users) {
-  io.emit('status', users)
-}
 
 socketApi.sendMessage = function (message, to) {
   io.to(to).emit('message', message);

@@ -6,12 +6,4 @@ const socket = io(URL, {
     autoConnect: false,
 });
 
-socket.on("typing", (user) => {
-    console.log(`${user} is typing`)
-});
-
-socket.on('chat', message => {
-    console.log('From server: ', message)
-})
-
 export default socket;

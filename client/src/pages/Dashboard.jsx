@@ -92,6 +92,14 @@ export default function Dashboard() {
   }, [userId, username])
 
   useEffect(() => {
+    socket.on('logout', (data) => {
+      authUser.getUsers().then(res => {
+        setFriends(res);
+      })
+    })
+  }, [])
+
+  useEffect(() => {
     if(!username) {
       history.push("/login")
     }
@@ -105,20 +113,18 @@ export default function Dashboard() {
   /* LIST AND FILTER CONVERSATIONS */
 
   useEffect(() => {
-    if(!filter) {
-      authUser.getUsers().then(res => {
-        socket.emit("status", res)
-        setFriends(res)
-      })
-      .then(() => {
-        socket.off('status', friends);
-      })
-    } else {
-      authConversation.findConversation(filter)
-      .then(res => {
-        setFriends(res)
-      })
-    }
+    socket.on('online', data => {
+      if(!filter) {
+        authUser.getUsers().then(res => {
+          setFriends(res)
+        })
+      } else {
+        authConversation.findConversation(filter)
+        .then(res => {
+          setFriends(res)
+        })
+      }
+    })
   }, [filter])
 
   useEffect(() => {

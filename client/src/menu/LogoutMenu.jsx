@@ -1,6 +1,6 @@
 import {
   useContext,
-  useState
+  useState,
 } from "react";
 
 import { useHistory } from "react-router-dom";
@@ -49,9 +49,13 @@ export default function LogoutMenu( { handleLogoutError }) {
   const handleLogout = () => {
     logout()
       .then((res) => setLoggedIn(false))
+      .then(() => socket.emit('update_logout', {
+        userId
+      }))
       .then(() => history.push("/login"))
       .catch((err) => handleLogoutError())
   }
+
 
   return (
     <Grid

@@ -24,7 +24,6 @@ router.get('/', (req, res) => {
       if (err) {
         res.status(400).send(err);
       } else {
-        socket.updateStatus(users)
         res.send(users);
       }
     });
@@ -179,7 +178,7 @@ router.post('/conversations/read', (req, res) => {
   Conversation.findByIdAndUpdate(
     conversationId,
     {
-      numUnread: 0,
+      lastUnread: Date.now(),
     })
     .exec((err, conversation) => {
       if (err) {
