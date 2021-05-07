@@ -150,7 +150,6 @@ export default function Messenger ({
       to: recipient._id,
       typing: true
     });
-    setIsTyping(e.target.value)
     setNewMessage(e.target.value);
   }
 
