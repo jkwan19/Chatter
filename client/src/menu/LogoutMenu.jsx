@@ -15,6 +15,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import HorizontalIcon from "./HorizontalIcon";
 
+import socket from "../socket";
 import auth from "../services/auth.service";
 import { AuthContext } from "../context/AuthContext";
 
@@ -32,7 +33,7 @@ const logout = () => auth.logout();
 export default function LogoutMenu( { handleLogoutError }) {
 
   const classes = useStyles();
-  const { setLoggedIn } = useContext(AuthContext)
+  const { setLoggedIn, userId } = useContext(AuthContext)
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const history = useHistory();
@@ -48,7 +49,6 @@ export default function LogoutMenu( { handleLogoutError }) {
   const handleLogout = () => {
     logout()
       .then((res) => setLoggedIn(false))
-      .then(() => localStorage.removeItem("username"))
       .then(() => history.push("/login"))
       .catch((err) => handleLogoutError())
   }

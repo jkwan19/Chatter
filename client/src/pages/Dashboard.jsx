@@ -3,6 +3,9 @@ import {
   useEffect,
   useState,
 } from "react";
+
+import { useHistory } from "react-router-dom";
+
 import {
   Grid,
 } from "@material-ui/core";
@@ -11,6 +14,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import authConversation from "../services/conversation.service";
 import authUser from "../services/user.service";
 import { AuthContext } from  "../context/AuthContext";
+import socket from "../socket";
 
 import ErrorMessage from "../snackbar/ErrorMessage";
 import Status from "../profile/Status";
@@ -45,7 +49,9 @@ const useStyles = makeStyles(theme => ({
 
 
 export default function Dashboard() {
+
   const classes = useStyles();
+  const history = useHistory();
 
   const [ open, setOpen ] = useState(false);
   const [ friends, setFriends ] = useState([]);
@@ -55,8 +61,7 @@ export default function Dashboard() {
   const [ messages, setMessages ] = useState([]);
   const [ friendsData, setFriendsData ] = useState([]);
 
-  const { user } = useContext(AuthContext)
-
+  const { username, userId } = useContext(AuthContext)
 
   /* GET CONVERSATIONS && MESSAGES */
 
@@ -72,6 +77,26 @@ export default function Dashboard() {
     });
   }
 
+
+  useEffect(() => {
+    socket.auth = {
+      userId,
+      username
+    };
+
+    socket.emit("login", {
+      userId
+    })
+    socket.connect();
+
+  }, [userId, username])
+
+  useEffect(() => {
+    if(!username) {
+      history.push("/login")
+    }
+  }, [username, history])
+
   useEffect(() => {
     getConversations();
   }, [messages])
@@ -82,7 +107,11 @@ export default function Dashboard() {
   useEffect(() => {
     if(!filter) {
       authUser.getUsers().then(res => {
+        socket.emit("status", res)
         setFriends(res)
+      })
+      .then(() => {
+        socket.off('status', friends);
       })
     } else {
       authConversation.findConversation(filter)
@@ -115,7 +144,7 @@ export default function Dashboard() {
 
       setFriendsData(dataList)
     }
-  }, [friends, messages, conversations])
+  }, [friends, conversations])
 
 
   const handleChat = (e) => {
@@ -124,8 +153,15 @@ export default function Dashboard() {
     for (let i = 0; i < friendsData.length; i++) {
       let friend = friendsData[i];
       if (friend._id === userId) {
+        const room = friend.conversationId;
         setRecipient(friend);
-        authConversation.readMessage(friend.conversationId)
+        socket.auth = {
+          id: friend._id,
+          username: username
+        }
+        socket.emit("chat", room)
+        socket.connect();
+        authConversation.readMessage(room)
       }
     }
     getMessages(userId);
@@ -158,8 +194,8 @@ export default function Dashboard() {
             container
             className={classes.profileHeader}
             >
-            <Status name={user} status='online'/>
-            <Name name={user} />
+            <Status name={username} status='online'/>
+            <Name name={username} />
             <LogoutMenu handleLogoutError={handleErrorMessage}/>
           </Grid>
           <Grid
@@ -181,14 +217,16 @@ export default function Dashboard() {
         >
         <MessageHeader
           name={recipient.username}
-          status={true}
+          status={recipient.isOnline}
          />
         <Messenger
+          user={username}
           recipient={recipient}
           friendsData={friendsData}
           conversations={messages}
           getMessages={getMessages}
           getConversations={getConversations}
+          socket={socket}
           />
       </Grid>
       <ErrorMessage
