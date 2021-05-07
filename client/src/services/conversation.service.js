@@ -29,7 +29,10 @@ const readMessage = (conversationId) => {
   return axios.post(`${API_URL}conversations/read`, {
     conversationId
   })
-    .then(res => res.data)
+    .then(res => {
+      socket.emit("notifications", conversationId)
+      return res.data
+    })
     .catch(err => console.log("Error reading message: " + err))
 };
 
@@ -42,6 +45,7 @@ const sendMessage = (from, to, body) => {
   return axios.post(`${API_URL}`, messageContent)
     .then(res => {
       socket.emit("message", messageContent)
+      socket.emit("")
       return res.data
     })
     .catch(err => console.log("Error sending message: " + err))

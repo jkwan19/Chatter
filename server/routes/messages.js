@@ -136,6 +136,10 @@ router.post('/', (req, res) => {
       members: [from, to],
       lastMessage: req.body.body,
       date: Date.now(),
+      $inc: {
+        numUnread: 1
+      },
+      lastFrom: from
     },
     {
       upsert: true,
@@ -151,8 +155,6 @@ router.post('/', (req, res) => {
           from: from,
           body: req.body.body,
         });
-
-        socket.sendMessage(message, to);
 
         message.save(err => {
           if (err) {
@@ -178,7 +180,7 @@ router.post('/conversations/read', (req, res) => {
   Conversation.findByIdAndUpdate(
     conversationId,
     {
-      lastUnread: Date.now(),
+      numUnread: 0,
     })
     .exec((err, conversation) => {
       if (err) {

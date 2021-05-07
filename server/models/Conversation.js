@@ -11,8 +11,13 @@ const ConversationSchema = new Schema({
     lastMessage: {
       type: String,
     },
-    lastUnread: {
-      type: Date
+    numUnread: {
+      type: Number,
+      default: 0
+    },
+    lastFrom: {
+      type: String,
+      default: ''
     }
 });
 

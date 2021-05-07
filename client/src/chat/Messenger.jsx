@@ -74,17 +74,21 @@ export default function Messenger ({
     setRecipientId(recipient._id)
   }, [recipient])
 
-
   useEffect(() => {
     socket.on('display', (data)=>{
       if (data.typing && !!data.from && (data.from !== userId) && (data.to === userId)) {
         setIsTyping(true)
+        setTypingBox(
+          <Typing
+            recipient={recipient}
+            isTyping={isTyping}
+          />
+        )
       } else {
         setIsTyping(false)
         setTypingBox("")
       }
     });
-
     if (!newMessage) {
       socket.emit("typing", {
         from: userId,
@@ -92,7 +96,7 @@ export default function Messenger ({
         typing: false
       })
     };
-  }, [newMessage, userId, socket, recipientId])
+  }, [recipient, userId, socket, recipientId, isTyping])
 
   useEffect(() => {
     const data = friendsData.find(friendData => friendData._id === recipientId);
@@ -117,17 +121,8 @@ export default function Messenger ({
         />
       )
     }))
-    if (isTyping) {
-      setTypingBox(
-        <Typing
-          recipient={recipient}
-          isTyping={isTyping}
-        />
-      )
-    } else {
-      setTypingBox("")
-    }
-  }, [isTyping, messages, recipient])
+
+  }, [messages, recipient])
 
 
   const handleSend = () => {
@@ -145,12 +140,12 @@ export default function Messenger ({
   }
 
   const handleMessage = (e) => {
+    setNewMessage(e.target.value);
     socket.emit("typing", {
       from: userId,
       to: recipient._id,
       typing: true
     });
-    setNewMessage(e.target.value);
   }
 
   const scrollToBottom = () => {

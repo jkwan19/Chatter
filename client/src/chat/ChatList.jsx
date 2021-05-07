@@ -40,9 +40,16 @@ export default function ChatList ({ friendsData, handleChat }) {
         username,
         membersObj,
         numUnread,
+        lastFrom,
         lastMessage,
         isOnline
       } = friend;
+
+      let notifications = 0;
+
+      if (numUnread && (lastFrom === _id)) {
+        notifications = numUnread;
+      }
 
       return (
         <User
@@ -50,7 +57,7 @@ export default function ChatList ({ friendsData, handleChat }) {
           _id={_id || membersObj[0]._id}
           name={username}
           message={lastMessage || ''}
-          numUnread={numUnread || 0}
+          numUnread={notifications}
           isOnline={isOnline}
           isTyping={false}
           handleChat={handleChat}

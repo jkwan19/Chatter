@@ -165,8 +165,6 @@ export default function Dashboard() {
           id: friend._id,
           username: username
         }
-        socket.emit("chat", room)
-        socket.connect();
         authConversation.readMessage(room)
       }
     }

@@ -71,6 +71,10 @@ io.on('connection', function(socket) {
     });
   })
 
+  socket.on('notifications', (data)=> {
+    io.emit('notification_read', data)
+  })
+
   socket.on('update_logout', (data) => {
     const userId = data.userId;
     removeOnlineUser(socket.id, userId);
@@ -94,9 +98,6 @@ io.use((socket, next) => {
   next();
 });
 
-socketApi.sendMessage = function (message, to) {
-  io.to(to).emit('message', message);
-};
 
 
 module.exports = socketApi;
