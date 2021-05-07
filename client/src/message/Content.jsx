@@ -2,7 +2,6 @@ import {
   Typography
 } from "@material-ui/core";
 
-import TypingIcon from "./TypingIcon";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
@@ -22,14 +21,8 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Content({ color, message, type, isReceived, isTyping }) {
+export default function Content({ color, message, type }) {
   const classes = useStyles();
-
-  if (isTyping) {
-    return (
-      <TypingIcon />
-    )
-  }
 
   return (
     <Typography

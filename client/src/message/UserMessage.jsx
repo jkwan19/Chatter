@@ -51,7 +51,7 @@ export default function Message({
     }
   }
 
-  const body = media
+  let body = media
                   ?
                   <Media media={media} />
                   :
@@ -66,6 +66,9 @@ export default function Message({
                       />
                   </Grid>
 
+  if (!message) {
+    return ''
+  }
   return (
     <Grid
       container

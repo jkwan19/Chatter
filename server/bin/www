@@ -9,6 +9,8 @@ require("dotenv").config();
 
 var app = require("../app");
 var http = require("http");
+var socketApi = require('../socketApi');
+
 
 /**
  * Get port from environment and store in Express.
@@ -30,6 +32,19 @@ var server = http.createServer(app);
 server.listen(port);
 server.on("error", onError);
 server.on("listening", onListening);
+
+
+/**
+ * Socket server
+ */
+var io = socketApi.io;
+var options = {
+  cors: {
+    origin: `http://localhost:${port}`,
+    methods: ["GET", "POST"]
+  }
+}
+io.attach(server, options);
 
 /**
  * Normalize a port into a number, string, or false.

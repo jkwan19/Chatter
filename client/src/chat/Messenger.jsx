@@ -1,6 +1,7 @@
 import {
   useState,
   useEffect,
+  useContext,
   useRef
 } from "react";
 
@@ -11,10 +12,12 @@ import {
 
 import { makeStyles } from "@material-ui/core/styles";
 
+import { AuthContext } from  "../context/AuthContext";
 import authConversation from "../services/conversation.service";
 
 import Compose from "../chat/Compose";
 import Message from "../message/Message";
+import Typing from "../message/Typing";
 
 const useStyles = makeStyles(theme => ({
   messenger: {
@@ -35,12 +38,16 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Messenger ({
+  user,
   recipient,
   friendsData,
   conversations,
   getMessages,
-  getConversations
+  getConversations,
+  socket
   }) {
+
+  const { username, userId } = useContext(AuthContext)
 
   const classes = useStyles();
 
@@ -49,16 +56,44 @@ export default function Messenger ({
   const [ recipientData, setRecipientData ] = useState({});
   const [ conversationList, setConversationList ] = useState([]);
   const [ recipientId, setRecipientId ] = useState();
+  const [ isTyping, setIsTyping ] = useState('');
+  const [ typingBox, setTypingBox ] = useState('');
 
   let chatBottom = useRef(null);
 
 
   useEffect(() => {
+    socket.on("message_received", (data) => {
+      if (data.to === userId) {
+        getMessages(data.from);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
     setRecipientId(recipient._id)
   }, [recipient])
 
+
   useEffect(() => {
-    const data = friendsData.find(data => data._id === recipientId);
+    socket.on('display', (data)=>{
+      if(data.typing === true && (socket.auth.username !== username)) {
+        setIsTyping(true)
+      } else {
+        setIsTyping(false)
+      }
+    });
+
+    if (!newMessage) {
+      socket.emit("typing", {
+        username,
+        typing: false
+      })
+    };
+  }, [newMessage, username])
+
+  useEffect(() => {
+    const data = friendsData.find(friendData => friendData._id === recipientId);
     let userMessages = conversations.filter(({conversation}) => {
       if (recipientData) {
         return conversation === recipientData.conversationId;
@@ -80,27 +115,39 @@ export default function Messenger ({
         />
       )
     }))
-
-  }, [messages, recipient])
+    if (isTyping) {
+      setTypingBox(
+        <Typing
+          recipient={recipient}
+          isTyping={isTyping}
+        />
+      )
+    } else {
+      setTypingBox('')
+    }
+  }, [isTyping, messages, recipient])
 
 
   const handleSend = () => {
     if (newMessage) {
       const messageBody = {
         message: newMessage
-      }
-      authConversation.sendMessage(recipientId, messageBody)
+      };
+      authConversation.sendMessage(userId, recipientId, messageBody)
         .then(() => {
           getMessages(recipientId)
         })
-        .then(() => {
-          getConversations()
-        })
         setNewMessage('');
+        setIsTyping('');
     }
   }
 
   const handleMessage = (e) => {
+    socket.emit("typing", {
+      username,
+      typing: true
+    });
+    setIsTyping(e.target.value)
     setNewMessage(e.target.value);
   }
 
@@ -108,7 +155,7 @@ export default function Messenger ({
     chatBottom.current.scrollIntoView({ behavior: "smooth" });
   };
 
-  useEffect(scrollToBottom, [messages]);
+  useEffect(scrollToBottom, [messages, isTyping]);
 
   if (!recipient) {
     return (
@@ -129,6 +176,7 @@ export default function Messenger ({
           container
           className={classes.messageList}>
           {conversationList}
+          {typingBox}
           <div ref={chatBottom} />
         </Grid>
         <Compose

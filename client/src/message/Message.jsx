@@ -9,7 +9,8 @@ import moment from "moment";
 
 export default function Message(
   { content,
-    recipient
+    recipient,
+    isTyping
   })
     {
 
@@ -18,8 +19,7 @@ export default function Message(
     body,
     media,
     from,
-    isSeen,
-    isTyping
+    isSeen
   } = content;
 
 

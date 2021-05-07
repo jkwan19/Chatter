@@ -6,6 +6,7 @@ const Conversation = require('../models/Conversation');
 const Message = require('../models/Message');
 const User = require('../models/User');
 
+const socket = require('../socketapi');
 
 //GET CONVERSATION
 
@@ -23,6 +24,7 @@ router.get('/', (req, res) => {
       if (err) {
         res.status(400).send(err);
       } else {
+        socket.updateStatus(users)
         res.send(users);
       }
     });
@@ -150,6 +152,9 @@ router.post('/', (req, res) => {
           from: from,
           body: req.body.body,
         });
+
+        socket.sendMessage(message, to);
+
         message.save(err => {
           if (err) {
             res.status(400).send(err)
