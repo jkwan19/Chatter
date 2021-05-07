@@ -47,7 +47,7 @@ export default function Messenger ({
   socket
   }) {
 
-  const { username, userId } = useContext(AuthContext)
+  const { userId } = useContext(AuthContext)
 
   const classes = useStyles();
 
@@ -68,7 +68,7 @@ export default function Messenger ({
         getMessages(data.from);
       }
     });
-  }, []);
+  }, [socket, getMessages, userId]);
 
   useEffect(() => {
     setRecipientId(recipient._id)
@@ -88,11 +88,11 @@ export default function Messenger ({
     if (!newMessage) {
       socket.emit("typing", {
         from: userId,
-        to: recipient._id,
+        to: recipientId,
         typing: false
       })
     };
-  }, [newMessage, userId])
+  }, [newMessage, userId, socket, recipientId])
 
   useEffect(() => {
     const data = friendsData.find(friendData => friendData._id === recipientId);

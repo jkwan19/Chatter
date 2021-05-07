@@ -6,7 +6,6 @@ import {
 
 import Picture from "../profile/Picture";
 import Receipt from "./Receipt";
-import Content from "./Content";
 import TypingIcon from "./TypingIcon";
 
 import { makeStyles } from "@material-ui/core/styles";
