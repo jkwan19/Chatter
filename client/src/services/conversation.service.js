@@ -1,4 +1,5 @@
 import axios from "axios";
+import socket from "../socket";
 
 const API_URL = "/api/messages/";
 
@@ -32,12 +33,17 @@ const readMessage = (conversationId) => {
     .catch(err => console.log("Error reading message: " + err))
 };
 
-const sendMessage = (to, body) => {
-  return axios.post(`${API_URL}`, {
-    to: to,
+const sendMessage = (from, to, body) => {
+  let messageContent = {
+    from,
+    to,
     body: body.message
-  })
-    .then(res => res.data)
+  }
+  return axios.post(`${API_URL}`, messageContent)
+    .then(res => {
+      socket.emit("message", messageContent)
+      return res.data
+    })
     .catch(err => console.log("Error sending message: " + err))
 }
 
