@@ -1,6 +1,7 @@
 import {
   Grid,
-  Hidden
+  Hidden,
+  ListItem
 } from "@material-ui/core";
 
 import Picture from "../profile/Picture";
@@ -39,34 +40,41 @@ export default function Typing({
   const classes = useStyles();
 
   return(
-    <Grid
-      container
-      spacing={2}
-      className={classes.friendSection}
-      >
-        <Grid
-          item
-          >
-          <Hidden smDown>
-            <Picture
-              name={recipient.username}
-              type="small"
-              />
-          </Hidden>
-        </Grid>
-        <Grid
-          item container
-          spacing={1}
-          className={classes.messageSection}
-          >
+    <ListItem >
+      <Grid
+        container
+        spacing={2}
+        className={classes.friendSection}
+        >
           <Grid
-            item container xs={12} sm={10}
-            className={classes.friendBubble}
+            item
             >
-             <TypingIcon />
+            <Hidden smDown>
+              <Picture
+                name={recipient.username}
+                type="small"
+                />
+            </Hidden>
           </Grid>
-        </Grid>
-    </Grid>
+          <Grid
+            item container
+            spacing={1}
+            className={classes.messageSection}
+            >
+              <Receipt
+              name={recipient.username}
+              timeStamp={timeStamp}
+              align="left"
+              />
+            <Grid
+              item container xs={12} sm={10}
+              className={classes.friendBubble}
+              >
+              <TypingIcon />
+            </Grid>
+          </Grid>
+      </Grid>
+    </ListItem>
 
   )
 }

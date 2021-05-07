@@ -77,20 +77,22 @@ export default function Messenger ({
 
   useEffect(() => {
     socket.on('display', (data)=>{
-      if(data.typing === true && (socket.auth.username !== username)) {
+      if(data.typing === true && data.from && (data.from !== userId)) {
         setIsTyping(true)
       } else {
         setIsTyping(false)
+        setTypingBox("")
       }
     });
 
     if (!newMessage) {
       socket.emit("typing", {
-        username,
+        from: userId,
+        to: recipient._id,
         typing: false
       })
     };
-  }, [newMessage, username])
+  }, [newMessage, userId])
 
   useEffect(() => {
     const data = friendsData.find(friendData => friendData._id === recipientId);
@@ -123,7 +125,7 @@ export default function Messenger ({
         />
       )
     } else {
-      setTypingBox('')
+      setTypingBox("")
     }
   }, [isTyping, messages, recipient])
 
@@ -144,7 +146,8 @@ export default function Messenger ({
 
   const handleMessage = (e) => {
     socket.emit("typing", {
-      username,
+      from: userId,
+      to: recipient._id,
       typing: true
     });
     setIsTyping(e.target.value)

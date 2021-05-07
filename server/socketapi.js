@@ -59,7 +59,7 @@ io.on('connection', function(socket) {
     if(data.typing === true) {
       io.emit('display', data)
     } else {
-      io.emit('display', data)
+      io.emit('display', '')
     }
   })
 
