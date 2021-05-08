@@ -13,11 +13,10 @@ let { users } = socketApi;
 
 const addOnlineUsers = (socketID, userID) => {
   User.findOneAndUpdate({ _id: userID }, { isOnline: true }, (err) => {
-    if (err) console.log(err)
+    if (err) console.error(err)
   })
   if (users[socketID] === undefined) {
     users[socketID] = [userID];
-    console.log(`${userID} is online!`)
     return;
   }
   if (!users[socketID].includes(userID)) {
@@ -28,7 +27,7 @@ const addOnlineUsers = (socketID, userID) => {
 
 const removeOnlineUser = (socketID, userID) => {
   User.findOneAndUpdate({ _id: userID }, { isOnline: false }, (err) => {
-    if (err) console.log(err)
+    if (err) console.error(err)
   })
   if (users[socketID] === undefined) return;
   if (users[socketID].length === 1) {
@@ -39,16 +38,14 @@ const removeOnlineUser = (socketID, userID) => {
   index >= 0 && users[socketID].splice(index, 1);
 }
 
-io.on('connection', function(socket) {
+io.on('connection', (socket) => {
 
   const {
     username,
     userId
   } = socket.handshake.auth;
 
-  console.log(`${username} has connected`);
-
-  socket.on('login', function(data){
+  socket.on('login', (data) => {
     if (data.userId) {
       addOnlineUsers(socket.id, data.userId);
       io.emit('online', data)
@@ -81,7 +78,7 @@ io.on('connection', function(socket) {
     io.emit("logout", data)
   });
 
-  socket.on('disconnect', function(){
+  socket.on('disconnect', () => {
     const userId = users[socket.id];
 
     removeOnlineUser(socket.id, userId)

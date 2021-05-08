@@ -42,7 +42,7 @@ const sendMessage = (from, to, body) => {
     to,
     body: body.message
   }
-  return axios.post(`${API_URL}`, messageContent)
+  return axios.post(API_URL, messageContent)
     .then(res => {
       socket.emit("message", messageContent)
       socket.emit("")

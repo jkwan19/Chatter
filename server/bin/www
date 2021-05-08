@@ -7,23 +7,23 @@ require("dotenv").config();
  * Module dependencies.
  */
 
-var app = require("../app");
-var http = require("http");
-var socketApi = require('../socketApi');
+const app = require("../app");
+const http = require("http");
+const socketApi = require('../socketApi');
 
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || "3001");
+const port = normalizePort(process.env.PORT || "3001");
 app.set("port", port);
 
 /**
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+const server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -37,8 +37,8 @@ server.on("listening", onListening);
 /**
  * Socket server
  */
-var io = socketApi.io;
-var options = {
+const io = socketApi.io;
+const options = {
   cors: {
     origin: `http://localhost:${port}`,
     methods: ["GET", "POST"]

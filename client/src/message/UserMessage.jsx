@@ -51,7 +51,7 @@ export default function Message({
     }
   }
 
-  let body = media
+  const body = media
                   ?
                   <Media media={media} />
                   :

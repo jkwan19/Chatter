@@ -113,7 +113,7 @@ export default function Dashboard() {
   /* LIST AND FILTER CONVERSATIONS */
 
   useEffect(() => {
-    socket.on('online', data => {
+    socket.on('online', (data) => {
       if(!filter) {
         authUser.getUsers().then(res => {
           setFriends(res)

@@ -56,8 +56,7 @@ export default function Messenger ({
   const [ recipientData, setRecipientData ] = useState({});
   const [ conversationList, setConversationList ] = useState([]);
   const [ recipientId, setRecipientId ] = useState();
-  const [ isTyping, setIsTyping ] = useState('');
-  const [ typingBox, setTypingBox ] = useState('');
+  const [ isTyping, setIsTyping ] = useState(false);
 
   let chatBottom = useRef(null);
 
@@ -78,15 +77,8 @@ export default function Messenger ({
     socket.on('display', (data)=>{
       if (data.typing && !!data.from && (data.from !== userId) && (data.to === userId)) {
         setIsTyping(true)
-        setTypingBox(
-          <Typing
-            recipient={recipient}
-            isTyping={isTyping}
-          />
-        )
       } else {
         setIsTyping(false)
-        setTypingBox("")
       }
     });
     if (!newMessage) {
@@ -96,7 +88,7 @@ export default function Messenger ({
         typing: false
       })
     };
-  }, [recipient, userId, socket, recipientId, isTyping])
+  }, [recipient, userId, socket, recipientId, isTyping, newMessage])
 
   useEffect(() => {
     const data = friendsData.find(friendData => friendData._id === recipientId);
@@ -152,7 +144,7 @@ export default function Messenger ({
     chatBottom.current.scrollIntoView({ behavior: "smooth" });
   };
 
-  useEffect(scrollToBottom, [messages, isTyping]);
+  useEffect(scrollToBottom, [messages]);
 
   if (!recipient) {
     return (
@@ -173,7 +165,7 @@ export default function Messenger ({
           container
           className={classes.messageList}>
           {conversationList}
-          {typingBox}
+          {isTyping && <Typing recipient={recipient} isTyping={isTyping}/>}
           <div ref={chatBottom} />
         </Grid>
         <Compose
