@@ -9,10 +9,9 @@ export function AuthContextProvider (props) {
 
   useEffect(() => {
     auth.isAuth().then((data) => {
-      setLoggedIn(data)
+      setUser(data.username)
     })
-    setUser(localStorage.getItem("username"))
-  }, [])
+  }, [user])
 
   return (
     <AuthContext.Provider value={{loggedIn, setLoggedIn, user, setUser}}>
