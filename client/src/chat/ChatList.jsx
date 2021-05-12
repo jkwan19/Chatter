@@ -43,7 +43,6 @@ export default function ChatList ({ friendsData, handleChat, socket }) {
       const {
         _id,
         username,
-        membersObj,
         numUnread,
         lastFrom,
         lastMessage
@@ -71,7 +70,7 @@ export default function ChatList ({ friendsData, handleChat, socket }) {
     }));
 
 
-  }, [friendsData, handleChat])
+  }, [friendsData, handleChat, onlineUsers, socket])
 
   return (
     <List

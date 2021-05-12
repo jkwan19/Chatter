@@ -75,9 +75,16 @@ io.on('connection', (socket) => {
 
     socket.join(room);
     socketApi.room = room;
-    io.to(users[channel._id]).emit('message',{msg: 'hello'})
   })
 
+  socket.on('message', ({from, to, body}) => {
+    console.log(users[from], 'convo')
+    io.to(users[to]).to(users[from]).emit('message_sent', {
+      from,
+      to,
+      body
+    });
+  })
 
   socket.on('notifications', (data)=> {
     io.emit('notification_read', data)

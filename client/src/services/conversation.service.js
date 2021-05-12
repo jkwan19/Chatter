@@ -45,6 +45,7 @@ const sendMessage = (from, to, body) => {
 
   return axios.post(API_URL, messageContent)
     .then(res => {
+      socket.emit("message", messageContent)
       return res.data
     })
     .catch(err => console.log("Error sending message: " + err))

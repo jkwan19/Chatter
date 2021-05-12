@@ -62,12 +62,17 @@ export default function Messenger ({
 
 
   useEffect(() => {
-    socket.on("message_received", (data) => {
-      if (data.to === userId) {
-        getMessages(data.from);
+    socket.on("message_sent", (data) => {
+      if (data.to === userId && messages) {
+        const message = {
+          from: data.from,
+          date: Date.now(),
+          body: data.body
+        }
+        setMessages([...messages, message])
       }
     });
-  }, [socket, getMessages, userId]);
+  }, [socket, userId, messages]);
 
   useEffect(() => {
     setRecipientId(recipient._id)
@@ -130,6 +135,9 @@ export default function Messenger ({
         setIsTyping('');
     }
   }
+
+
+
 
   const handleMessage = (e) => {
     setNewMessage(e.target.value);
