@@ -92,6 +92,22 @@ export default function Dashboard() {
   }, [userId, username])
 
   useEffect(() => {
+    socket.on("message_sent", (data) => {
+      if (data.to === userId) {
+        const message = {
+          _id: Math.random(0, 1000).toString(),
+          from: data.from,
+          date: Date.now(),
+          body: data.body,
+          conversation: recipient.conversationId,
+          isSeen: false
+        }
+        setMessages([...messages, message])
+      }
+    });
+  }, [messages, recipient]);
+
+  useEffect(() => {
     socket.on('logout', (data) => {
       authUser.getUsers().then(res => {
         setFriends(res);
@@ -108,7 +124,6 @@ export default function Dashboard() {
   useEffect(() => {
     getConversations();
   }, [messages])
-
 
   /* LIST AND FILTER CONVERSATIONS */
 
@@ -152,6 +167,29 @@ export default function Dashboard() {
     }
   }, [friends, conversations])
 
+  useEffect(() => {
+    socket.on('update_last_message', ({
+      to,
+      from,
+      body
+    }) => {
+      let targetIndex;
+      friendsData.forEach((friendData, index) => {
+        if (friendData.members) {
+          if ((friendData.members.indexOf(to) > -1) && (friendData.members.indexOf(from) > -1)) {
+            targetIndex = index;
+          }
+        }
+      })
+      const targetData = friendsData[targetIndex];
+      if (targetData) {
+        const friendsDataCopy = friendsData;
+        targetData.lastMessage = body;
+        friendsDataCopy[targetIndex] = targetData;
+        setFriendsData(friendsDataCopy);
+      }
+    })
+  }, [friendsData])
 
   const handleChat = (e) => {
     const userId = e.target.offsetParent.id;

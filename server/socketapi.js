@@ -62,7 +62,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('typing', (data)=>{
-    if(data.typing === true) {
+    if(data.typing === true && data.room === socketApi.room) {
       io.emit('display', data)
     } else {
       io.emit('display', "")
@@ -77,13 +77,9 @@ io.on('connection', (socket) => {
     socketApi.room = room;
   })
 
-  socket.on('message', ({from, to, body}) => {
-    console.log(users[from], 'convo')
-    io.to(users[to]).to(users[from]).emit('message_sent', {
-      from,
-      to,
-      body
-    });
+  socket.on('message', (data) => {
+    io.to(users[data.to]).to(users[data.from]).emit('message_sent', data);
+    io.emit('update_last_message', data)
   })
 
   socket.on('notifications', (data)=> {

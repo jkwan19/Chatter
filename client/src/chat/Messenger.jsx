@@ -60,20 +60,6 @@ export default function Messenger ({
 
   let chatBottom = useRef(null);
 
-
-  useEffect(() => {
-    socket.on("message_sent", (data) => {
-      if (data.to === userId && messages) {
-        const message = {
-          from: data.from,
-          date: Date.now(),
-          body: data.body
-        }
-        setMessages([...messages, message])
-      }
-    });
-  }, [socket, userId, messages]);
-
   useEffect(() => {
     setRecipientId(recipient._id)
   }, [recipient])
@@ -90,7 +76,8 @@ export default function Messenger ({
       socket.emit("typing", {
         from: userId,
         to: recipientId,
-        typing: false
+        typing: false,
+        room: ''
       })
     };
   }, [recipient, userId, socket, recipientId, isTyping, newMessage])
@@ -120,7 +107,6 @@ export default function Messenger ({
     }))
 
   }, [messages, recipient])
-
 
   const handleSend = () => {
     if (newMessage) {
