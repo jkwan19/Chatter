@@ -61,7 +61,7 @@ export default function Dashboard() {
   const [ messages, setMessages ] = useState([]);
   const [ friendsData, setFriendsData ] = useState([]);
 
-  const { username, userId } = useContext(AuthContext)
+  const { loggedIn, username, userId } = useContext(AuthContext)
 
   /* GET CONVERSATIONS && MESSAGES */
 
@@ -105,7 +105,7 @@ export default function Dashboard() {
         setMessages([...messages, message])
       }
     });
-  }, [messages, recipient]);
+  }, [messages, userId, recipient]);
 
   useEffect(() => {
     socket.on('logout', (data) => {
@@ -116,10 +116,10 @@ export default function Dashboard() {
   }, [])
 
   useEffect(() => {
-    if(!username) {
+    if(!loggedIn) {
       history.push("/login")
     }
-  }, [username, history])
+  }, [loggedIn, history])
 
   useEffect(() => {
     getConversations();

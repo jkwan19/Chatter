@@ -84,20 +84,16 @@ export default function Login() {
   const [open, setOpen] = useState(false);
   const history = useHistory();
 
-  const { loggedIn, setLoggedIn, setUsername, setUserId } = useContext(AuthContext);
+  const { loggedIn, userId, setLoggedIn, setUsername, setUserId } = useContext(AuthContext);
 
   useEffect(() => {
-    if (loggedIn) history.push('/dashboard')
-  }, [history, loggedIn]);
+    if (loggedIn && userId) history.push('/dashboard')
+  }, [history, loggedIn, userId]);
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") return;
     setOpen(false);
   };
-
-  const handleError = () => {
-    setOpen(true);
-  }
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -115,6 +111,7 @@ export default function Login() {
             justify="center"
             alignItems="center"
             className={classes.formBox}
+
             >
             <FormHeader value={'Welcome back!'}/>
             <Formik
@@ -145,6 +142,10 @@ export default function Login() {
                     setStatus(error);
                   }
                 )
+                .catch(() => {
+                  setOpen(true)
+                  setLoggedIn(false)
+                })
               }}
             >
               {({ handleSubmit, handleChange, values, touched, errors }) => (
@@ -168,7 +169,6 @@ export default function Login() {
                   />
                   <SubmitButton
                     name={'Login'}
-                    handleError={handleError}
                     />
                 </form>
               )}

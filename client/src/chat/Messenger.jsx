@@ -66,7 +66,7 @@ export default function Messenger ({
 
   useEffect(() => {
     socket.on('display', (data)=>{
-      if (data.typing && !!data.from && (data.from !== userId) && (data.to === userId)) {
+      if (data.typing && !!data.from && (data.from !== userId) && (data.to === userId) && (recipientId)) {
         setIsTyping(true)
       } else {
         setIsTyping(false)
@@ -121,9 +121,6 @@ export default function Messenger ({
         setIsTyping('');
     }
   }
-
-
-
 
   const handleMessage = (e) => {
     setNewMessage(e.target.value);

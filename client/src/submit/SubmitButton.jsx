@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function SubmitButton({ name, handleError}) {
+export default function SubmitButton({ name }) {
   const classes = useStyles();
 
   return (
@@ -40,7 +40,6 @@ export default function SubmitButton({ name, handleError}) {
         variant="contained"
         color="primary"
         className={classes.submit}
-        onClick={handleError}
       >
         <Typography
           variant="body2"
