@@ -5,7 +5,9 @@ const io = require("socket.io")();
 
 const socketApi = {
   io: io,
-  users: []
+  users: {},
+  room: null,
+  to: ''
 };
 
 let { users } = socketApi;
@@ -15,12 +17,14 @@ const addOnlineUsers = (socketID, userID) => {
   User.findOneAndUpdate({ _id: userID }, { isOnline: true }, (err) => {
     if (err) console.error(err)
   })
-  if (users[socketID] === undefined) {
-    users[socketID] = [userID];
+  if (users[userID] === undefined) {
+    users[userID] = [socketID];
+    updateUsers();
     return;
   }
-  if (!users[socketID].includes(userID)) {
-    users[socketID].push(userID);
+  if (!users[userID].includes(socketID)) {
+    users[userID].push(socketID);
+    updateUsers();
     return;
   }
 }
@@ -29,13 +33,18 @@ const removeOnlineUser = (socketID, userID) => {
   User.findOneAndUpdate({ _id: userID }, { isOnline: false }, (err) => {
     if (err) console.error(err)
   })
-  if (users[socketID] === undefined) return;
-  if (users[socketID].length === 1) {
-    delete users[socketID];
+  if (users[userID] === undefined) return;
+  if (users[userID].length === 1) {
+    delete users[userID];
+    updateUsers();
     return;
   }
-  const index = users[socketID].indexOf(userID);
-  index >= 0 && users[socketID].splice(index, 1);
+  const index = users[userID].indexOf(socketID);
+  index >= 0 && users[userID].splice(index, 1);
+}
+
+const updateUsers = () => {
+  io.emit('update', users);
 }
 
 io.on('connection', (socket) => {
@@ -60,13 +69,15 @@ io.on('connection', (socket) => {
     }
   })
 
-  socket.on('message', ({from, to, body}) => {
-    io.emit('message_received', {
-      from,
-      to,
-      body
-    });
+  socket.on('enter_chatroom', (channel) => {
+    const room = channel.conversationId;
+    const members = channel.members;
+
+    socket.join(room);
+    socketApi.room = room;
+    io.to(users[channel._id]).emit('message',{msg: 'hello'})
   })
+
 
   socket.on('notifications', (data)=> {
     io.emit('notification_read', data)

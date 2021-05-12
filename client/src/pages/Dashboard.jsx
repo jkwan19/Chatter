@@ -159,16 +159,13 @@ export default function Dashboard() {
     for (let i = 0; i < friendsData.length; i++) {
       let friend = friendsData[i];
       if (friend._id === userId) {
+        socket.emit('enter_chatroom', friend);
         const room = friend.conversationId;
         setRecipient(friend);
-        socket.auth = {
-          id: friend._id,
-          username: username
-        }
         authConversation.readMessage(room)
+        getMessages(userId);
       }
     }
-    getMessages(userId);
   }
 
 
@@ -212,6 +209,7 @@ export default function Dashboard() {
           <ChatList
             handleChat={handleChat}
             friendsData={friendsData}
+            socket={socket}
             />
       </Grid>
       {/* Column two for messages with user*/}

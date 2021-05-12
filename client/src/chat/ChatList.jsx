@@ -24,14 +24,19 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function ChatList ({ friendsData, handleChat }) {
+export default function ChatList ({ friendsData, handleChat, socket }) {
 
   const classes = useStyles();
 
-  const [friendsList, setFriendsList] = useState([])
+  const [friendsList, setFriendsList] = useState([]);
+  const [ onlineUsers, setOnlineUsers ] = useState([]);
 
 
   useEffect(() => {
+
+    socket.on('update', (users) => {
+      setOnlineUsers(users)
+    });
 
     setFriendsList(friendsData.map((friend) => {
 
@@ -41,8 +46,7 @@ export default function ChatList ({ friendsData, handleChat }) {
         membersObj,
         numUnread,
         lastFrom,
-        lastMessage,
-        isOnline
+        lastMessage
       } = friend;
 
       let notifications = 0;
@@ -53,16 +57,17 @@ export default function ChatList ({ friendsData, handleChat }) {
 
       return (
         <User
-          key={_id}
-          _id={_id || membersObj[0]._id}
-          name={username}
-          message={lastMessage || ''}
-          numUnread={notifications}
-          isOnline={isOnline}
-          isTyping={false}
-          handleChat={handleChat}
+        key={_id}
+        _id={_id}
+        name={username}
+        message={lastMessage || ''}
+        numUnread={notifications}
+        isOnline={onlineUsers[_id] ? true : false}
+        isTyping={false}
+        handleChat={handleChat}
         />
-      )
+        )
+
     }));
 
 
