@@ -81,21 +81,19 @@ export default function Register() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
 
-  const { loggedIn, setLoggedIn } = useContext(AuthContext);
+  const { userId, loggedIn, setLoggedIn, setUsername, setUserId } = useContext(AuthContext);
   const history = useHistory();
 
   useEffect(() => {
-    if (loggedIn) history.push('/dashboard')
-  }, [history, loggedIn]);
+    if (loggedIn && userId) history.push('/dashboard')
+  }, [history, loggedIn, userId]);
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") return;
     setOpen(false);
   };
 
-  const handleError = () => {
-    setOpen(true);
-  }
+
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -140,14 +138,19 @@ export default function Register() {
                 register(username, email, password).then(
                   (res) => {
                     setLoggedIn(true)
+                    setUsername(res.username);
+                    setUserId(res._id);
                     history.push('/dashboard')
                   },
                   error => {
                     setSubmitting(false);
-                    setOpen(true);
                     setStatus(error);
                   }
                 )
+                .catch(() => {
+                  setOpen(true);
+                  setLoggedIn(false);
+                })
               }}
             >
               {({ handleSubmit, handleChange, values, touched, errors }) => (
@@ -177,7 +180,6 @@ export default function Register() {
                   />
                   <SubmitButton
                     name={'Create'}
-                    handleError={handleError}
                     />
                 </form>
               )}
