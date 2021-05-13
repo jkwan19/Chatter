@@ -60,7 +60,8 @@ const useStyles = makeStyles(theme => ({
   },
   form: {
     display: "block",
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
+    width: '100%'
   },
   formBox: {
     marginLeft: theme.spacing(12),
@@ -106,7 +107,7 @@ export default function Register() {
             main={'Login'}
             alt={'Already have an account?'}/>
           <Grid
-            container
+            item container xs={12} sm={12}
             spacing={3}
             alignItems="center"
             justify="center"
