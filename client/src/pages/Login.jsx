@@ -84,7 +84,11 @@ export default function Login() {
   const [open, setOpen] = useState(false);
   const history = useHistory();
 
+<<<<<<< HEAD
   const { loggedIn, userId, setLoggedIn, setUsername, setUserId } = useContext(AuthContext);
+=======
+  const { loggedIn, setLoggedIn, setUser } = useContext(AuthContext);
+>>>>>>> master
 
   useEffect(() => {
     if (loggedIn && userId) history.push('/dashboard')
@@ -132,9 +136,14 @@ export default function Login() {
                 setStatus();
                 login(email, password).then(
                   (res) => {
+<<<<<<< HEAD
                     setLoggedIn(true)
                     setUsername(res.username);
                     setUserId(res._id)
+=======
+                    setLoggedIn(true);
+                    setUser(res.username)
+>>>>>>> master
                     history.push('/dashboard')
                   },
                   (error) => {

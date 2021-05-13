@@ -83,6 +83,7 @@ export default function Messenger ({
   }, [userId, socket, recipientId, newMessage])
 
   useEffect(() => {
+<<<<<<< HEAD
     if (typingUsers[recipient._id]) {
       setIsTyping(true);
     } else {
@@ -91,6 +92,8 @@ export default function Messenger ({
   }, [typingUsers, isTyping, recipient])
 
   useEffect(() => {
+=======
+>>>>>>> master
     const data = friendsData.find(friendData => friendData._id === recipientId);
     let userMessages = conversations.filter(({conversation}) => {
       if (recipientData) {
@@ -124,10 +127,13 @@ export default function Messenger ({
       authConversation.sendMessage(userId, recipientId, messageBody)
         .then(() => {
           getMessages(recipientId)
+<<<<<<< HEAD
           socket.emit('notifications', {
             to: recipientId,
             from: userId
           })
+=======
+>>>>>>> master
         })
         setNewMessage('');
     }
