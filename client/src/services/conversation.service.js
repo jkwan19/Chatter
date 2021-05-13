@@ -30,7 +30,6 @@ const readMessage = (conversationId) => {
     conversationId
   })
     .then(res => {
-      socket.emit("notifications", conversationId)
       return res.data
     })
     .catch(err => console.log("Error reading message: " + err))

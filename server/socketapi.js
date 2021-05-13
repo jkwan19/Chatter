@@ -83,7 +83,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('notifications', (data)=> {
-    io.emit('notification_read', data)
+    io.emit('add_notification', data);
   })
 
   socket.on('update_logout', (data) => {

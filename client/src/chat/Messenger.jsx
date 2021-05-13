@@ -44,6 +44,7 @@ export default function Messenger ({
   conversations,
   getMessages,
   getConversations,
+  typingUsers,
   socket
   }) {
 
@@ -64,14 +65,14 @@ export default function Messenger ({
     setRecipientId(recipient._id)
   }, [recipient])
 
+
   useEffect(() => {
-    // socket.on('display', (data)=>{
-    //   if (data.typing && !!data.from && (data.from !== userId) && (data.to === userId) && (recipientId)) {
-    //     setIsTyping(true)
-    //   } else {
-    //     setIsTyping(false)
-    //   }
-    // });
+    if (recipientData) {
+      authConversation.readMessage(recipientData.conversationId)
+    }
+  }, [recipientData])
+
+  useEffect(() => {
     if (!newMessage) {
       socket.emit("typing", {
         from: userId,
@@ -79,7 +80,15 @@ export default function Messenger ({
         typing: false
       })
     };
-  }, [recipient, userId, socket, recipientId, isTyping, newMessage])
+  }, [userId, socket, recipientId, newMessage])
+
+  useEffect(() => {
+    if (typingUsers[recipient._id]) {
+      setIsTyping(true);
+    } else {
+      setIsTyping(false);
+    }
+  }, [typingUsers, isTyping, recipient])
 
   useEffect(() => {
     const data = friendsData.find(friendData => friendData._id === recipientId);
@@ -115,9 +124,12 @@ export default function Messenger ({
       authConversation.sendMessage(userId, recipientId, messageBody)
         .then(() => {
           getMessages(recipientId)
+          socket.emit('notifications', {
+            to: recipientId,
+            from: userId
+          })
         })
         setNewMessage('');
-        setIsTyping('');
     }
   }
 

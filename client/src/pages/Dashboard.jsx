@@ -61,6 +61,7 @@ export default function Dashboard() {
   const [ messages, setMessages ] = useState([]);
   const [ friendsData, setFriendsData ] = useState([]);
   const [ typingUsers, setTypingUsers ] = useState({});
+  const [ notificationList, setNotificationList ] = useState({});
 
   const { loggedIn, username, userId } = useContext(AuthContext)
 
@@ -78,6 +79,7 @@ export default function Dashboard() {
     });
   }
 
+  /*LOGIN & LOGOUT */
 
   useEffect(() => {
     socket.auth = {
@@ -93,8 +95,22 @@ export default function Dashboard() {
   }, [userId, username])
 
   useEffect(() => {
+    if(!loggedIn) {
+      history.push("/login")
+    }
+  }, [loggedIn, history])
+
+  useEffect(() => {
+    socket.on('logout', (data) => {
+      authUser.getUsers().then(res => {
+        setFriends(res);
+      })
+    })
+  }, [])
+
+  useEffect(() => {
     socket.on("message_sent", (data) => {
-      if (data.to === userId) {
+      if ((data.to === userId) && (data.from === recipient._id) ) {
         const message = {
           _id: Math.random(0, 1000).toString(),
           from: data.from,
@@ -108,25 +124,11 @@ export default function Dashboard() {
     });
   }, [messages, userId, recipient]);
 
-  useEffect(() => {
-    socket.on('logout', (data) => {
-      authUser.getUsers().then(res => {
-        setFriends(res);
-      })
-    })
-  }, [])
-
-  useEffect(() => {
-    if(!loggedIn) {
-      history.push("/login")
-    }
-  }, [loggedIn, history])
+  /* LIST AND FILTER CONVERSATIONS */
 
   useEffect(() => {
     getConversations();
   }, [messages])
-
-  /* LIST AND FILTER CONVERSATIONS */
 
   useEffect(() => {
     socket.on('online', (data) => {
@@ -196,7 +198,7 @@ export default function Dashboard() {
     socket.on('display', (data)=> {
       let typingUsersObj = {};
       if (data.typing) {
-        friendsData.forEach((friendData, index) => {
+        friendsData.forEach((friendData) => {
           if (friendData._id === data.from) {
             typingUsersObj[friendData._id] = true;
           } else {
@@ -204,7 +206,7 @@ export default function Dashboard() {
           }
         })
       } else {
-        friendsData.forEach((friendData, index) => {
+        friendsData.forEach((friendData) => {
           if (friendData._id === data.from) {
             typingUsersObj[friendData._id] = false;
           }
@@ -213,6 +215,23 @@ export default function Dashboard() {
       setTypingUsers(typingUsersObj)
     });
   }, [friendsData])
+
+  useEffect(() => {
+    socket.on('add_notification', (data) => {
+      let notificationListObj = {};
+      friendsData.forEach((friendData) => {
+        if ((friendData._id === data.from) && (recipient._id !== data.from)) {
+          if (notificationList[data.from]) {
+            notificationListObj[data.from] = notificationList[data.from] + 1;
+          } else {
+            notificationListObj[data.from] = 1;
+          }
+        }
+      })
+      setNotificationList(notificationListObj)
+    });
+  }, [notificationList, friendsData, recipient._id])
+
   const handleChat = (e) => {
     const userId = e.target.offsetParent.id;
 
@@ -223,6 +242,11 @@ export default function Dashboard() {
         const room = friend.conversationId;
         setRecipient(friend);
         authConversation.readMessage(room)
+
+        let newNotificationList = notificationList;
+        delete newNotificationList[friend._id];
+
+        setNotificationList(newNotificationList);
         getMessages(userId);
       }
     }
@@ -270,6 +294,7 @@ export default function Dashboard() {
             handleChat={handleChat}
             friendsData={friendsData}
             typingUsers={typingUsers}
+            notificationList={notificationList}
             socket={socket}
             />
       </Grid>
@@ -289,6 +314,7 @@ export default function Dashboard() {
           conversations={messages}
           getMessages={getMessages}
           getConversations={getConversations}
+          typingUsers={typingUsers}
           socket={socket}
           />
       </Grid>

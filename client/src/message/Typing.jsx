@@ -38,8 +38,10 @@ export default function Typing({
   }) {
   const classes = useStyles();
 
-  return(
-    <ListItem >
+  if (isTyping) {
+
+    return (
+      <ListItem >
       <Grid
         container
         spacing={2}
@@ -74,6 +76,6 @@ export default function Typing({
           </Grid>
       </Grid>
     </ListItem>
-
-  )
+    )
+  }
 }

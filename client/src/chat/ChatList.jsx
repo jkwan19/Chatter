@@ -28,14 +28,14 @@ export default function ChatList ({
   friendsData,
   handleChat,
   socket,
-  typingUsers
+  typingUsers,
+  notificationList
 }) {
 
   const classes = useStyles();
 
   const [ friendsList, setFriendsList ] = useState([]);
   const [ onlineUsers, setOnlineUsers ] = useState([]);
-
 
   useEffect(() => {
 
@@ -53,26 +53,15 @@ export default function ChatList ({
         lastMessage
       } = friend;
 
-      let notifications = 0;
-      let isTyping = false;
-
-      if (numUnread && (lastFrom === _id)) {
-        notifications = numUnread;
-      }
-
-      if (typingUsers[_id]) {
-        isTyping = true;
-      }
-
       return (
         <User
         key={_id}
         _id={_id}
         name={username}
         message={lastMessage || ''}
-        numUnread={notifications}
+        numUnread={notificationList[_id] || 0}
         isOnline={onlineUsers[_id] ? true : false}
-        isTyping={isTyping}
+        isTyping={typingUsers[_id] ? true : false}
         handleChat={handleChat}
         />
         )
@@ -80,7 +69,7 @@ export default function ChatList ({
     }));
 
 
-  }, [friendsData, handleChat, onlineUsers, socket])
+  }, [friendsData, handleChat, onlineUsers, typingUsers,notificationList, socket])
 
   return (
     <List
