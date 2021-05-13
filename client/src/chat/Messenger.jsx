@@ -1,6 +1,7 @@
 import {
   useState,
   useEffect,
+  useContext,
   useRef
 } from "react";
 
@@ -11,10 +12,12 @@ import {
 
 import { makeStyles } from "@material-ui/core/styles";
 
+import { AuthContext } from  "../context/AuthContext";
 import authConversation from "../services/conversation.service";
 
 import Compose from "../chat/Compose";
 import Message from "../message/Message";
+import Typing from "../message/Typing";
 
 const useStyles = makeStyles(theme => ({
   messenger: {
@@ -35,12 +38,17 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Messenger ({
+  user,
   recipient,
   friendsData,
   conversations,
   getMessages,
-  getConversations
+  getConversations,
+  typingUsers,
+  socket
   }) {
+
+  const { userId } = useContext(AuthContext)
 
   const classes = useStyles();
 
@@ -49,15 +57,43 @@ export default function Messenger ({
   const [ recipientData, setRecipientData ] = useState({});
   const [ conversationList, setConversationList ] = useState([]);
   const [ recipientId, setRecipientId ] = useState();
+  const [ isTyping, setIsTyping ] = useState(false);
 
   let chatBottom = useRef(null);
-
 
   useEffect(() => {
     setRecipientId(recipient._id)
   }, [recipient])
 
+
   useEffect(() => {
+    if (recipientData) {
+      authConversation.readMessage(recipientData.conversationId)
+    }
+  }, [recipientData])
+
+  useEffect(() => {
+    if (!newMessage) {
+      socket.emit("typing", {
+        from: userId,
+        to: recipientId,
+        typing: false
+      })
+    };
+  }, [userId, socket, recipientId, newMessage])
+
+  useEffect(() => {
+<<<<<<< HEAD
+    if (typingUsers[recipient._id]) {
+      setIsTyping(true);
+    } else {
+      setIsTyping(false);
+    }
+  }, [typingUsers, isTyping, recipient])
+
+  useEffect(() => {
+=======
+>>>>>>> master
     const data = friendsData.find(friendData => friendData._id === recipientId);
     let userMessages = conversations.filter(({conversation}) => {
       if (recipientData) {
@@ -83,15 +119,21 @@ export default function Messenger ({
 
   }, [messages, recipient])
 
-
   const handleSend = () => {
     if (newMessage) {
       const messageBody = {
         message: newMessage
-      }
-      authConversation.sendMessage(recipientId, messageBody)
+      };
+      authConversation.sendMessage(userId, recipientId, messageBody)
         .then(() => {
           getMessages(recipientId)
+<<<<<<< HEAD
+          socket.emit('notifications', {
+            to: recipientId,
+            from: userId
+          })
+=======
+>>>>>>> master
         })
         setNewMessage('');
     }
@@ -99,6 +141,12 @@ export default function Messenger ({
 
   const handleMessage = (e) => {
     setNewMessage(e.target.value);
+    socket.emit("typing", {
+      from: userId,
+      to: recipient._id,
+      typing: true,
+      room: recipientData.conversationId
+    });
   }
 
   const scrollToBottom = () => {
@@ -126,6 +174,7 @@ export default function Messenger ({
           container
           className={classes.messageList}>
           {conversationList}
+          {isTyping && <Typing recipient={recipient} isTyping={isTyping}/>}
           <div ref={chatBottom} />
         </Grid>
         <Compose

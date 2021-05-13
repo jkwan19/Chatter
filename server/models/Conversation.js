@@ -14,6 +14,10 @@ const ConversationSchema = new Schema({
     numUnread: {
       type: Number,
       default: 0
+    },
+    lastFrom: {
+      type: String,
+      default: ''
     }
 });
 

@@ -66,6 +66,9 @@ export default function Message({
                       />
                   </Grid>
 
+  if (!message) {
+    return ''
+  }
   return (
     <Grid
       container

@@ -3,6 +3,9 @@ import {
   useEffect,
   useState,
 } from "react";
+
+import { useHistory } from "react-router-dom";
+
 import {
   Grid,
 } from "@material-ui/core";
@@ -11,6 +14,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import authConversation from "../services/conversation.service";
 import authUser from "../services/user.service";
 import { AuthContext } from  "../context/AuthContext";
+import socket from "../socket";
 
 import ErrorMessage from "../snackbar/ErrorMessage";
 import Status from "../profile/Status";
@@ -45,7 +49,9 @@ const useStyles = makeStyles(theme => ({
 
 
 export default function Dashboard() {
+
   const classes = useStyles();
+  const history = useHistory();
 
   const [ open, setOpen ] = useState(false);
   const [ friends, setFriends ] = useState([]);
@@ -54,9 +60,10 @@ export default function Dashboard() {
   const [ conversations,  setConversations] = useState([]);
   const [ messages, setMessages ] = useState([]);
   const [ friendsData, setFriendsData ] = useState([]);
+  const [ typingUsers, setTypingUsers ] = useState({});
+  const [ notificationList, setNotificationList ] = useState({});
 
-  const { user } = useContext(AuthContext)
-
+  const { loggedIn, username, userId } = useContext(AuthContext)
 
   /* GET CONVERSATIONS && MESSAGES */
 
@@ -72,14 +79,62 @@ export default function Dashboard() {
     });
   }
 
-  useEffect(() => {
-    getConversations();
-  }, [messages])
+  /*LOGIN & LOGOUT */
 
+  useEffect(() => {
+    socket.auth = {
+      userId,
+      username
+    };
+
+    socket.emit("login", {
+      userId
+    })
+    socket.connect();
+
+  }, [userId, username])
+
+  useEffect(() => {
+    if(!loggedIn) {
+      history.push("/login")
+    }
+  }, [loggedIn, history])
+
+  useEffect(() => {
+    socket.on('logout', (data) => {
+      authUser.getUsers().then(res => {
+        setFriends(res);
+      })
+    })
+  }, [])
+
+  useEffect(() => {
+    socket.on("message_sent", (data) => {
+      if ((data.to === userId) && (data.from === recipient._id) ) {
+        const message = {
+          _id: Math.random(0, 1000).toString(),
+          from: data.from,
+          date: Date.now(),
+          body: data.body,
+          conversation: recipient.conversationId,
+          isSeen: false
+        }
+        setMessages([...messages, message])
+      }
+    });
+  }, [messages, userId, recipient]);
 
   /* LIST AND FILTER CONVERSATIONS */
 
   useEffect(() => {
+    getConversations();
+  }, [messages])
+
+  useEffect(() => {
+    socket.on('online', (data) => {
+      return;
+    })
+
     if(!filter) {
       authUser.getUsers().then(res => {
         setFriends(res)
@@ -115,8 +170,69 @@ export default function Dashboard() {
 
       setFriendsData(dataList)
     }
-  }, [friends, messages, conversations])
+  }, [friends, conversations])
 
+  useEffect(() => {
+    socket.on('update_last_message', ({
+      to,
+      from,
+      body
+    }) => {
+      let targetIndex;
+      friendsData.forEach((friendData, index) => {
+        if (friendData.members) {
+          if ((friendData.members.indexOf(to) > -1) && (friendData.members.indexOf(from) > -1)) {
+            targetIndex = index;
+          }
+        }
+      })
+      const targetData = friendsData[targetIndex];
+      if (targetData) {
+        const friendsDataCopy = friendsData;
+        targetData.lastMessage = body;
+        friendsDataCopy[targetIndex] = targetData;
+        setFriendsData(friendsDataCopy);
+      }
+    })
+  }, [friendsData])
+
+  useEffect(() => {
+    socket.on('display', (data)=> {
+      let typingUsersObj = {};
+      if (data.typing) {
+        friendsData.forEach((friendData) => {
+          if (friendData._id === data.from) {
+            typingUsersObj[friendData._id] = true;
+          } else {
+            typingUsersObj[friendData._id] = false;
+          }
+        })
+      } else {
+        friendsData.forEach((friendData) => {
+          if (friendData._id === data.from) {
+            typingUsersObj[friendData._id] = false;
+          }
+        })
+      }
+      setTypingUsers(typingUsersObj)
+    });
+  }, [friendsData])
+
+  useEffect(() => {
+    socket.on('add_notification', (data) => {
+      let notificationListObj = {};
+      friendsData.forEach((friendData) => {
+        if ((friendData._id === data.from) && (recipient._id !== data.from)) {
+          if (notificationList[data.from]) {
+            notificationListObj[data.from] = notificationList[data.from] + 1;
+          } else {
+            notificationListObj[data.from] = 1;
+          }
+        }
+      })
+      setNotificationList(notificationListObj)
+    });
+  }, [notificationList, friendsData, recipient._id])
 
   const handleChat = (e) => {
     const userId = e.target.offsetParent.id;
@@ -124,11 +240,18 @@ export default function Dashboard() {
     for (let i = 0; i < friendsData.length; i++) {
       let friend = friendsData[i];
       if (friend._id === userId) {
+        socket.emit('enter_chatroom', friend);
+        const room = friend.conversationId;
         setRecipient(friend);
-        authConversation.readMessage(friend.conversationId)
+        authConversation.readMessage(room)
+
+        let newNotificationList = notificationList;
+        delete newNotificationList[friend._id];
+
+        setNotificationList(newNotificationList);
+        getMessages(userId);
       }
     }
-    getMessages(userId);
   }
 
 
@@ -158,8 +281,8 @@ export default function Dashboard() {
             container
             className={classes.profileHeader}
             >
-            <Status name={user} status='online'/>
-            <Name name={user} />
+            <Status name={username} status='online'/>
+            <Name name={username} />
             <LogoutMenu handleLogoutError={handleErrorMessage}/>
           </Grid>
           <Grid
@@ -172,6 +295,9 @@ export default function Dashboard() {
           <ChatList
             handleChat={handleChat}
             friendsData={friendsData}
+            typingUsers={typingUsers}
+            notificationList={notificationList}
+            socket={socket}
             />
       </Grid>
       {/* Column two for messages with user*/}
@@ -181,14 +307,17 @@ export default function Dashboard() {
         >
         <MessageHeader
           name={recipient.username}
-          status={true}
+          status={recipient.isOnline}
          />
         <Messenger
+          user={username}
           recipient={recipient}
           friendsData={friendsData}
           conversations={messages}
           getMessages={getMessages}
           getConversations={getConversations}
+          typingUsers={typingUsers}
+          socket={socket}
           />
       </Grid>
       <ErrorMessage

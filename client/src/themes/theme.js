@@ -110,7 +110,7 @@ export const theme = {
         fontSize: '.75rem',
         minWidth: '100%',
         [breakpoints.down("sm")]: {
-          fontSize: '.25rem'
+          fontSize: '.5rem'
         }
       }
     },

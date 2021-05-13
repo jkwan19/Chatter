@@ -6,6 +6,7 @@ const Conversation = require('../models/Conversation');
 const Message = require('../models/Message');
 const User = require('../models/User');
 
+const socket = require('../socketapi');
 
 //GET CONVERSATION
 
@@ -135,6 +136,10 @@ router.post('/', (req, res) => {
       members: [from, to],
       lastMessage: req.body.body,
       date: Date.now(),
+      $inc: {
+        numUnread: 1
+      },
+      lastFrom: from
     },
     {
       upsert: true,
@@ -150,6 +155,7 @@ router.post('/', (req, res) => {
           from: from,
           body: req.body.body,
         });
+
         message.save(err => {
           if (err) {
             res.status(400).send(err)

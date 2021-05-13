@@ -33,6 +33,7 @@ app.use(passport.initialize());
 // Passport config
 require("./config/passport")(passport);
 
+
 app.use("/api/users", users);
 
 //TOKEN VERIFICATION MIDDLEWARE
@@ -47,6 +48,7 @@ app.use((req, res, next) => {
     }
   });
 });
+
 
 app.use("/api/messages", messages);
 

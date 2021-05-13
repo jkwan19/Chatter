@@ -9,7 +9,8 @@ import moment from "moment";
 
 export default function Message(
   { content,
-    recipient
+    recipient,
+    isTyping
   })
     {
 
@@ -18,8 +19,7 @@ export default function Message(
     body,
     media,
     from,
-    isSeen,
-    isTyping
+    isSeen
   } = content;
 
 
@@ -35,14 +35,14 @@ export default function Message(
     <ListItem >
       {isReceived
         ? <FriendMessage
-          media={media}
+          media={media || ''}
           message={body}
           timeStamp={time}
           isTyping={isTyping}
           recipient={recipient}
           /> :
         <UserMessage
-          media={media}
+          media={media || ''}
           message={body}
           timeStamp={time}
           isSeen={isSeen}
