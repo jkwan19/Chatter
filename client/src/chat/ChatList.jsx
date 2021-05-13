@@ -49,7 +49,6 @@ export default function ChatList ({
         _id,
         username,
         numUnread,
-        lastFrom,
         lastMessage
       } = friend;
 
@@ -59,7 +58,7 @@ export default function ChatList ({
         _id={_id}
         name={username}
         message={lastMessage || ''}
-        numUnread={notificationList[_id] || 0}
+        numUnread={notificationList[_id] || numUnread || 0}
         isOnline={onlineUsers[_id] ? true : false}
         isTyping={typingUsers[_id] ? true : false}
         handleChat={handleChat}

@@ -132,17 +132,19 @@ export default function Dashboard() {
 
   useEffect(() => {
     socket.on('online', (data) => {
-      if(!filter) {
-        authUser.getUsers().then(res => {
-          setFriends(res)
-        })
-      } else {
-        authConversation.findConversation(filter)
-        .then(res => {
-          setFriends(res)
-        })
-      }
+      return;
     })
+
+    if(!filter) {
+      authUser.getUsers().then(res => {
+        setFriends(res)
+      })
+    } else {
+      authConversation.findConversation(filter)
+      .then(res => {
+        setFriends(res)
+      })
+    }
   }, [filter])
 
   useEffect(() => {
