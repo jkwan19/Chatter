@@ -65,19 +65,18 @@ export default function Messenger ({
   }, [recipient])
 
   useEffect(() => {
-    socket.on('display', (data)=>{
-      if (data.typing && !!data.from && (data.from !== userId) && (data.to === userId) && (recipientId)) {
-        setIsTyping(true)
-      } else {
-        setIsTyping(false)
-      }
-    });
+    // socket.on('display', (data)=>{
+    //   if (data.typing && !!data.from && (data.from !== userId) && (data.to === userId) && (recipientId)) {
+    //     setIsTyping(true)
+    //   } else {
+    //     setIsTyping(false)
+    //   }
+    // });
     if (!newMessage) {
       socket.emit("typing", {
         from: userId,
         to: recipientId,
-        typing: false,
-        room: ''
+        typing: false
       })
     };
   }, [recipient, userId, socket, recipientId, isTyping, newMessage])
@@ -127,7 +126,8 @@ export default function Messenger ({
     socket.emit("typing", {
       from: userId,
       to: recipient._id,
-      typing: true
+      typing: true,
+      room: recipientData.conversationId
     });
   }
 

@@ -24,11 +24,16 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function ChatList ({ friendsData, handleChat, socket }) {
+export default function ChatList ({
+  friendsData,
+  handleChat,
+  socket,
+  typingUsers
+}) {
 
   const classes = useStyles();
 
-  const [friendsList, setFriendsList] = useState([]);
+  const [ friendsList, setFriendsList ] = useState([]);
   const [ onlineUsers, setOnlineUsers ] = useState([]);
 
 
@@ -49,9 +54,14 @@ export default function ChatList ({ friendsData, handleChat, socket }) {
       } = friend;
 
       let notifications = 0;
+      let isTyping = false;
 
       if (numUnread && (lastFrom === _id)) {
         notifications = numUnread;
+      }
+
+      if (typingUsers[_id]) {
+        isTyping = true;
       }
 
       return (
@@ -62,7 +72,7 @@ export default function ChatList ({ friendsData, handleChat, socket }) {
         message={lastMessage || ''}
         numUnread={notifications}
         isOnline={onlineUsers[_id] ? true : false}
-        isTyping={false}
+        isTyping={isTyping}
         handleChat={handleChat}
         />
         )

@@ -60,6 +60,7 @@ export default function Dashboard() {
   const [ conversations,  setConversations] = useState([]);
   const [ messages, setMessages ] = useState([]);
   const [ friendsData, setFriendsData ] = useState([]);
+  const [ typingUsers, setTypingUsers ] = useState({});
 
   const { loggedIn, username, userId } = useContext(AuthContext)
 
@@ -191,6 +192,27 @@ export default function Dashboard() {
     })
   }, [friendsData])
 
+  useEffect(() => {
+    socket.on('display', (data)=> {
+      let typingUsersObj = {};
+      if (data.typing) {
+        friendsData.forEach((friendData, index) => {
+          if (friendData._id === data.from) {
+            typingUsersObj[friendData._id] = true;
+          } else {
+            typingUsersObj[friendData._id] = false;
+          }
+        })
+      } else {
+        friendsData.forEach((friendData, index) => {
+          if (friendData._id === data.from) {
+            typingUsersObj[friendData._id] = false;
+          }
+        })
+      }
+      setTypingUsers(typingUsersObj)
+    });
+  }, [friendsData])
   const handleChat = (e) => {
     const userId = e.target.offsetParent.id;
 
@@ -247,6 +269,7 @@ export default function Dashboard() {
           <ChatList
             handleChat={handleChat}
             friendsData={friendsData}
+            typingUsers={typingUsers}
             socket={socket}
             />
       </Grid>

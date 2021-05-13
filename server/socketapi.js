@@ -62,7 +62,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('typing', (data)=>{
-    if(data.typing === true && data.room === socketApi.room) {
+    if(data.typing === true) {
       io.emit('display', data)
     } else {
       io.emit('display', "")
