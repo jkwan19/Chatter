@@ -214,14 +214,13 @@ export default function Dashboard() {
 
   useEffect(() => {
     socket.on('add_notification', (data) => {
-      let notificationListObj = {};
+      let notificationListObj = notificationList;
       friendsData.forEach((friendData) => {
         if ((friendData._id === data.from) && (recipient._id !== data.from)) {
-          if (notificationList[data.from]) {
-            notificationListObj[data.from] = notificationList[data.from] + 1;
-          } else {
-            notificationListObj[data.from] = 1;
+          if (!notificationListObj[data.from]) {
+            notificationListObj[data.from] = friendData.numUnread;
           }
+          notificationListObj[data.from] = notificationListObj[data.from] + 1;
         }
       })
       setNotificationList(notificationListObj)

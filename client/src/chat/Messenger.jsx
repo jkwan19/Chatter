@@ -77,7 +77,7 @@ export default function Messenger ({
       socket.emit("typing", {
         from: userId,
         to: recipientId,
-        typing: false
+        typing: false,
       })
     };
   }, [userId, socket, recipientId, newMessage])
@@ -128,6 +128,12 @@ export default function Messenger ({
             to: recipientId,
             from: userId
           })
+          socket.emit("typing", {
+            from: userId,
+            to: recipient._id,
+            typing: false,
+            room: recipientData.conversationId
+          });
         })
       setNewMessage('');
     }
