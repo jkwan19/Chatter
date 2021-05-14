@@ -210,7 +210,7 @@ export default function Dashboard() {
       }
       setTypingUsers(typingUsersObj)
     });
-  }, [friendsData])
+  }, [friendsData, userId])
 
   useEffect(() => {
     socket.on('add_notification', (data) => {

@@ -78,7 +78,7 @@ export default function ChatList ({
     }));
 
 
-  }, [friendsData, handleChat, onlineUsers, typingUsers,notificationList, socket])
+  }, [friendsData, handleChat, onlineUsers, typingUsers, notificationList, userId, socket])
 
   return (
     <List

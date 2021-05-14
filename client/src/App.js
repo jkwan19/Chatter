@@ -16,7 +16,7 @@ function App() {
           <Route path="/signup" component={Signup} />
           <Route path="/dashboard" component={Dashboard} />
           <Route exact path="/">
-            <Redirect to="/signup" />
+            <Redirect to="/login" />
           </Route>
       </BrowserRouter>
 
