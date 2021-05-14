@@ -1,6 +1,7 @@
 import {
   useState,
-  useEffect
+  useEffect,
+  useContext
 } from "react";
 
 import {
@@ -8,6 +9,8 @@ import {
 } from "@material-ui/core";
 
 import { makeStyles } from "@material-ui/core/styles";
+
+import { AuthContext } from  "../context/AuthContext";
 
 import User from "../profile/User";
 
@@ -34,24 +37,30 @@ export default function ChatList ({
 
   const classes = useStyles();
 
+  const { userId } = useContext(AuthContext)
+
   const [ friendsList, setFriendsList ] = useState([]);
   const [ onlineUsers, setOnlineUsers ] = useState([]);
 
   useEffect(() => {
 
-    console.log(onlineUsers, 'online')
     socket.on('update', (users) => {
       setOnlineUsers(users)
     });
 
     setFriendsList(friendsData.map((friend) => {
 
-      const {
+      let {
         _id,
         username,
         numUnread,
-        lastMessage
+        lastMessage,
+        lastFrom
       } = friend;
+
+      if (lastFrom === userId) {
+        numUnread = 0;
+      }
 
       return (
         <User

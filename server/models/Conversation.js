@@ -18,6 +18,9 @@ const ConversationSchema = new Schema({
     lastFrom: {
       type: String,
       default: ''
+    },
+    lastRead: {
+      type: String
     }
 });
 

@@ -68,7 +68,7 @@ export default function Messenger ({
 
   useEffect(() => {
     if (recipientData) {
-      authConversation.readMessage(recipientData.conversationId)
+      authConversation.readMessage(recipientData.conversationId, userId, recipientData.lastFrom, recipientData.lastRead)
     }
   }, [recipientData])
 

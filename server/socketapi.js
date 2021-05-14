@@ -65,7 +65,7 @@ io.on('connection', (socket) => {
     if(data.typing === true) {
       io.emit('display', data)
     } else {
-      io.emit('display', "")
+      io.emit('display', data)
     }
   })
 

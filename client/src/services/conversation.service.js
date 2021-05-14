@@ -25,10 +25,14 @@ const findConversation = (username) => {
     .catch(err => console.log("Error searching: " + err))
 };
 
-const readMessage = (conversationId) => {
-  return axios.post(`${API_URL}conversations/read`, {
-    conversationId
-  })
+const readMessage = (conversationId, userId, lastFrom, lastRead) => {
+  const readContent = {
+    conversationId,
+    userId,
+    lastFrom,
+    lastRead
+  }
+  return axios.post(`${API_URL}conversations/read`, readContent)
     .then(res => {
       return res.data
     })
