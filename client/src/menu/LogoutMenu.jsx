@@ -33,11 +33,7 @@ const logout = () => auth.logout();
 export default function LogoutMenu( { handleLogoutError }) {
 
   const classes = useStyles();
-<<<<<<< HEAD
-  const { setLoggedIn, userId } = useContext(AuthContext)
-=======
-  const { setLoggedIn, setUser } = useContext(AuthContext)
->>>>>>> master
+  const { setLoggedIn, userId, setUserId, setUsername } = useContext(AuthContext)
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const history = useHistory();
@@ -53,13 +49,14 @@ export default function LogoutMenu( { handleLogoutError }) {
 
   const handleLogout = () => {
     logout()
-      .then((res) => setLoggedIn(false))
-<<<<<<< HEAD
+      .then((res) => {
+        setLoggedIn(false)
+        setUserId("")
+        setUsername("")
+      })
       .then(() => socket.emit('update_logout', {
         userId
       }))
-=======
->>>>>>> master
       .then(() => history.push("/login"))
       .catch((err) => handleLogoutError())
   }

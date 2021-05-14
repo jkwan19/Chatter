@@ -57,7 +57,7 @@ export default function Dashboard() {
   const [ friends, setFriends ] = useState([]);
   const [ filter, setFilter ] = useState('');
   const [ recipient, setRecipient ] = useState([]);
-  const [ conversations,  setConversations] = useState([]);
+  const [ conversations, setConversations] = useState([]);
   const [ messages, setMessages ] = useState([]);
   const [ friendsData, setFriendsData ] = useState([]);
   const [ typingUsers, setTypingUsers ] = useState({});
@@ -199,7 +199,7 @@ export default function Dashboard() {
   useEffect(() => {
     socket.on('display', (data)=> {
       let typingUsersObj = {};
-      if (data.typing) {
+      if (data.typing && (userId === data.to)) {
         friendsData.forEach((friendData) => {
           if (friendData._id === data.from) {
             typingUsersObj[friendData._id] = true;
@@ -207,16 +207,10 @@ export default function Dashboard() {
             typingUsersObj[friendData._id] = false;
           }
         })
-      } else {
-        friendsData.forEach((friendData) => {
-          if (friendData._id === data.from) {
-            typingUsersObj[friendData._id] = false;
-          }
-        })
       }
       setTypingUsers(typingUsersObj)
     });
-  }, [friendsData])
+  }, [friendsData, userId])
 
   useEffect(() => {
     socket.on('add_notification', (data) => {
@@ -235,25 +229,24 @@ export default function Dashboard() {
   }, [notificationList, friendsData, recipient._id])
 
   const handleChat = (e) => {
-    const userId = e.target.offsetParent.id;
+    const friendId = e.target.offsetParent.id;
 
     for (let i = 0; i < friendsData.length; i++) {
       let friend = friendsData[i];
-      if (friend._id === userId) {
+      if (friend._id === friendId) {
         socket.emit('enter_chatroom', friend);
         const room = friend.conversationId;
         setRecipient(friend);
-        authConversation.readMessage(room)
+        authConversation.readMessage(room, userId, friend.lastFrom, friend.lastRead)
 
         let newNotificationList = notificationList;
         delete newNotificationList[friend._id];
 
         setNotificationList(newNotificationList);
-        getMessages(userId);
+        getMessages(friendId);
       }
     }
   }
-
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") return;

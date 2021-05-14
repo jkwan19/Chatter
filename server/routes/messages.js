@@ -174,14 +174,32 @@ router.post('/', (req, res) => {
 });
 
 router.post('/conversations/read', (req, res) => {
+  let {
+    conversationId,
+    userId,
+    lastFrom,
+    lastRead
+  } = req.body;
 
-  const conversationId = req.body.conversationId;
+  let updateObj;
+
+  if (conversationId && userId) {
+    updateObj = {
+      lastRead: userId
+    }
+  }
+
+  if ((userId !== lastFrom) && (userId !== lastRead)) {
+    updateObj = {
+      numUnread: 0,
+      lastRead: userId
+    }
+  }
 
   Conversation.findByIdAndUpdate(
     conversationId,
-    {
-      numUnread: 0,
-    })
+    updateObj
+    )
     .exec((err, conversation) => {
       if (err) {
         res.status(400).send(err);

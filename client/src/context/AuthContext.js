@@ -10,7 +10,6 @@ export function AuthContextProvider (props) {
 
   useEffect(() => {
     auth.isAuth().then((data) => {
-<<<<<<< HEAD
       setLoggedIn(true)
       setUsername(data.username);
       setUserId(data.id);
@@ -20,11 +19,7 @@ export function AuthContextProvider (props) {
       setUserId("")
     })
   }, [])
-=======
-      setUser(data.username)
-    })
-  }, [user])
->>>>>>> master
+
 
   return (
     <AuthContext.Provider value={{

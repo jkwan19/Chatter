@@ -34,7 +34,7 @@ const removeOnlineUser = (socketID, userID) => {
     if (err) console.error(err)
   })
   if (users[userID] === undefined) return;
-  if (users[userID].length === 1) {
+  if (users[userID]) {
     delete users[userID];
     updateUsers();
     return;
@@ -65,7 +65,7 @@ io.on('connection', (socket) => {
     if(data.typing === true) {
       io.emit('display', data)
     } else {
-      io.emit('display', "")
+      io.emit('display', data)
     }
   })
 
