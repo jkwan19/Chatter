@@ -129,7 +129,7 @@ export default function Messenger ({
             from: userId
           })
         })
-        setNewMessage('');
+      setNewMessage('');
     }
   }
 
@@ -149,12 +149,20 @@ export default function Messenger ({
 
   useEffect(scrollToBottom, [messages]);
 
-  if (!recipient) {
+  if (!recipientData) {
     return (
       <Grid
         item xs={12}
         className={classes.messenger}
-        ></Grid>
+        >
+      <List>
+        <Grid
+          container
+          className={classes.messageList}>
+          <div ref={chatBottom} />
+        </Grid>
+      </List>
+      </Grid>
     )
   };
 
