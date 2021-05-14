@@ -32,6 +32,7 @@ export default function ChatList ({
   handleChat,
   socket,
   typingUsers,
+  onlineUsers,
   notificationList
 }) {
 
@@ -40,14 +41,6 @@ export default function ChatList ({
   const { userId } = useContext(AuthContext)
 
   const [ friendsList, setFriendsList ] = useState([]);
-  const [ onlineUsers, setOnlineUsers ] = useState([]);
-
-
-  useEffect(() => {
-    socket.on('update', (users) => {
-      setOnlineUsers(users)
-    });
-  }, [socket])
 
   useEffect(() => {
     setFriendsList(friendsData.map((friend) => {

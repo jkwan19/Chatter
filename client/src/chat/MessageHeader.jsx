@@ -30,12 +30,18 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function MessageHeader ({ name, status }) {
+export default function MessageHeader ({
+  name,
+  userId,
+  onlineUsers
+}) {
 
   const classes = useStyles();
 
   const header = name;
 
+  const isOnline = onlineUsers[userId] ? true : false;
+  console.log(isOnline, onlineUsers, userId, 'online?')
 
   if (!name) {
     return (
@@ -57,7 +63,7 @@ export default function MessageHeader ({ name, status }) {
       <Typography variant="h5">{header}</Typography>
       <Grid item className={classes.chatStatus}>
         <Badge
-          color={status ? "secondary" : "primary"}
+          color={isOnline ? "secondary" : "primary"}
           overlap="circle"
           variant="dot"
           anchorOrigin={{
@@ -72,7 +78,7 @@ export default function MessageHeader ({ name, status }) {
             <Typography
               variant="subtitle1"
               >
-              {status ? "Online" : "Offline"}
+              {isOnline ? "Online" : "Offline"}
             </Typography>
           </Grid>
         </Badge>

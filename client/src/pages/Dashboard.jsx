@@ -62,6 +62,7 @@ export default function Dashboard() {
   const [ friendsData, setFriendsData ] = useState([]);
   const [ typingUsers, setTypingUsers ] = useState({});
   const [ notificationList, setNotificationList ] = useState({});
+  const [ onlineUsers, setOnlineUsers ] = useState([]);
 
   const { loggedIn, username, userId } = useContext(AuthContext)
 
@@ -106,6 +107,12 @@ export default function Dashboard() {
         setFriends(res);
       })
     })
+  }, [])
+
+  useEffect(() => {
+    socket.on('update', (users) => {
+      setOnlineUsers(users)
+    });
   }, [])
 
   useEffect(() => {
@@ -289,6 +296,7 @@ export default function Dashboard() {
             friendsData={friendsData}
             typingUsers={typingUsers}
             notificationList={notificationList}
+            onlineUsers={onlineUsers}
             socket={socket}
             />
       </Grid>
@@ -299,7 +307,8 @@ export default function Dashboard() {
         >
         <MessageHeader
           name={recipient.username}
-          status={recipient.isOnline}
+          userId={recipient._id}
+          onlineUsers={onlineUsers}
          />
         <Messenger
           user={username}
