@@ -39,6 +39,7 @@ export default function ChatList ({
 
   useEffect(() => {
 
+    console.log(onlineUsers, 'online')
     socket.on('update', (users) => {
       setOnlineUsers(users)
     });
