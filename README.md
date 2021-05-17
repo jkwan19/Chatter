@@ -8,18 +8,18 @@
 ##Demo
 
 ###Registration
-![]Registration.mp4
+![](Registration.mp4)
 
 ###Login
-![]Login-validation.mp4
+![](Login-validation.mp4)
 
 ###Real Time Status
-![]Online-offline-status.mp4
+![](Online-offline-status.mp4)
 
 ###Real Time Typing
-![]Real-time-typing.mp4
+![](Real-time-typing.mp4)
 
-![]Real-time-read.mp4
+![](Real-time-read.mp4)
 
 ### Real Time Messaging
-![]Real-time-messaging.mp4
+![](Real-time-messaging.mp4)
