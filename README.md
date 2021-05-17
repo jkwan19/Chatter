@@ -1,25 +1,27 @@
 # Chatter
 
-##Tech Stack
+## Tech Stack
 >Reactjs, Mongo, Expressjs, Nodejs, socket.io, JWT, bcryptjs, passport-jwt/passport, Material-UI
 
-> Below is a video demo of the different Chatter components.
 
-##Demo
+## Demo
 
-###Registration
-![](Registration.mp4)
+### Registration
+![](Registration.gif)
 
-###Login
-![](Login-validation.mp4)
+### Login
+![](Login.gif)
 
-###Real Time Status
-![](Online-offline-status.mp4)
+### Search
+![](Search.gif)
 
-###Real Time Typing
-![](Real-time-typing.mp4)
+### Real Time Status
+![](Online-status.gif)
 
-![](Real-time-read.mp4)
+### Real Time Typing
+![](Typing-notification.gif)
+
+![](Inline-typing.gif)
 
 ### Real Time Messaging
-![](Real-time-messaging.mp4)
+![](Messaging.gif)
