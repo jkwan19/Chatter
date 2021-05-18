@@ -41,7 +41,6 @@ export default function MessageHeader ({
   const header = name;
 
   const isOnline = onlineUsers[userId] ? true : false;
-  console.log(isOnline, onlineUsers, userId, 'online?')
 
   if (!name) {
     return (

@@ -225,9 +225,10 @@ export default function Dashboard() {
       friendsData.forEach((friendData) => {
         if ((friendData._id === data.from) && (recipient._id !== data.from)) {
           if (!notificationListObj[data.from]) {
-            notificationListObj[data.from] = friendData.numUnread;
+            notificationListObj[data.from] = friendData.numUnread || 0;
           }
           notificationListObj[data.from] = notificationListObj[data.from] + 1;
+          console.log(notificationListObj[data.from], friendData.numUnread, userId, 'num unread')
         }
       })
       setNotificationList(notificationListObj)

@@ -3,7 +3,8 @@ import React from 'react';
 /* MATERIAL UI STYLING */
 import {
   Grid,
-  Typography
+  Typography,
+  Hidden
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -52,6 +53,7 @@ export default function LandingImage() {
         justify="center"
         alignItems="center"
       >
+        <Hidden smDown>
         <img
           width={67} alt="chat bubble"
           className={classes.icon}
@@ -60,6 +62,7 @@ export default function LandingImage() {
           <Typography className={classes.heroText}>
             Converse with anyone with any language
           </Typography>
+        </Hidden>
       </Grid>
     </Grid>
   )
